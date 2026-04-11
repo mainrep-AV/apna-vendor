@@ -258,7 +258,7 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
     </div>
     <div class="hero-stats">
       <div class="stat"><div class="stat-num" id="stat-count">0</div><div class="stat-label" id="stat-label1">पंजीकृत विक्रेता</div></div>
-      <div class="stat"><div class="stat-num">२८</div><div class="stat-label" id="stat-label2">राज्य</div></div>
+      <div class="stat"><div class="stat-num" id="stat-states">0</div><div class="stat-label" id="stat-label2">राज्य</div></div>
       <div class="stat"><div class="stat-num" id="stat-free">मुफ़्त</div><div class="stat-label" id="stat-label3">हमेशा के लिए</div></div>
     </div>
   </div>
@@ -510,7 +510,29 @@ function requireGoogleLogin(){
 // seed data removed — app starts empty
 
 
-function saveVendors(){ localStorage.setItem('av_vendors', JSON.stringify(vendors)); }
+function saveVendors(){
+  localStorage.setItem('av_vendors', JSON.stringify(vendors));
+  updateStats();
+}
+
+function updateStats(){
+  // Vendor count
+  var countEl = document.getElementById('stat-count');
+  if(countEl) countEl.textContent = vendors.length;
+
+  // Unique locations — split each vendor's loc by comma and collect distinct trimmed parts
+  var locations = {};
+  vendors.forEach(function(v){
+    if(v.loc){
+      v.loc.split(',').forEach(function(part){
+        var p = part.trim();
+        if(p) locations[p.toLowerCase()] = true;
+      });
+    }
+  });
+  var statesEl = document.getElementById('stat-states');
+  if(statesEl) statesEl.textContent = Object.keys(locations).length || 0;
+}
 
 // ── TRANSLATIONS ──
 var T = {
@@ -806,7 +828,7 @@ function filterVendors(){
 function renderVendorGrid(list){
   var grid = document.getElementById('vendor-grid');
   var data = list || vendors;
-  document.getElementById('stat-count').textContent = vendors.length;
+  updateStats();
   if(data.length===0){
     grid.innerHTML='<div class="empty-state"><div class="empty-state-icon">🏪</div><p>'+t('emptyVendors')+'</p></div>';
     return;
@@ -1137,8 +1159,8 @@ function showToast(msg){
 window.addEventListener('load', function(){
   applyTranslations();
   updateAuthUI();
+  updateStats();
 });
-document.getElementById('stat-count').textContent = vendors.length;
 document.getElementById('vendor-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 </script>
 </body>
