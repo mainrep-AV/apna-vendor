@@ -426,32 +426,39 @@ function updateAuthUI(){
   var authArea = document.getElementById('auth-area');
   if(!authArea) return;
   if(currentUser){
-    authArea.innerHTML = '<span style="color:#fff;font-size:13px;">'+(currentUser.name||currentUser.email||'User')+'</span>'+
+    authArea.innerHTML =
+      '<span style="color:#fff;font-size:13px;margin-right:6px;">'+(currentUser.name||currentUser.email||'User')+'</span>'+
       '<button class="auth-btn" onclick="signOut()">Logout</button>';
   } else {
+    // Place a stable container — Google will render its button inside it
     authArea.innerHTML = '<div id="google-signin-button"></div>';
+    // Attempt to render the button now (Google SDK may already be ready)
+    renderGoogleButton();
   }
 }
-function initGoogleAuth(retries){
-  retries = typeof retries === 'number' ? retries : 20;
+
+function renderGoogleButton(){
+  var container = document.getElementById('google-signin-button');
+  if(!container) return;
   if(window.google && google.accounts && google.accounts.id){
-    google.accounts.id.initialize({
-      client_id:'690805050238-52e8fqjqt65kroi8opndu2t5j3hvo7dv.apps.googleusercontent.com',
-      callback: handleCredentialResponse
-    });
-    google.accounts.id.renderButton(
-      document.getElementById('google-signin-button'),
-      { theme:'outline', size:'small', width:'220' }
-    );
-    google.accounts.id.prompt();
-    return;
+    google.accounts.id.renderButton(container, { theme:'outline', size:'small', width:'180' });
   }
-  if(retries > 0){
-    setTimeout(function(){ initGoogleAuth(retries - 1); }, 200);
-  } else {
-    updateAuthUI();
-  }
+  // If Google SDK not ready yet, onGoogleLibraryLoad (below) will call this again
 }
+
+// Google calls this automatically once its SDK has fully loaded
+window.onGoogleLibraryLoad = function(){
+  google.accounts.id.initialize({
+    client_id: '690805050238-52e8fqjqt65kroi8opndu2t5j3hvo7dv.apps.googleusercontent.com',
+    callback: handleCredentialResponse,
+    auto_select: false,
+    cancel_on_tap_outside: true
+  });
+  // Only render button if user is not already signed in
+  if(!currentUser){
+    renderGoogleButton();
+  }
+};
 function handleCredentialResponse(response){
   if(!response || !response.credential) return;
   var payload = parseJwt(response.credential);
@@ -993,7 +1000,6 @@ function showToast(msg){
 // ── INIT ──
 window.addEventListener('load', function(){
   updateAuthUI();
-  initGoogleAuth();
 });
 document.getElementById('stat-count').textContent = vendors.length;
 document.getElementById('vendor-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
