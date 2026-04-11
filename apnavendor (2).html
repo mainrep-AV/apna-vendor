@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>अपना वेंडर — Apna Vendor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#1A1A2E;
+  --gold:#C9A96E;
+  --gold-light:#E8D5B0;
+  --cream:#FDF6EC;
+  --cream2:#F7EDD8;
+  --red:#C0392B;
+  --green:#0F6E56;
+  --text:#1A1A2E;
+  --muted:#6B6B6B;
+  --border:#E2D9CC;
+  --white:#FFFFFF;
+  --surface:#FAFAF8;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+
+/* ── NAV ── */
+nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;}
+.nav-logo{font-family:'Tiro Devanagari Hindi',serif;font-size:20px;color:var(--white);letter-spacing:1px;cursor:pointer;}
+.nav-logo span{color:var(--gold);}
+.nav-links{display:flex;gap:6px;}
+.nav-link{background:none;border:none;color:#B0A090;font-size:13px;padding:7px 14px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.nav-link:hover,.nav-link.active{background:rgba(201,169,110,0.15);color:var(--gold);}
+.lang-bar{display:flex;gap:4px;}
+.auth-area{display:flex;align-items:center;gap:8px;}
+.auth-btn{padding:5px 12px;font-size:12px;border:1px solid rgba(201,169,110,0.3);border-radius:16px;cursor:pointer;background:none;color:#B0A090;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.auth-btn:hover{background:rgba(201,169,110,0.15);color:var(--gold);}
+.lang-btn{padding:5px 12px;font-size:12px;border:1px solid rgba(201,169,110,0.3);border-radius:16px;cursor:pointer;background:none;color:#B0A090;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.lang-btn.active{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:600;}
+
+/* ── HERO ── */
+.hero{background:var(--navy);padding:80px 32px 60px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-80px;left:-80px;width:320px;height:320px;border-radius:50%;background:rgba(201,169,110,0.06);}
+.hero::after{content:'';position:absolute;bottom:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:rgba(201,169,110,0.04);}
+.hero-logo{font-family:'Tiro Devanagari Hindi',serif;font-size:52px;color:var(--white);letter-spacing:2px;margin-bottom:8px;line-height:1.2;}
+.hero-logo span{color:var(--gold);}
+.hero-tagline{font-family:'Tiro Devanagari Hindi',serif;font-size:18px;color:var(--gold-light);margin-bottom:6px;opacity:0.85;}
+.hero-sub{font-size:13px;color:#8A7A6A;letter-spacing:1px;margin-bottom:40px;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:var(--gold);color:var(--navy);padding:12px 28px;border:none;border-radius:24px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Tiro Devanagari Hindi',serif;font-size:16px;transition:opacity 0.2s;}
+.btn-primary:hover{opacity:0.88;}
+.btn-outline{background:none;color:var(--gold);padding:12px 28px;border:1.5px solid var(--gold);border-radius:24px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-outline:hover{background:rgba(201,169,110,0.1);}
+.hero-stats{display:flex;gap:32px;justify-content:center;margin-top:48px;flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-num{font-family:'Tiro Devanagari Hindi',serif;font-size:28px;color:var(--gold);}
+.stat-label{font-size:12px;color:#7A6A5A;margin-top:2px;}
+
+/* ── SECTIONS ── */
+.section{padding:60px 32px;}
+.section-header{text-align:center;margin-bottom:40px;}
+.section-title{font-family:'Tiro Devanagari Hindi',serif;font-size:32px;color:var(--navy);margin-bottom:6px;}
+.section-sub{font-size:13px;color:var(--muted);}
+
+/* ── PAGES ── */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ── VENDOR GRID ── */
+.vendor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;max-width:1100px;margin:0 auto;}
+.vendor-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;}
+.vendor-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(26,26,46,0.1);}
+.vc-hero{background:var(--navy);padding:20px;position:relative;}
+.vc-name{font-family:'Tiro Devanagari Hindi',serif;font-size:18px;color:var(--white);margin-bottom:3px;}
+.vc-tagline{font-size:12px;color:var(--gold);opacity:0.9;}
+.vc-badge{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;margin-top:8px;}
+.vc-body{padding:16px;}
+.vc-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.vc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;}
+.vc-tag{background:#F0EBE0;color:#5A4A30;font-size:11px;padding:2px 8px;border-radius:10px;}
+.vc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);}
+.vc-rating{display:flex;align-items:center;gap:4px;}
+.stars{color:var(--gold);font-size:13px;}
+.vc-rating-num{font-size:12px;color:var(--muted);}
+.vc-loc{font-size:12px;color:var(--muted);}
+.vc-phone{font-size:12px;color:var(--navy);font-weight:500;}
+.view-btn{background:var(--navy);color:var(--gold);border:none;padding:6px 14px;border-radius:12px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;}
+
+/* ── VENDOR DETAIL ── */
+.detail-back{background:none;border:none;color:var(--gold);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:20px;font-family:'Inter',sans-serif;}
+.detail-hero{background:var(--navy);border-radius:16px;padding:28px;margin-bottom:24px;}
+.detail-name{font-family:'Tiro Devanagari Hindi',serif;font-size:28px;color:var(--white);margin-bottom:4px;}
+.detail-tagline{font-size:14px;color:var(--gold);margin-bottom:12px;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.detail-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;}
+.detail-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.detail-body{font-size:13px;color:var(--text);line-height:1.6;}
+.detail-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.detail-tag{background:#E1F5EE;color:#085041;font-size:12px;padding:3px 10px;border-radius:10px;}
+.detail-spec-tag{background:#EEEDFE;color:#3C3489;font-size:12px;padding:3px 10px;border-radius:10px;}
+.contact-row{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--border);}
+.contact-row:last-child{border-bottom:none;}
+.contact-lbl{color:var(--muted);}
+.contact-val{font-weight:500;color:var(--text);}
+
+/* share buttons */
+.share-section{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;margin-top:20px;}
+.share-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:12px;}
+.share-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.share-btn{display:flex;align-items:center;gap:8px;padding:9px 18px;border-radius:20px;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity 0.2s;}
+.share-btn:hover{opacity:0.85;}
+.share-ig{background:#E1306C;color:#fff;}
+.share-fb{background:#1877F2;color:#fff;}
+.share-wa{background:#25D366;color:#fff;}
+.share-copy{background:var(--navy);color:var(--gold);}
+
+/* ── REVIEWS ── */
+.reviews-section{margin-top:24px;}
+.reviews-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.reviews-title{font-size:15px;font-weight:600;color:var(--navy);}
+.avg-rating{display:flex;align-items:center;gap:8px;}
+.avg-num{font-size:28px;font-weight:700;color:var(--navy);}
+.avg-stars{font-size:18px;color:var(--gold);}
+.review-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
+.review-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.review-name{font-size:13px;font-weight:600;color:var(--text);}
+.review-stars{font-size:13px;color:var(--gold);}
+.review-text{font-size:13px;color:var(--muted);line-height:1.5;}
+.review-date{font-size:11px;color:#AAA;margin-top:4px;}
+
+/* add review */
+.add-review{background:var(--cream2);border:1px solid var(--border);border-radius:12px;padding:18px;margin-top:16px;}
+.add-review-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:12px;}
+.star-picker{display:flex;gap:4px;margin-bottom:12px;}
+.star-pick{font-size:24px;cursor:pointer;color:#DDD;transition:color 0.15s;}
+.star-pick.lit{color:var(--gold);}
+.review-name-input{width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--white);margin-bottom:8px;}
+.review-textarea{width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--white);min-height:72px;resize:vertical;}
+.submit-review-btn{margin-top:10px;background:var(--navy);color:var(--gold);border:none;padding:9px 20px;border-radius:16px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;}
+
+/* ── REGISTER FORM ── */
+.form-wrap{max-width:800px;margin:0 auto;}
+.form-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;}
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:20px;}
+.form-card-title{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.form-card-title::before{content:'';display:inline-block;width:3px;height:12px;background:var(--gold);border-radius:2px;}
+.field{margin-bottom:12px;}
+.field:last-child{margin-bottom:0;}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px;font-weight:500;}
+.field input,.field textarea,.field select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:'Tiro Devanagari Hindi',serif;font-size:14px;background:var(--white);color:var(--text);outline:none;transition:border-color 0.2s;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold);}
+.field textarea{resize:vertical;min-height:80px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tag-row{display:flex;gap:8px;}
+.tag-row input{flex:1;}
+.add-tag-btn{flex-shrink:0;padding:0 14px;background:var(--navy);color:var(--gold);border:none;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;}
+.tags-display{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;}
+.form-tag{background:#FAEEDA;color:#633806;font-size:12px;padding:3px 10px 3px 12px;border-radius:20px;display:flex;align-items:center;gap:4px;}
+.form-tag button{background:none;border:none;color:#854F0B;cursor:pointer;font-size:14px;padding:0;line-height:1;}
+.char-count{font-size:11px;color:var(--muted);text-align:right;margin-top:2px;}
+.publish-btn{width:100%;padding:14px;font-size:17px;background:var(--navy);color:var(--gold);border:none;border-radius:12px;cursor:pointer;font-family:'Tiro Devanagari Hindi',serif;letter-spacing:1px;margin-top:20px;transition:opacity 0.2s;}
+.publish-btn:hover{opacity:0.88;}
+.success-msg{text-align:center;font-size:14px;font-weight:600;margin-top:10px;min-height:20px;}
+
+/* ── ABOUT ── */
+.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:900px;margin:0 auto;}
+.about-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;}
+.about-icon{font-size:32px;margin-bottom:12px;}
+.about-title{font-family:'Tiro Devanagari Hindi',serif;font-size:18px;color:var(--navy);margin-bottom:6px;}
+.about-text{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:var(--gold);padding:12px 24px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:all 0.3s;z-index:999;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── CUSTOM CONFIRM DIALOG ── */
+.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,0.6);z-index:500;align-items:center;justify-content:center;}
+.confirm-overlay.open{display:flex;}
+.confirm-box{background:var(--white);border-radius:16px;padding:28px 24px;max-width:340px;width:90%;text-align:center;box-shadow:0 12px 48px rgba(26,26,46,0.25);}
+.confirm-icon{font-size:32px;margin-bottom:12px;}
+.confirm-msg{font-size:14px;color:var(--text);line-height:1.5;margin-bottom:20px;font-family:'Inter',sans-serif;}
+.confirm-btns{display:flex;gap:10px;justify-content:center;}
+.confirm-cancel{padding:9px 22px;border:1.5px solid var(--border);border-radius:20px;background:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;}
+.confirm-cancel:hover{background:var(--cream2);}
+.confirm-ok{padding:9px 22px;border:none;border-radius:20px;background:var(--red);color:#fff;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;}
+.confirm-ok:hover{opacity:0.85;}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,0.7);z-index:200;overflow-y:auto;padding:20px;}
+.modal-overlay.open{display:flex;align-items:flex-start;justify-content:center;}
+.modal{background:var(--cream);border-radius:20px;width:100%;max-width:860px;padding:28px;position:relative;margin:auto;}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);}
+
+/* search */
+.search-bar{display:flex;gap:10px;max-width:600px;margin:0 auto 32px;align-items:center;}
+.search-bar input{flex:1;padding:11px 18px;border:1.5px solid var(--border);border-radius:24px;font-family:'Tiro Devanagari Hindi',serif;font-size:14px;background:var(--white);outline:none;}
+.search-bar input:focus{border-color:var(--gold);}
+.filter-select{padding:11px 14px;border:1.5px solid var(--border);border-radius:24px;font-size:13px;background:var(--white);outline:none;cursor:pointer;}
+
+/* empty state */
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-state-icon{font-size:48px;margin-bottom:12px;}
+.empty-state p{font-size:14px;}
+
+/* responsive */
+@media(max-width:640px){
+  .form-grid,.detail-grid{grid-template-columns:1fr;}
+  .hero-logo{font-size:36px;}
+  .section{padding:40px 16px;}
+  nav{padding:0 16px;}
+  .hero{padding:60px 16px 40px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">अपना <span>वेंडर</span></div>
+  <div class="nav-links">
+    <button class="nav-link active" id="nav-home" onclick="showPage('home')" data-key="navHome">होम</button>
+    <button class="nav-link" id="nav-vendors" onclick="showPage('vendors')" data-key="navVendors">विक्रेता</button>
+    <button class="nav-link" id="nav-register" onclick="showPage('register')" data-key="navRegister">पंजीकरण</button>
+    <button class="nav-link" id="nav-about" onclick="showPage('about')" data-key="navAbout">हमारे बारे में</button>
+  </div>
+  <div class="lang-bar">
+    <button class="lang-btn active" onclick="setLang('hi')">हिंदी</button>
+    <button class="lang-btn" onclick="setLang('en')">English</button>
+    <button class="lang-btn" onclick="setLang('mr')">मराठी</button>
+  </div>
+  <div class="auth-area" id="auth-area"></div>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<!-- CUSTOM CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">🗑️</div>
+    <div class="confirm-msg" id="confirm-msg"></div>
+    <div class="confirm-btns">
+      <button class="confirm-cancel" id="confirm-cancel-btn"></button>
+      <button class="confirm-ok" id="confirm-ok-btn"></button>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-logo">अपना <span>वेंडर</span></div>
+    <div class="hero-tagline" id="hero-tagline">अपना विक्रेता, अपना भरोसा</div>
+    <div class="hero-sub" id="hero-sub">APNA VENDOR · APNA BHAROSA</div>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('register')" id="hero-btn1">अपनी दुकान जोड़ें</button>
+      <button class="btn-outline" onclick="showPage('vendors')" id="hero-btn2">विक्रेता देखें</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num" id="stat-count">0</div><div class="stat-label" id="stat-label1">पंजीकृत विक्रेता</div></div>
+      <div class="stat"><div class="stat-num">२८</div><div class="stat-label" id="stat-label2">राज्य</div></div>
+      <div class="stat"><div class="stat-num" id="stat-free">मुफ़्त</div><div class="stat-label" id="stat-label3">हमेशा के लिए</div></div>
+    </div>
+  </div>
+  <div class="section" style="background:var(--white);">
+    <div class="section-header">
+      <div class="section-title" id="home-why-title">यह क्यों?</div>
+      <div class="section-sub" id="home-why-sub">गरीब से गरीब व्यापारी भी डिजिटल दुनिया में अपनी पहचान बना सके</div>
+    </div>
+    <div class="about-grid">
+      <div class="about-card"><div class="about-icon">🌐</div><div class="about-title" id="why1-t">डिजिटल पहचान</div><div class="about-text" id="why1-b">इंटरनेट पर अपनी दुकान की छवि बनाएं और लाखों ग्राहकों तक पहुंचें।</div></div>
+      <div class="about-card"><div class="about-icon">⭐</div><div class="about-title" id="why2-t">रेटिंग और समीक्षा</div><div class="about-text" id="why2-b">ग्राहक आपको रेट करें, समीक्षा दें और आपका विश्वास बढ़ाएं।</div></div>
+      <div class="about-card"><div class="about-icon">📱</div><div class="about-title" id="why3-t">सोशल मीडिया</div><div class="about-text" id="why3-b">Instagram, Facebook और WhatsApp पर अपनी दुकान शेयर करें।</div></div>
+      <div class="about-card"><div class="about-icon">🆓</div><div class="about-title" id="why4-t">बिल्कुल मुफ़्त</div><div class="about-text" id="why4-b">कोई शुल्क नहीं, कोई छुपी फीस नहीं। हमेशा के लिए मुफ़्त।</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- VENDORS -->
+<div class="page" id="page-vendors">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title" id="vendors-title">सभी विक्रेता</div>
+      <div class="section-sub" id="vendors-sub">हमारे समुदाय के विक्रेताओं से मिलें</div>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="दुकान या सेवा खोजें..." oninput="filterVendors()">
+      <select class="filter-select" id="cat-filter" onchange="filterVendors()">
+        <option value="">सभी श्रेणी</option>
+        <option>खान-पान</option><option>दर्जी</option><option>प्रिंटिंग</option>
+        <option>ट्रांसपोर्ट</option><option>मरम्मत</option><option>होलसेल</option>
+        <option>फूलवाला</option><option>टेक सेवा</option><option>कपड़े</option>
+      </select>
+    </div>
+    <div class="vendor-grid" id="vendor-grid"></div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div class="page" id="page-register">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title" id="reg-title">अपनी दुकान पंजीकृत करें</div>
+      <div class="section-sub" id="reg-sub">नीचे अपनी जानकारी भरें और अपनी डिजिटल पहचान बनाएं</div>
+    </div>
+    <div class="form-wrap">
+      <div class="form-grid">
+        <div>
+          <div class="form-card" style="margin-bottom:16px;">
+            <div class="form-card-title" id="fc-identity">दुकान की पहचान</div>
+            <div class="field"><label id="fl-vname">व्यापार का नाम *</label><input type="text" id="f-vname"></div>
+            <div class="field"><label id="fl-tagline">टैगलाइन</label><input type="text" id="f-tagline"></div>
+            <div class="row2">
+              <div class="field"><label id="fl-cat">श्रेणी</label>
+                <select id="f-cat">
+                  <option value="">चुनें...</option>
+                  <option>खान-पान</option><option>दर्जी</option><option>प्रिंटिंग</option>
+                  <option>ट्रांसपोर्ट</option><option>मरम्मत</option><option>होलसेल</option>
+                  <option>फूलवाला</option><option>टेक सेवा</option><option>कपड़े</option><option>अन्य</option>
+                </select>
+              </div>
+              <div class="field"><label id="fl-loc">शहर / स्थान</label><input type="text" id="f-loc"></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label id="fl-year">स्थापना वर्ष</label><input type="number" id="f-year" placeholder="2010"></div>
+              <div class="field"><label id="fl-team">टीम का आकार</label>
+                <select id="f-team">
+                  <option value="">चुनें...</option>
+                  <option>सिर्फ मैं</option><option>२–५ लोग</option><option>६–१५ लोग</option>
+                  <option>१६–५० लोग</option><option>५०+ लोग</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-card" style="margin-bottom:16px;">
+            <div class="form-card-title" id="fc-about">हमारे बारे में</div>
+            <div class="field">
+              <label id="fl-desc">विवरण</label>
+              <textarea id="f-desc" maxlength="300" oninput="document.getElementById('f-desc-count').textContent=this.value.length+' / 300'"></textarea>
+              <div class="char-count" id="f-desc-count">0 / 300</div>
+            </div>
+          </div>
+          <div class="form-card">
+            <div class="form-card-title" id="fc-contact">संपर्क जानकारी</div>
+            <div class="row2">
+              <div class="field"><label id="fl-phone">फोन नंबर *</label><input type="tel" id="f-phone"></div>
+              <div class="field"><label id="fl-wa">व्हाट्सएप</label><input type="tel" id="f-wa"></div>
+            </div>
+            <div class="field"><label id="fl-email">ईमेल</label><input type="email" id="f-email"></div>
+            <div class="field"><label id="fl-web">वेबसाइट</label><input type="text" id="f-web"></div>
+          </div>
+        </div>
+        <div>
+          <div class="form-card" style="margin-bottom:16px;">
+            <div class="form-card-title" id="fc-offers">हम क्या देते हैं</div>
+            <div class="field">
+              <label id="fl-offers">सेवा या उत्पाद जोड़ें</label>
+              <div class="tag-row">
+                <input type="text" id="f-offer-input">
+                <button class="add-tag-btn" onclick="addFormTag('f-offer-input',fOffersList,'f-offers-tags')" id="fbtn-offer">+ जोड़ें</button>
+              </div>
+              <div class="tags-display" id="f-offers-tags"></div>
+            </div>
+          </div>
+          <div class="form-card">
+            <div class="form-card-title" id="fc-spec">विशेषताएं</div>
+            <div class="field">
+              <label id="fl-spec">आप क्यों खास हैं?</label>
+              <div class="tag-row">
+                <input type="text" id="f-spec-input">
+                <button class="add-tag-btn" onclick="addFormTag('f-spec-input',fSpecsList,'f-specs-tags')" id="fbtn-spec">+ जोड़ें</button>
+              </div>
+              <div class="tags-display" id="f-specs-tags"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="publish-btn" onclick="publishVendor()" id="publish-btn">मेरी दुकान प्रकाशित करें</button>
+      <div class="success-msg" id="form-success"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="page" id="page-about">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title" id="about-title">अपना वेंडर के बारे में</div>
+      <div class="section-sub" id="about-sub">भारत के छोटे व्यापारियों के लिए एक मुफ़्त डिजिटल मंच</div>
+    </div>
+    <div class="about-grid" style="max-width:700px;margin:0 auto;">
+      <div class="about-card"><div class="about-icon">🏪</div><div class="about-title" id="about1-t">हमारा मिशन</div><div class="about-text" id="about1-b">हर छोटे विक्रेता को, चाहे वो किसी भी गली-मोहल्ले में हो, एक डिजिटल पहचान देना।</div></div>
+      <div class="about-card"><div class="about-icon">🤝</div><div class="about-title" id="about2-t">समुदाय</div><div class="about-text" id="about2-b">यह एक समुदाय है जहाँ विक्रेता और ग्राहक एक-दूसरे का साथ देते हैं।</div></div>
+      <div class="about-card"><div class="about-icon">💡</div><div class="about-title" id="about3-t">तकनीक</div><div class="about-text" id="about3-b">सरल तकनीक जो हर किसी के लिए आसान हो — स्मार्टफोन हो या कंप्यूटर।</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- VENDOR DETAIL MODAL -->
+<div class="modal-overlay" id="vendor-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+var vendors = JSON.parse(localStorage.getItem('av_vendors') || '[]');
+var currentUser = loadCurrentUser();
+var currentLang = 'hi';
+var selectedVendorId = null;
+var selectedStars = 0;
+
+function loadCurrentUser(){
+  try{ return JSON.parse(localStorage.getItem('av_user')) || null; }
+  catch(e){ return null; }
+}
+function saveCurrentUser(user){
+  currentUser = user;
+  if(user){ localStorage.setItem('av_user', JSON.stringify(user)); }
+  else { localStorage.removeItem('av_user'); }
+  updateAuthUI();
+}
+function updateAuthUI(){
+  var authArea = document.getElementById('auth-area');
+  if(!authArea) return;
+  if(currentUser){
+    authArea.innerHTML = '<span style="color:#fff;font-size:13px;">'+(currentUser.name||currentUser.email||'User')+'</span>'+
+      '<button class="auth-btn" onclick="signOut()">Logout</button>';
+  } else {
+    authArea.innerHTML = '<div id="google-signin-button"></div>';
+  }
+}
+function initGoogleAuth(retries){
+  retries = typeof retries === 'number' ? retries : 20;
+  if(window.google && google.accounts && google.accounts.id){
+    google.accounts.id.initialize({
+      client_id:'690805050238-52e8fqjqt65kroi8opndu2t5j3hvo7dv.apps.googleusercontent.com',
+      callback: handleCredentialResponse
+    });
+    google.accounts.id.renderButton(
+      document.getElementById('google-signin-button'),
+      { theme:'outline', size:'small', width:'220' }
+    );
+    google.accounts.id.prompt();
+    return;
+  }
+  if(retries > 0){
+    setTimeout(function(){ initGoogleAuth(retries - 1); }, 200);
+  } else {
+    updateAuthUI();
+  }
+}
+function handleCredentialResponse(response){
+  if(!response || !response.credential) return;
+  var payload = parseJwt(response.credential);
+  if(!payload) return;
+  saveCurrentUser({ id: payload.sub, name: payload.name || payload.email, email: payload.email, picture: payload.picture });
+  showToast(currentLang==='en'?'Signed in successfully.':'सफलतापूर्वक साइन इन हुआ।');
+}
+function parseJwt(token){
+  try{
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g,'+').replace(/_/g,'/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c){
+      return '%'+('00'+c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+  } catch(e){ return null; }
+}
+function signOut(){
+  saveCurrentUser(null);
+  if(window.google && google.accounts && google.accounts.id && google.accounts.id.disableAutoSelect){
+    google.accounts.id.disableAutoSelect();
+  }
+  showToast(currentLang==='en'?'Signed out.':'साइन आउट किया गया।');
+}
+function requireGoogleLogin(){
+  if(!currentUser){
+    showToast(currentLang==='en'?'Please sign in with Google first.':'कृपया पहले Google से साइन इन करें।');
+    return false;
+  }
+  return true;
+}
+
+// seed data if empty
+if(vendors.length === 0){
+  vendors = [
+    {id:'v1',name:'शर्मा कैटरर्स',tagline:'गृह जैसा खाना, हर जगह',cat:'खान-पान',loc:'दिल्ली, NCR',year:'2008',team:'६–१५ लोग',desc:'हम शादी, जन्मदिन और कॉर्पोरेट कार्यक्रमों के लिए शुद्ध और स्वादिष्ट खाना बनाते हैं। 15 साल का अनुभव।',offers:['शादी का खाना','जन्मदिन पार्टी','कॉर्पोरेट लंच','होम डिलीवरी'],specs:['जैन फूड','हलाल','24 घंटे उपलब्ध'],phone:'+91 98100 12345',wa:'+91 98100 12345',email:'sharma@caterers.in',web:'',reviews:[{name:'रामेश कुमार',stars:5,text:'बहुत बढ़िया खाना! शादी में सबने तारीफ की।',date:'मार्च 2025'},{name:'Priya Singh',stars:4,text:'Great food and service. Will order again!',date:'फरवरी 2025'}]},
+    {id:'v2',name:'पुष्प मंदिर',tagline:'हर फूल में एक कहानी',cat:'फूलवाला',loc:'मुंबई, महाराष्ट्र',year:'2015',team:'२–५ लोग',desc:'ताज़े फूलों से सुंदर सजावट। शादी, पूजा और हर उत्सव के लिए।',offers:['शादी की सजावट','पूजा माला','गुलदस्ते','फूलों की थाली'],specs:['ताज़े फूल रोज़','कस्टम डिज़ाइन','बजट के अनुसार'],phone:'+91 97650 54321',wa:'',email:'pushpa@mandirs.com',web:'',reviews:[{name:'Aisha Khan',stars:5,text:'Absolutely beautiful arrangements for my wedding!',date:'अप्रैल 2025'}]},
+    {id:'v3',name:'रामजी प्रिंट हाउस',tagline:'आपके सपनों का प्रिंट',cat:'प्रिंटिंग',loc:'जयपुर, राजस्थान',year:'2012',team:'२–५ लोग',desc:'निमंत्रण पत्र, बैनर, विज़िटिंग कार्ड और हर प्रकार की प्रिंटिंग सेवा।',offers:['निमंत्रण पत्र','बैनर','विज़िटिंग कार्ड','फ्लेक्स प्रिंट'],specs:['48 घंटे में डिलीवरी','सस्ती कीमत','कस्टम डिज़ाइन'],phone:'+91 94100 98765',wa:'+91 94100 98765',email:'ramji@print.co',web:'www.ramjiprint.in',reviews:[]}
+  ];
+  localStorage.setItem('av_vendors', JSON.stringify(vendors));
+}
+
+function saveVendors(){ localStorage.setItem('av_vendors', JSON.stringify(vendors)); }
+
+// ── TRANSLATIONS ──
+var T = {
+  hi:{
+    navHome:'होम',navVendors:'विक्रेता',navRegister:'पंजीकरण',navAbout:'हमारे बारे में',
+    heroTagline:'अपना विक्रेता, अपना भरोसा',heroBtn1:'अपनी दुकान जोड़ें',heroBtn2:'विक्रेता देखें',
+    statL1:'पंजीकृत विक्रेता',statL2:'राज्य',statL3:'हमेशा के लिए',statFree:'मुफ़्त',
+    vendorsTitle:'सभी विक्रेता',vendorsSub:'हमारे समुदाय के विक्रेताओं से मिलें',
+    regTitle:'अपनी दुकान पंजीकृत करें',regSub:'नीचे अपनी जानकारी भरें और अपनी डिजिटल पहचान बनाएं',
+    aboutTitle:'अपना वेंडर के बारे में',aboutSub:'भारत के छोटे व्यापारियों के लिए एक मुफ़्त डिजिटल मंच',
+    homeWhyTitle:'यह क्यों?',homeWhySub:'गरीब से गरीब व्यापारी भी डिजिटल दुनिया में अपनी पहचान बना सके',
+    why1t:'डिजिटल पहचान',why1b:'इंटरनेट पर अपनी दुकान की छवि बनाएं।',
+    why2t:'रेटिंग और समीक्षा',why2b:'ग्राहक आपको रेट करें और आपका विश्वास बढ़ाएं।',
+    why3t:'सोशल मीडिया',why3b:'Instagram, Facebook पर अपनी दुकान शेयर करें।',
+    why4t:'बिल्कुल मुफ़्त',why4b:'कोई शुल्क नहीं। हमेशा के लिए मुफ़्त।',
+    fcIdentity:'दुकान की पहचान',fcAbout:'हमारे बारे में',fcOffers:'हम क्या देते हैं',fcSpec:'विशेषताएं',fcContact:'संपर्क जानकारी',
+    flVname:'व्यापार का नाम *',flTagline:'टैगलाइन',flCat:'श्रेणी',flLoc:'शहर / स्थान',flYear:'स्थापना वर्ष',flTeam:'टीम का आकार',
+    flDesc:'विवरण',flOffers:'सेवा या उत्पाद जोड़ें',flSpec:'आप क्यों खास हैं?',
+    flPhone:'फोन नंबर *',flWa:'व्हाट्सएप',flEmail:'ईमेल',flWeb:'वेबसाइट',
+    fbtnOffer:'+ जोड़ें',fbtnSpec:'+ जोड़ें',publishBtn:'मेरी दुकान प्रकाशित करें',
+    viewBtn:'देखें',searchPlaceholder:'दुकान या सेवा खोजें...',
+    shareTitle:'सोशल मीडिया पर शेयर करें',
+    reviewsTitle:'समीक्षाएं',addReviewTitle:'समीक्षा दें',reviewPlaceholder:'अपनी समीक्षा लिखें...',namePlaceholder:'आपका नाम',submitReview:'समीक्षा जमा करें',
+    errName:'कृपया व्यापार का नाम भरें।',errPhone:'कृपया फोन नंबर भरें।',
+    successPub:'आपकी दुकान प्रकाशित हो गई! अब इसे सभी देख सकते हैं।',
+    toastCopied:'लिंक कॉपी हो गया!',toastReview:'आपकी समीक्षा जुड़ गई!',
+    detailAbout:'के बारे में',detailOffers:'हम क्या देते हैं',detailSpec:'विशेषताएं',detailContact:'संपर्क',detailDetails:'विवरण',
+    plLoc:'स्थान',plYear:'स्थापना',plTeam:'टीम',plPhone:'फोन',plWa:'व्हाट्सएप',plEmail:'ईमेल',plWeb:'वेबसाइट',
+    emptyVendors:'अभी कोई विक्रेता नहीं मिला।',inputFont:"'Tiro Devanagari Hindi',serif",
+    noReviews:'अभी कोई समीक्षा नहीं। पहले बनें!',reviewCount:'समीक्षाएं',
+    deleteReview:'हटाएं',deleteConfirm:'क्या आप इस समीक्षा को हटाना चाहते हैं?',
+    deleteVendorBtn:'🗑 मेरी दुकान हटाएं',deleteVendorConfirm:'क्या आप वाकई अपनी दुकान का प्रोफ़ाइल हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती।',deleteVendorToast:'आपकी दुकान हटा दी गई।',
+    copyLink:'लिंक कॉपी करें',
+    about1t:'हमारा मिशन',about1b:'हर छोटे विक्रेता को, चाहे वो किसी भी गली-मोहल्ले में हो, एक डिजिटल पहचान देना।',
+    about2t:'समुदाय',about2b:'यह एक समुदाय है जहाँ विक्रेता और ग्राहक एक-दूसरे का साथ देते हैं।',
+    about3t:'तकनीक',about3b:'सरल तकनीक जो हर किसी के लिए आसान हो — स्मार्टफोन हो या कंप्यूटर।'
+  },
+  en:{
+    navHome:'Home',navVendors:'Vendors',navRegister:'Register',navAbout:'About',
+    heroTagline:'Your Vendor, Your Trust',heroBtn1:'Add Your Shop',heroBtn2:'Browse Vendors',
+    statL1:'Registered Vendors',statL2:'States',statL3:'Forever Free',statFree:'Free',
+    vendorsTitle:'All Vendors',vendorsSub:'Meet the vendors in our community',
+    regTitle:'Register Your Shop',regSub:'Fill in your details and build your digital presence',
+    aboutTitle:'About Apna Vendor',aboutSub:'A free digital platform for small vendors across India',
+    homeWhyTitle:'Why Apna Vendor?',homeWhySub:'Every small vendor deserves a digital identity',
+    why1t:'Digital Identity',why1b:'Build your shop\'s presence on the internet.',
+    why2t:'Ratings & Reviews',why2b:'Let customers rate and review your business.',
+    why3t:'Social Media',why3b:'Share your shop on Instagram and Facebook.',
+    why4t:'Completely Free',why4b:'No charges. Free forever.',
+    fcIdentity:'Vendor Identity',fcAbout:'About Us',fcOffers:'What We Offer',fcSpec:'Specialities',fcContact:'Contact Details',
+    flVname:'Business Name *',flTagline:'Tagline',flCat:'Category',flLoc:'City / Location',flYear:'Est. Year',flTeam:'Team Size',
+    flDesc:'Description',flOffers:'Add a service or product',flSpec:'What makes you stand out?',
+    flPhone:'Phone Number *',flWa:'WhatsApp',flEmail:'Email',flWeb:'Website',
+    fbtnOffer:'+ Add',fbtnSpec:'+ Add',publishBtn:'Publish My Vendor Profile',
+    viewBtn:'View',searchPlaceholder:'Search shops or services...',
+    shareTitle:'Share on Social Media',
+    reviewsTitle:'Reviews',addReviewTitle:'Leave a Review',reviewPlaceholder:'Write your review...',namePlaceholder:'Your name',submitReview:'Submit Review',
+    errName:'Please enter your business name.',errPhone:'Please enter a phone number.',
+    successPub:'Your shop is now live! Everyone can see it.',
+    toastCopied:'Link copied!',toastReview:'Your review has been added!',
+    detailAbout:'About',detailOffers:'What We Offer',detailSpec:'Specialities',detailContact:'Contact',detailDetails:'Details',
+    plLoc:'Location',plYear:'Est.',plTeam:'Team',plPhone:'Phone',plWa:'WhatsApp',plEmail:'Email',plWeb:'Website',
+    emptyVendors:'No vendors found.',inputFont:"'Inter',sans-serif",
+    noReviews:'No reviews yet. Be the first!',reviewCount:'reviews',
+    deleteReview:'Delete',deleteConfirm:'Are you sure you want to delete this review?',
+    deleteVendorBtn:'🗑 Delete My Profile',deleteVendorConfirm:'Are you sure you want to delete your vendor profile? This cannot be undone.',deleteVendorToast:'Your profile has been deleted.',
+    copyLink:'Copy Link',
+    about1t:'Our Mission',about1b:'To give every small vendor, wherever they may be, a digital identity.',
+    about2t:'Community',about2b:'A community where vendors and customers support each other.',
+    about3t:'Technology',about3b:'Simple technology that works for everyone — smartphone or computer.'
+  },
+  mr:{
+    navHome:'होम',navVendors:'विक्रेते',navRegister:'नोंदणी',navAbout:'आमच्याबद्दल',
+    heroTagline:'अपना विक्रेता, अपना भरोसा',heroBtn1:'माझे दुकान जोडा',heroBtn2:'विक्रेते पहा',
+    statL1:'नोंदणीकृत विक्रेते',statL2:'राज्ये',statL3:'कायमचे मोफत',statFree:'मोफत',
+    vendorsTitle:'सर्व विक्रेते',vendorsSub:'आमच्या समुदायातील विक्रेत्यांना भेटा',
+    regTitle:'आपले दुकान नोंदवा',regSub:'खाली माहिती भरा आणि डिजिटल ओळख बनवा',
+    aboutTitle:'अपना वेंडर बद्दल',aboutSub:'भारतातील छोट्या व्यापाऱ्यांसाठी एक मोफत डिजिटल व्यासपीठ',
+    homeWhyTitle:'हे का?',homeWhySub:'प्रत्येक छोट्या विक्रेत्याला डिजिटल ओळख मिळावी',
+    why1t:'डिजिटल ओळख',why1b:'इंटरनेटवर आपल्या दुकानाची प्रतिमा तयार करा।',
+    why2t:'रेटिंग आणि समीक्षा',why2b:'ग्राहक तुम्हाला रेट करतील आणि विश्वास वाढवतील.',
+    why3t:'सोशल मीडिया',why3b:'Instagram, Facebook वर दुकान शेअर करा.',
+    why4t:'पूर्णपणे मोफत',why4b:'कोणतेही शुल्क नाही. कायमचे मोफत.',
+    fcIdentity:'दुकानाची ओळख',fcAbout:'आमच्याबद्दल',fcOffers:'आम्ही काय देतो',fcSpec:'विशेषता',fcContact:'संपर्क माहिती',
+    flVname:'व्यवसायाचे नाव *',flTagline:'टॅगलाइन',flCat:'श्रेणी',flLoc:'शहर / ठिकाण',flYear:'स्थापना वर्ष',flTeam:'संघाचा आकार',
+    flDesc:'वर्णन',flOffers:'सेवा किंवा उत्पादन जोडा',flSpec:'तुम्ही विशेष का आहात?',
+    flPhone:'फोन नंबर *',flWa:'व्हॉट्सअॅप',flEmail:'ईमेल',flWeb:'वेबसाइट',
+    fbtnOffer:'+ जोडा',fbtnSpec:'+ जोडा',publishBtn:'माझे दुकान प्रकाशित करा',
+    viewBtn:'पहा',searchPlaceholder:'दुकान किंवा सेवा शोधा...',
+    shareTitle:'सोशल मीडियावर शेअर करा',
+    reviewsTitle:'समीक्षा',addReviewTitle:'समीक्षा द्या',reviewPlaceholder:'आपली समीक्षा लिहा...',namePlaceholder:'आपले नाव',submitReview:'समीक्षा सादर करा',
+    errName:'कृपया व्यवसायाचे नाव भरा.',errPhone:'कृपया फोन नंबर भरा.',
+    successPub:'आपले दुकान प्रकाशित झाले! आता सर्व पाहू शकतात.',
+    toastCopied:'लिंक कॉपी झाली!',toastReview:'आपली समीक्षा जोडली गेली!',
+    detailAbout:'बद्दल',detailOffers:'आम्ही काय देतो',detailSpec:'विशेषता',detailContact:'संपर्क',detailDetails:'तपशील',
+    plLoc:'ठिकाण',plYear:'स्थापना',plTeam:'संघ',plPhone:'फोन',plWa:'व्हॉट्सअॅप',plEmail:'ईमेल',plWeb:'वेबसाइट',
+    emptyVendors:'कोणतेही विक्रेते सापडले नाहीत.',inputFont:"'Tiro Devanagari Hindi',serif",
+    noReviews:'अद्याप कोणतीही समीक्षा नाही. प्रथम व्हा!',reviewCount:'समीक्षा',
+    deleteReview:'हटवा',deleteConfirm:'तुम्हाला ही समीक्षा हटवायची आहे का?',
+    deleteVendorBtn:'🗑 माझे दुकान हटवा',deleteVendorConfirm:'तुम्हाला खरोखर तुमचे विक्रेता प्रोफाइल हटवायचे आहे का? ही क्रिया पूर्ववत करता येणार नाही.',deleteVendorToast:'तुमचे प्रोफाइल हटवले गेले.',
+    copyLink:'लिंक कॉपी करा',
+    about1t:'आमचे ध्येय',about1b:'प्रत्येक छोट्या विक्रेत्याला, कुठेही असला तरी, डिजिटल ओळख देणे.',
+    about2t:'समुदाय',about2b:'एक समुदाय जिथे विक्रेते आणि ग्राहक एकमेकांना साथ देतात.',
+    about3t:'तंत्रज्ञान',about3b:'सोपे तंत्रज्ञान जे सर्वांसाठी सहज असेल — स्मार्टफोन किंवा संगणक.'
+  }
+};
+
+function t(key){ return T[currentLang][key] || key; }
+
+function setLang(lang){
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(function(b,i){b.classList.toggle('active',['hi','en','mr'][i]===lang);});
+  applyTranslations();
+  renderVendorGrid();
+  // Re-render modal if it's currently open
+  if(selectedVendorId && document.getElementById('vendor-modal').classList.contains('open')){
+    openVendor(selectedVendorId);
+  }
+}
+
+function applyTranslations(){
+  var keys = ['navHome','navVendors','navRegister','navAbout','heroTagline','heroBtn1','heroBtn2',
+    'statL1','statL2','statL3','statFree','vendorsTitle','vendorsSub','regTitle','regSub','aboutTitle','aboutSub',
+    'homeWhyTitle','homeWhySub','why1t','why1b','why2t','why2b','why3t','why3b','why4t','why4b',
+    'fcIdentity','fcAbout','fcOffers','fcSpec','fcContact',
+    'flVname','flTagline','flCat','flLoc','flYear','flTeam','flDesc','flOffers','flSpec',
+    'flPhone','flWa','flEmail','flWeb','fbtnOffer','fbtnSpec','publishBtn',
+    'about1t','about1b','about2t','about2b','about3t','about3b'];
+  var idMap = {
+    navHome:'nav-home',navVendors:'nav-vendors',navRegister:'nav-register',navAbout:'nav-about',
+    heroTagline:'hero-tagline',heroBtn1:'hero-btn1',heroBtn2:'hero-btn2',
+    statL1:'stat-label1',statL2:'stat-label2',statL3:'stat-label3',statFree:'stat-free',
+    vendorsTitle:'vendors-title',vendorsSub:'vendors-sub',regTitle:'reg-title',regSub:'reg-sub',
+    aboutTitle:'about-title',aboutSub:'about-sub',homeWhyTitle:'home-why-title',homeWhySub:'home-why-sub',
+    why1t:'why1-t',why1b:'why1-b',why2t:'why2-t',why2b:'why2-b',why3t:'why3-t',why3b:'why3-b',why4t:'why4-t',why4b:'why4-b',
+    fcIdentity:'fc-identity',fcAbout:'fc-about',fcOffers:'fc-offers',fcSpec:'fc-spec',fcContact:'fc-contact',
+    flVname:'fl-vname',flTagline:'fl-tagline',flCat:'fl-cat',flLoc:'fl-loc',flYear:'fl-year',flTeam:'fl-team',
+    flDesc:'fl-desc',flOffers:'fl-offers',flSpec:'fl-spec',
+    flPhone:'fl-phone',flWa:'fl-wa',flEmail:'fl-email',flWeb:'fl-web',
+    fbtnOffer:'fbtn-offer',fbtnSpec:'fbtn-spec',publishBtn:'publish-btn',
+    about1t:'about1-t',about1b:'about1-b',about2t:'about2-t',about2b:'about2-b',about3t:'about3-t',about3b:'about3-b'
+  };
+  keys.forEach(function(k){ var el=document.getElementById(idMap[k]); if(el) el.textContent=t(k); });
+  var si = document.getElementById('search-input');
+  if(si) si.placeholder = t('searchPlaceholder');
+  document.querySelectorAll('.field input,.field textarea,.field select').forEach(function(el){
+    el.style.fontFamily = t('inputFont');
+  });
+}
+
+// ── PAGES ──
+function showPage(p){
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.nav-link').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('page-'+p).classList.add('active');
+  var nl = document.getElementById('nav-'+p);
+  if(nl) nl.classList.add('active');
+  if(p==='vendors') renderVendorGrid();
+  window.scrollTo(0,0);
+}
+
+// ── VENDOR GRID ──
+function avgRating(v){
+  if(!v.reviews||v.reviews.length===0) return null;
+  return (v.reviews.reduce(function(a,r){return a+r.stars;},0)/v.reviews.length).toFixed(1);
+}
+function starsHtml(n){
+  var s='',num=Math.round(n);
+  for(var i=1;i<=5;i++) s+=(i<=num?'★':'☆');
+  return s;
+}
+
+function filterVendors(){
+  var q = (document.getElementById('search-input').value||'').toLowerCase();
+  var cat = document.getElementById('cat-filter').value;
+  var filtered = vendors.filter(function(v){
+    var matchQ = !q || v.name.toLowerCase().includes(q)||v.desc.toLowerCase().includes(q)||(v.cat||'').includes(q);
+    var matchC = !cat || v.cat===cat;
+    return matchQ && matchC;
+  });
+  renderVendorGrid(filtered);
+}
+
+function renderVendorGrid(list){
+  var grid = document.getElementById('vendor-grid');
+  var data = list || vendors;
+  document.getElementById('stat-count').textContent = vendors.length;
+  if(data.length===0){
+    grid.innerHTML='<div class="empty-state"><div class="empty-state-icon">🏪</div><p>'+t('emptyVendors')+'</p></div>';
+    return;
+  }
+  grid.innerHTML = data.map(function(v){
+    var avg = avgRating(v);
+    var ratingHtml = avg ? '<div class="vc-rating"><span class="stars">'+starsHtml(parseFloat(avg))+'</span><span class="vc-rating-num">'+avg+' ('+v.reviews.length+')</span></div>' : '<div class="vc-rating-num" style="font-size:11px;color:#aaa;">'+t('noReviews').split('.')[0]+'</div>';
+    var offerTags = (v.offers||[]).slice(0,3).map(function(o){return '<span class="vc-tag">'+o+'</span>';}).join('');
+    return '<div class="vendor-card" onclick="openVendor(\''+v.id+'\')">'+
+      '<div class="vc-hero">'+
+      '<div class="vc-name">'+v.name+'</div>'+
+      '<div class="vc-tagline">'+v.tagline+'</div>'+
+      '<span class="vc-badge">'+v.cat+'</span>'+
+      '</div>'+
+      '<div class="vc-body">'+
+      '<div class="vc-desc">'+v.desc+'</div>'+
+      '<div class="vc-tags">'+offerTags+'</div>'+
+      '<div class="vc-footer">'+ratingHtml+'<div class="vc-loc">📍 '+v.loc+'</div></div>'+
+      '</div></div>';
+  }).join('');
+}
+
+// ── VENDOR DETAIL ──
+function openVendor(id){
+  selectedVendorId = id;
+  var v = vendors.find(function(x){return x.id===id;});
+  if(!v) return;
+  var avg = avgRating(v);
+  var shareUrl = 'https://apnavendor.in/vendor/'+id;
+  var igText = encodeURIComponent('🏪 '+v.name+' — '+v.tagline+'\n📍 '+v.loc+'\n📞 '+v.phone+'\n\nFind us on Apna Vendor! #ApnaVendor #SmallBusiness #India');
+  var fbUrl = 'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(shareUrl)+'&quote='+encodeURIComponent(v.name+' — '+v.tagline);
+  var waText = encodeURIComponent('नमस्ते! मैं *'+v.name+'* हूँ।\n📍 '+v.loc+'\n📞 '+v.phone+'\n\nहमारी दुकान देखें: '+shareUrl);
+
+  var reviewsHtml = (v.reviews&&v.reviews.length>0)
+    ? v.reviews.map(function(r,ri){
+        var deleteBtn = canDeleteReview(r)
+          ? '<button class="review-delete-btn" data-vid="'+id+'" data-ri="'+ri+'" style="background:none;border:1px solid #e0b0b0;color:#C0392B;font-size:11px;padding:2px 10px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;margin-left:8px;font-weight:500;">🗑 '+t('deleteReview')+'</button>'
+          : '';
+        return '<div class="review-card"><div class="review-top" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;"><span class="review-name">'+r.name+'</span><span style="display:flex;align-items:center;gap:4px;"><span class="review-stars">'+starsHtml(r.stars)+' '+r.stars+'/5</span>'+deleteBtn+'</span></div><div class="review-text">'+r.text+'</div><div class="review-date">'+r.date+'</div></div>';
+      }).join('')
+    : '<div style="color:var(--muted);font-size:13px;padding:8px 0;">'+t('noReviews')+'</div>';
+
+  var avgBlock = avg ? '<div class="avg-rating"><div class="avg-num">'+avg+'</div><div><div class="avg-stars">'+starsHtml(parseFloat(avg))+'</div><div style="font-size:11px;color:var(--muted);">'+v.reviews.length+' '+t('reviewCount')+'</div></div></div>' : '';
+
+  var isVendorOwner = currentUser && v.ownerId && v.ownerId === currentUser.id;
+  var deleteVendorBtn = isVendorOwner
+    ? '<button class="vendor-delete-btn" data-vid="'+id+'" style="margin-top:12px;background:none;border:1.5px solid #C0392B;color:#C0392B;padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;display:inline-flex;align-items:center;gap:6px;">'+t('deleteVendorBtn')+'</button>'
+    : '';
+
+  document.getElementById('modal-content').innerHTML =
+    '<div class="detail-hero">'+
+    '<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">'+
+    '<div><div class="detail-name">'+v.name+'</div><div class="detail-tagline">'+v.tagline+'</div><span class="vc-badge">'+v.cat+'</span>'+deleteVendorBtn+'</div>'+
+    avgBlock+
+    '</div></div>'+
+    '<div class="detail-grid">'+
+    '<div>'+
+    '<div class="detail-card" style="margin-bottom:14px;"><div class="detail-label">'+t('detailAbout')+'</div><div class="detail-body">'+v.desc+'</div></div>'+
+    '<div class="detail-card" style="margin-bottom:14px;"><div class="detail-label">'+t('detailOffers')+'</div><div class="detail-tags">'+(v.offers||[]).map(function(o){return '<span class="detail-tag">'+o+'</span>';}).join('')+'</div></div>'+
+    '<div class="detail-card"><div class="detail-label">'+t('detailSpec')+'</div><div class="detail-tags">'+(v.specs||[]).map(function(s){return '<span class="detail-spec-tag">'+s+'</span>';}).join('')+'</div></div>'+
+    '</div>'+
+    '<div>'+
+    '<div class="detail-card" style="margin-bottom:14px;"><div class="detail-label">'+t('detailDetails')+'</div>'+
+    '<div class="contact-row"><span class="contact-lbl">'+t('plLoc')+'</span><span class="contact-val">'+v.loc+'</span></div>'+
+    '<div class="contact-row"><span class="contact-lbl">'+t('plYear')+'</span><span class="contact-val">'+v.year+'</span></div>'+
+    '<div class="contact-row"><span class="contact-lbl">'+t('plTeam')+'</span><span class="contact-val">'+v.team+'</span></div>'+
+    '</div>'+
+    '<div class="detail-card"><div class="detail-label">'+t('detailContact')+'</div>'+
+    '<div class="contact-row"><span class="contact-lbl">'+t('plPhone')+'</span><span class="contact-val">'+v.phone+'</span></div>'+
+    (v.wa?'<div class="contact-row"><span class="contact-lbl">'+t('plWa')+'</span><span class="contact-val">'+v.wa+'</span></div>':'')+
+    (v.email?'<div class="contact-row"><span class="contact-lbl">'+t('plEmail')+'</span><span class="contact-val">'+v.email+'</span></div>':'')+
+    (v.web?'<div class="contact-row"><span class="contact-lbl">'+t('plWeb')+'</span><span class="contact-val">'+v.web+'</span></div>':'')+
+    '</div>'+
+    '</div></div>'+
+    // SHARE
+    '<div class="share-section">'+
+    '<div class="share-title">'+t('shareTitle')+'</div>'+
+    '<div class="share-btns">'+
+    '<button class="share-btn share-ig" onclick="shareIG(\''+id+'\')">📸 Instagram</button>'+
+    '<button class="share-btn share-fb" onclick="window.open(\''+fbUrl+'\',\'_blank\')">Facebook</button>'+
+    '<button class="share-btn share-wa" onclick="window.open(\'https://wa.me/?text='+waText+'\',\'_blank\')">WhatsApp</button>'+
+    '<button class="share-btn share-copy" onclick="copyLink(\''+shareUrl+'\')">🔗 '+t('copyLink')+'</button>'+
+    '</div></div>'+
+    // REVIEWS
+    '<div class="reviews-section">'+
+    '<div class="reviews-header"><div class="reviews-title">'+t('reviewsTitle')+'</div></div>'+
+    reviewsHtml+
+    '<div class="add-review">'+
+    '<div class="add-review-title">'+t('addReviewTitle')+'</div>'+
+    '<div class="star-picker" id="star-picker">'+
+    '<span class="star-pick" onclick="setStars(1)">★</span>'+
+    '<span class="star-pick" onclick="setStars(2)">★</span>'+
+    '<span class="star-pick" onclick="setStars(3)">★</span>'+
+    '<span class="star-pick" onclick="setStars(4)">★</span>'+
+    '<span class="star-pick" onclick="setStars(5)">★</span>'+
+    '</div>'+
+    '<input class="review-name-input" id="review-name" placeholder="'+t('namePlaceholder')+'" style="font-family:'+t('inputFont')+'">'+
+    '<textarea class="review-textarea" id="review-text" placeholder="'+t('reviewPlaceholder')+'" style="font-family:'+t('inputFont')+'"></textarea>'+
+    '<button class="submit-review-btn" onclick="submitReview(\''+id+'\')">'+t('submitReview')+'</button>'+
+    '</div></div>';
+
+  selectedStars = 0;
+  document.getElementById('vendor-modal').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('vendor-modal').classList.remove('open');
+  selectedVendorId = null;
+  selectedStars = 0;
+}
+
+function setStars(n){
+  selectedStars = n;
+  document.querySelectorAll('.star-pick').forEach(function(s,i){s.classList.toggle('lit',i<n);});
+}
+
+// ── REVIEW OWNERSHIP via Google sign-in ──
+// If the user is signed in, their Google account ID is used to track ownership.
+// Reviews created without signing in remain anonymous and cannot be deleted.
+
+function submitReview(vid){
+  var name = (document.getElementById('review-name').value||'').trim();
+  var text = (document.getElementById('review-text').value||'').trim();
+  if(!name||!text||!selectedStars){ showToast(currentLang==='en'?'Please fill all fields and pick a star rating.':currentLang==='mr'?'कृपया सर्व माहिती भरा आणि रेटिंग निवडा.':'कृपया सभी जानकारी भरें और रेटिंग चुनें।'); return; }
+  var v = vendors.find(function(x){return x.id===vid;});
+  if(!v) return;
+  if(!v.reviews) v.reviews=[];
+  var months = {hi:['जनवरी','फरवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'],en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],mr:['जानेवारी','फेब्रुवारी','मार्च','एप्रिल','मे','जून','जुलै','ऑगस्ट','सप्टेंबर','ऑक्टोबर','नोव्हेंबर','डिसेंबर']};
+  var d = new Date(); var dateStr = months[currentLang][d.getMonth()]+' '+d.getFullYear();
+  // Store the current user's id on the review so we can verify ownership later
+  v.reviews.push({name:name, stars:selectedStars, text:text, date:dateStr, ownerId: currentUser ? currentUser.id : null});
+  saveVendors();
+  showToast(t('toastReview'));
+  openVendor(vid);
+}
+
+function canDeleteReview(review){
+  return currentUser && review.ownerId && review.ownerId === currentUser.id;
+}
+
+// Custom confirm dialog (avoids browser blocking native confirm())
+var _confirmCallback = null;
+function showConfirm(msg, onOk){
+  _confirmCallback = onOk;
+  document.getElementById('confirm-msg').textContent = msg;
+  document.getElementById('confirm-cancel-btn').textContent = currentLang==='en'?'Cancel':currentLang==='mr'?'रद्द करा':'रद्द करें';
+  document.getElementById('confirm-ok-btn').textContent = currentLang==='en'?'Delete':currentLang==='mr'?'हटवा':'हटाएं';
+  document.getElementById('confirm-overlay').classList.add('open');
+}
+document.addEventListener('DOMContentLoaded', function(){
+  // Custom confirm dialog buttons
+  document.getElementById('confirm-cancel-btn').addEventListener('click', function(){
+    document.getElementById('confirm-overlay').classList.remove('open');
+    _confirmCallback = null;
+  });
+  document.getElementById('confirm-ok-btn').addEventListener('click', function(){
+    document.getElementById('confirm-overlay').classList.remove('open');
+    if(_confirmCallback){ _confirmCallback(); _confirmCallback = null; }
+  });
+
+  // Event delegation for review delete buttons (avoids inline onclick issues)
+  document.getElementById('vendor-modal').addEventListener('click', function(e){
+    var reviewBtn = e.target.closest('.review-delete-btn');
+    if(reviewBtn){
+      e.stopPropagation();
+      var vid = reviewBtn.getAttribute('data-vid');
+      var ri = parseInt(reviewBtn.getAttribute('data-ri'), 10);
+      deleteReview(vid, ri);
+      return;
+    }
+    var vendorBtn = e.target.closest('.vendor-delete-btn');
+    if(vendorBtn){
+      e.stopPropagation();
+      deleteVendor(vendorBtn.getAttribute('data-vid'));
+    }
+  });
+});
+
+// Called from review delete buttons via data attributes
+function deleteReview(vid, ri){
+  var v = vendors.find(function(x){return x.id===vid;});
+  if(!v||!v.reviews||!v.reviews[ri]) return;
+  if(!canDeleteReview(v.reviews[ri])){
+    showToast(currentLang==='en'?'You can only delete your own reviews.':currentLang==='mr'?'तुम्ही फक्त तुमच्या स्वतःच्या समीक्षा हटवू शकता.':'आप केवल अपनी समीक्षाएं हटा सकते हैं।');
+    return;
+  }
+  showConfirm(t('deleteConfirm'), function(){
+    // Re-fetch vendor in case state changed
+    var v2 = vendors.find(function(x){return x.id===vid;});
+    if(!v2||!v2.reviews) return;
+    v2.reviews.splice(ri, 1);
+    saveVendors();
+    showToast(currentLang==='en'?'Review deleted.':currentLang==='mr'?'समीक्षा हटवली.':'समीक्षा हटाई गई।');
+    openVendor(vid);
+  });
+}
+
+
+function deleteVendor(vid){
+  var v = vendors.find(function(x){return x.id===vid;});
+  if(!v) return;
+  if(!currentUser){
+    showToast(currentLang==='en'?'Please sign in with Google first.':'कृपया पहले Google से साइन इन करें।');
+    return;
+  }
+  if(!v.ownerId || v.ownerId !== currentUser.id){
+    showToast(currentLang==='en'?'You can only delete your own profile.':currentLang==='mr'?'तुम्ही फक्त तुमचे स्वतःचे प्रोफाइल हटवू शकता.':'आप केवल अपनी दुकान हटा सकते हैं।');
+    return;
+  }
+  showConfirm(t('deleteVendorConfirm'), function(){
+    var idx = vendors.findIndex(function(x){return x.id===vid;});
+    if(idx > -1) vendors.splice(idx, 1);
+    saveVendors();
+    closeModal();
+    showToast(t('deleteVendorToast'));
+    renderVendorGrid();
+  });
+}
+
+function shareIG(vid){
+  var v = vendors.find(function(x){return x.id===vid;});
+  if(!v) return;
+  var text = '🏪 '+v.name+'\n'+v.tagline+'\n📍 '+v.loc+'\n📞 '+v.phone+'\n\n#ApnaVendor #SmallBusiness #MadeInIndia';
+  navigator.clipboard.writeText(text).then(function(){
+    showToast(currentLang==='en'?'Caption copied! Now paste in Instagram.':currentLang==='mr'?'कॅप्शन कॉपी झाली! Instagram मध्ये पेस्ट करा.':'कैप्शन कॉपी हुई! Instagram में पेस्ट करें।');
+  });
+  window.open('https://www.instagram.com/','_blank');
+}
+
+function copyLink(url){
+  navigator.clipboard.writeText(url).then(function(){showToast(t('toastCopied'));});
+}
+
+// ── REGISTER ──
+var fOffersList = [], fSpecsList = [];
+
+function addFormTag(inputId, arr, displayId){
+  var input = document.getElementById(inputId);
+  var v = (input.value||'').trim();
+  if(!v||arr.includes(v)){input.value='';return;}
+  arr.push(v); input.value='';
+  var el = document.getElementById(displayId);
+  el.innerHTML = arr.map(function(s){
+    return '<span class="form-tag">'+s+'<button onclick="removeFormTag(\''+s.replace(/'/g,"&#39;")+'\',\''+displayId+'\')">×</button></span>';
+  }).join('');
+}
+
+function removeFormTag(s, displayId){
+  var isOffer = displayId==='f-offers-tags';
+  var arr = isOffer ? fOffersList : fSpecsList;
+  var i = arr.indexOf(s); if(i>-1) arr.splice(i,1);
+  var el = document.getElementById(displayId);
+  el.innerHTML = arr.map(function(x){return '<span class="form-tag">'+x+'<button onclick="removeFormTag(\''+x.replace(/'/g,"&#39;")+'\',\''+displayId+'\')">×</button></span>';}).join('');
+}
+
+['f-offer-input','f-spec-input'].forEach(function(id){
+  var el = document.getElementById(id);
+  if(el) el.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){
+      if(id==='f-offer-input') addFormTag('f-offer-input',fOffersList,'f-offers-tags');
+      else addFormTag('f-spec-input',fSpecsList,'f-specs-tags');
+    }
+  });
+});
+
+function publishVendor(){
+  if(!requireGoogleLogin()) return;
+  var name = (document.getElementById('f-vname').value||'').trim();
+  var phone = (document.getElementById('f-phone').value||'').trim();
+  var msg = document.getElementById('form-success');
+  if(!name){msg.textContent=t('errName');msg.style.color='var(--red)';setTimeout(function(){msg.textContent='';},3000);return;}
+  if(!phone){msg.textContent=t('errPhone');msg.style.color='var(--red)';setTimeout(function(){msg.textContent='';},3000);return;}
+  var newV = {
+    id:'v'+Date.now(),
+    name:name,
+    tagline:(document.getElementById('f-tagline').value||'').trim(),
+    cat:(document.getElementById('f-cat').value||'अन्य'),
+    loc:(document.getElementById('f-loc').value||'').trim(),
+    year:(document.getElementById('f-year').value||'').trim(),
+    team:(document.getElementById('f-team').value||'').trim(),
+    desc:(document.getElementById('f-desc').value||'').trim(),
+    offers:[...fOffersList],
+    specs:[...fSpecsList],
+    phone:phone,
+    wa:(document.getElementById('f-wa').value||'').trim(),
+    email:(document.getElementById('f-email').value||'').trim(),
+    web:(document.getElementById('f-web').value||'').trim(),
+    reviews:[],
+    ownerId: currentUser ? currentUser.id : null
+  };
+  vendors.push(newV);
+  saveVendors();
+  fOffersList.length=0; fSpecsList.length=0;
+  ['f-vname','f-tagline','f-loc','f-year','f-phone','f-wa','f-email','f-web','f-desc'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  ['f-cat','f-team'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0;});
+  ['f-offers-tags','f-specs-tags'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML='';});
+  document.getElementById('f-desc-count').textContent='0 / 300';
+  msg.textContent=t('successPub'); msg.style.color='var(--green)';
+  setTimeout(function(){msg.textContent='';showPage('vendors');},2500);
+}
+
+// ── TOAST ──
+function showToast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  setTimeout(function(){el.classList.remove('show');},2800);
+}
+
+// ── INIT ──
+window.addEventListener('load', function(){
+  updateAuthUI();
+  initGoogleAuth();
+});
+document.getElementById('stat-count').textContent = vendors.length;
+document.getElementById('vendor-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+</script>
+</body>
+</html>
