@@ -212,6 +212,25 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
   nav{padding:0 16px;}
   .hero{padding:60px 16px 40px;}
 }
+/* Required asterisk */
+.req{color:var(--red);font-weight:700;margin-left:2px;}
+/* Edit review inline */
+.review-edit-area{margin-top:8px;display:none;}
+.review-edit-area textarea{width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--white);min-height:60px;resize:vertical;}
+.review-edit-btns{display:flex;gap:8px;margin-top:6px;}
+.review-edit-save{background:var(--navy);color:var(--gold);border:none;padding:6px 16px;border-radius:12px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;}
+.review-edit-cancel{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 16px;border-radius:12px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;}
+/* Edit star picker inline */
+.review-edit-stars{display:flex;gap:4px;margin-bottom:6px;}
+.review-edit-star{font-size:20px;cursor:pointer;color:#DDD;transition:color 0.15s;}
+.review-edit-star.lit{color:var(--gold);}
+/* QR overlay */
+.qr-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,0.75);z-index:600;align-items:center;justify-content:center;}
+.qr-overlay.open{display:flex;}
+.qr-box{background:var(--white);border-radius:20px;padding:32px 28px;text-align:center;max-width:320px;width:90%;box-shadow:0 12px 48px rgba(26,26,46,0.25);}
+.qr-title{font-family:'Tiro Devanagari Hindi',serif;font-size:18px;color:var(--navy);margin-bottom:4px;}
+.qr-sub{font-size:12px;color:var(--muted);margin-bottom:18px;}
+.qr-close{margin-top:18px;background:var(--navy);color:var(--gold);border:none;padding:9px 24px;border-radius:20px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;}
 </style>
 </head>
 <body>
@@ -308,10 +327,10 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
         <div>
           <div class="form-card" style="margin-bottom:16px;">
             <div class="form-card-title" id="fc-identity">दुकान की पहचान</div>
-            <div class="field"><label id="fl-vname">व्यापार का नाम *</label><input type="text" id="f-vname"></div>
+            <div class="field"><label id="fl-vname">व्यापार का नाम <span class="req">*</span></label><input type="text" id="f-vname"></div>
             <div class="field"><label id="fl-tagline">टैगलाइन</label><input type="text" id="f-tagline"></div>
             <div class="row2">
-              <div class="field"><label id="fl-cat">श्रेणी</label>
+              <div class="field"><label id="fl-cat">श्रेणी <span class="req">*</span></label>
                 <select id="f-cat">
                   <option value="">चुनें...</option>
                   <option>खान-पान</option><option>दर्जी</option><option>प्रिंटिंग</option>
@@ -319,11 +338,23 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
                   <option>फूलवाला</option><option>टेक सेवा</option><option>कपड़े</option><option>अन्य</option>
                 </select>
               </div>
-              <div class="field"><label id="fl-loc">शहर / स्थान</label><input type="text" id="f-loc"></div>
+              <div class="field"><label id="fl-loc">शहर / स्थान <span class="req">*</span></label>
+                <select id="f-loc"><option value="">चुनें...</option></select>
+              </div>
+            </div>
+            <div id="f-loc-subarea-wrap" style="display:none;" class="field">
+              <label id="fl-loc-sub">क्षेत्र / इलाका <span class="req">*</span></label>
+              <select id="f-loc-sub"><option value="">चुनें...</option></select>
+            </div>
+            <div class="field" style="margin-top:4px;">
+              <label id="fl-map">📍 मानचित्र पर स्थान (वैकल्पिक)</label>
+              <div id="vendor-map-picker" style="width:100%;height:220px;border-radius:10px;border:1px solid var(--border);margin-top:4px;overflow:hidden;"></div>
+              <div id="vendor-map-coords" style="font-size:11px;color:var(--muted);margin-top:4px;"></div>
+              <input type="hidden" id="f-lat"><input type="hidden" id="f-lng">
             </div>
             <div class="row2">
               <div class="field"><label id="fl-year">स्थापना वर्ष</label><input type="number" id="f-year" placeholder="2010"></div>
-              <div class="field"><label id="fl-team">टीम का आकार</label>
+              <div class="field"><label id="fl-team">टीम का आकार <span class="req">*</span></label>
                 <select id="f-team">
                   <option value="">चुनें...</option>
                   <option>सिर्फ मैं</option><option>२–५ लोग</option><option>६–१५ लोग</option>
@@ -335,7 +366,7 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
           <div class="form-card" style="margin-bottom:16px;">
             <div class="form-card-title" id="fc-about">हमारे बारे में</div>
             <div class="field">
-              <label id="fl-desc">विवरण</label>
+              <label id="fl-desc">विवरण <span class="req">*</span></label>
               <textarea id="f-desc" maxlength="300" oninput="document.getElementById('f-desc-count').textContent=this.value.length+' / 300'"></textarea>
               <div class="char-count" id="f-desc-count">0 / 300</div>
             </div>
@@ -343,7 +374,7 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
           <div class="form-card">
             <div class="form-card-title" id="fc-contact">संपर्क जानकारी</div>
             <div class="row2">
-              <div class="field"><label id="fl-phone">फोन नंबर *</label><input type="tel" id="f-phone"></div>
+              <div class="field"><label id="fl-phone">फोन नंबर <span class="req">*</span></label><input type="tel" id="f-phone"></div>
               <div class="field"><label id="fl-wa">व्हाट्सएप</label><input type="tel" id="f-wa"></div>
             </div>
             <div class="field"><label id="fl-email">ईमेल</label><input type="email" id="f-email"></div>
@@ -352,7 +383,7 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
         </div>
         <div>
           <div class="form-card" style="margin-bottom:16px;">
-            <div class="form-card-title" id="fc-offers">हम क्या देते हैं</div>
+            <div class="form-card-title" id="fc-offers">हम क्या देते हैं <span class="req">*</span></div>
             <div class="field">
               <label id="fl-offers">सेवा या उत्पाद जोड़ें</label>
               <div class="tag-row">
@@ -363,7 +394,7 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
             </div>
           </div>
           <div class="form-card">
-            <div class="form-card-title" id="fc-spec">विशेषताएं</div>
+            <div class="form-card-title" id="fc-spec">विशेषताएं <span class="req">*</span></div>
             <div class="field">
               <label id="fl-spec">आप क्यों खास हैं?</label>
               <div class="tag-row">
@@ -396,7 +427,19 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
   </div>
 </div>
 
-<!-- VENDOR DETAIL MODAL -->
+<!-- QR CODE OVERLAY -->
+<div class="qr-overlay" id="qr-overlay">
+  <div class="qr-box">
+    <div class="qr-title" id="qr-vendor-name"></div>
+    <div class="qr-sub" id="qr-vendor-sub"></div>
+    <div id="qr-canvas-wrap"></div>
+    <button class="qr-close" onclick="document.getElementById('qr-overlay').classList.remove('open')">✕ Close</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <div class="modal-overlay" id="vendor-modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
@@ -534,7 +577,109 @@ function updateStats(){
   if(statesEl) statesEl.textContent = Object.keys(locations).length || 0;
 }
 
-// ── TRANSLATIONS ──
+// ── INDIA LOCATIONS ──
+var INDIA_LOCS = {
+  'Andaman & Nicobar Islands':['Port Blair'],
+  'Andhra Pradesh':['Visakhapatnam','Vijayawada','Guntur','Nellore','Kurnool','Kakinada','Tirupati','Rajahmundry'],
+  'Arunachal Pradesh':['Itanagar','Naharlagun','Pasighat'],
+  'Assam':['Guwahati','Silchar','Dibrugarh','Jorhat','Nagaon','Tinsukia'],
+  'Bihar':['Patna','Gaya','Muzaffarpur','Bhagalpur','Darbhanga','Arrah','Begusarai'],
+  'Chandigarh':['Chandigarh'],
+  'Chhattisgarh':['Raipur','Bhilai','Bilaspur','Durg','Korba','Rajnandgaon'],
+  'Dadra & Nagar Haveli':['Silvassa'],
+  'Daman & Diu':['Daman','Diu'],
+  'Delhi':['New Delhi','Central Delhi','North Delhi','South Delhi','East Delhi','West Delhi','Dwarka','Rohini','Janakpuri','Laxmi Nagar','Saket','Pitampura'],
+  'Goa':['Panaji','Margao','Vasco da Gama','Mapusa','Ponda'],
+  'Gujarat':['Ahmedabad','Surat','Vadodara','Rajkot','Bhavnagar','Jamnagar','Gandhinagar','Anand','Morbi'],
+  'Haryana':['Faridabad','Gurugram','Panipat','Ambala','Yamunanagar','Hisar','Rohtak','Karnal','Sonipat'],
+  'Himachal Pradesh':['Shimla','Dharamshala','Solan','Mandi','Kullu','Manali'],
+  'Jammu & Kashmir':['Srinagar','Jammu','Anantnag','Baramulla','Sopore'],
+  'Jharkhand':['Ranchi','Jamshedpur','Dhanbad','Bokaro','Deoghar','Hazaribagh'],
+  'Karnataka':['Bengaluru','Mysuru','Hubli','Mangaluru','Belagavi','Davangere','Ballari','Kalaburagi'],
+  'Kerala':['Thiruvananthapuram','Kochi','Kozhikode','Thrissur','Kollam','Palakkad','Malappuram','Kannur'],
+  'Ladakh':['Leh','Kargil'],
+  'Lakshadweep':['Kavaratti'],
+  'Madhya Pradesh':['Bhopal','Indore','Jabalpur','Gwalior','Ujjain','Sagar','Dewas','Satna','Ratlam'],
+  'Maharashtra':['Mumbai','Pune','Nagpur','Nashik','Aurangabad','Solapur','Amravati','Kolhapur','Thane','Navi Mumbai'],
+  'Manipur':['Imphal','Thoubal','Bishnupur'],
+  'Meghalaya':['Shillong','Tura','Jowai'],
+  'Mizoram':['Aizawl','Lunglei'],
+  'Nagaland':['Kohima','Dimapur','Mokokchung'],
+  'Odisha':['Bhubaneswar','Cuttack','Rourkela','Brahmapur','Sambalpur','Puri'],
+  'Puducherry':['Puducherry','Karaikal','Mahe','Yanam'],
+  'Punjab':['Ludhiana','Amritsar','Jalandhar','Patiala','Bathinda','Pathankot','Hoshiarpur'],
+  'Rajasthan':['Jaipur','Jodhpur','Kota','Bikaner','Ajmer','Udaipur','Bhilwara','Alwar'],
+  'Sikkim':['Gangtok','Namchi','Mangan'],
+  'Tamil Nadu':['Chennai','Coimbatore','Madurai','Tiruchirappalli','Salem','Tirunelveli','Tiruppur','Vellore','Erode'],
+  'Telangana':['Hyderabad','Warangal','Nizamabad','Karimnagar','Khammam','Ramagundam'],
+  'Tripura':['Agartala','Udaipur','Dharmanagar'],
+  'Uttar Pradesh':['Lucknow','Kanpur','Agra','Varanasi','Prayagraj','Ghaziabad','Noida','Meerut','Bareilly','Aligarh','Moradabad','Saharanpur'],
+  'Uttarakhand':['Dehradun','Haridwar','Roorkee','Haldwani','Rishikesh','Nainital','Mussoorie'],
+  'West Bengal':['Kolkata','Howrah','Asansol','Siliguri','Durgapur','Bardhaman','Malda']
+};
+// Mumbai sub-areas
+var MUMBAI_AREAS = ['Andheri','Bandra','Borivali','Chembur','Colaba','CST / Fort','Dahisar','Dadar','Dharavi','Ghatkopar','Goregaon','Jogeshwari','Juhu','Kandivali','Kurla','Lower Parel','Mahim','Malad','Matunga','Mulund','Powai','Santacruz','Versova','Vikhroli','Vile Parle','Worli'];
+
+var _mapPicker = null; var _mapMarker = null;
+
+function initLocationDropdown(){
+  var locSel = document.getElementById('f-loc');
+  if(!locSel) return;
+  var choose = t('catChoose');
+  locSel.innerHTML = '<option value="">'+choose+'</option>'+
+    Object.keys(INDIA_LOCS).sort().map(function(state){
+      return '<optgroup label="'+state+'">'+
+        INDIA_LOCS[state].map(function(city){ return '<option value="'+city+', '+state+'">'+city+'</option>'; }).join('')+
+      '</optgroup>';
+    }).join('');
+  locSel.onchange = function(){
+    var val = locSel.value;
+    var wrap = document.getElementById('f-loc-subarea-wrap');
+    var subSel = document.getElementById('f-loc-sub');
+    if(val && val.startsWith('Mumbai')){
+      wrap.style.display = '';
+      subSel.innerHTML = '<option value="">'+choose+'</option>'+
+        MUMBAI_AREAS.map(function(a){ return '<option value="'+a+'">'+a+'</option>'; }).join('');
+    } else {
+      wrap.style.display = 'none';
+      subSel.innerHTML = '<option value="">'+choose+'</option>';
+    }
+    initMapPicker(val);
+  };
+}
+
+function initMapPicker(locationName){
+  var container = document.getElementById('vendor-map-picker');
+  if(!container) return;
+  // Default India centre
+  var lat = 20.5937, lng = 78.9629, zoom = 5;
+  // Rough centres for a few major cities
+  var centres = {'Mumbai':{ lat:19.076,lng:72.877,zoom:12},'Delhi':{ lat:28.644,lng:77.216,zoom:11},'Bengaluru':{ lat:12.972,lng:77.594,zoom:12},'Kolkata':{ lat:22.572,lng:88.363,zoom:12},'Chennai':{ lat:13.083,lng:80.270,zoom:12},'Hyderabad':{ lat:17.385,lng:78.486,zoom:12},'Pune':{ lat:18.520,lng:73.856,zoom:12},'Ahmedabad':{ lat:23.023,lng:72.572,zoom:12}};
+  if(locationName){
+    var city = locationName.split(',')[0].trim();
+    if(centres[city]){ lat=centres[city].lat; lng=centres[city].lng; zoom=centres[city].zoom; }
+  }
+  if(_mapPicker){ _mapPicker.remove(); _mapPicker=null; _mapMarker=null; }
+  setTimeout(function(){
+    _mapPicker = L.map('vendor-map-picker').setView([lat,lng],zoom);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(_mapPicker);
+    _mapPicker.on('click',function(e){
+      var la=e.latlng.lat.toFixed(6), ln=e.latlng.lng.toFixed(6);
+      document.getElementById('f-lat').value=la;
+      document.getElementById('f-lng').value=ln;
+      document.getElementById('vendor-map-coords').textContent='📍 '+la+', '+ln;
+      if(_mapMarker) _mapPicker.removeLayer(_mapMarker);
+      _mapMarker = L.marker([la,ln]).addTo(_mapPicker);
+    });
+  },100);
+}
+
+function getFullLocation(){
+  var loc = (document.getElementById('f-loc').value||'').trim();
+  var sub = (document.getElementById('f-loc-sub').value||'').trim();
+  if(sub && loc.startsWith('Mumbai')) return sub+', '+loc;
+  return loc;
+}
 var T = {
   hi:{
     navHome:'होम',navVendors:'विक्रेता',navRegister:'पंजीकरण',navAbout:'हमारे बारे में',
@@ -558,6 +703,7 @@ var T = {
     reviewsTitle:'समीक्षाएं',addReviewTitle:'समीक्षा दें',reviewPlaceholder:'अपनी समीक्षा लिखें...',namePlaceholder:'आपका नाम',submitReview:'समीक्षा जमा करें',
     errName:'कृपया व्यापार का नाम भरें।',errPhone:'कृपया फोन नंबर भरें।',
     errLoc:'कृपया शहर / स्थान भरें।',errCat:'कृपया श्रेणी चुनें।',errTeam:'कृपया टीम का आकार चुनें।',
+    errDesc:'कृपया अपनी दुकान का विवरण भरें।',
     errOffers:'कृपया कम से कम एक सेवा या उत्पाद जोड़ें।',errSpecs:'कृपया कम से कम एक विशेषता जोड़ें।',
     errPhoneInvalid:'कृपया एक मान्य फोन नंबर दर्ज करें।',errEmailInvalid:'कृपया एक मान्य ईमेल पता दर्ज करें।',
     successPub:'आपकी दुकान प्रकाशित हो गई! अब इसे सभी देख सकते हैं।',
@@ -568,6 +714,10 @@ var T = {
     noReviews:'अभी कोई समीक्षा नहीं। पहले बनें!',reviewCount:'समीक्षाएं',
     deleteReview:'हटाएं',deleteConfirm:'क्या आप इस समीक्षा को हटाना चाहते हैं?',
     deleteVendorBtn:'🗑 मेरी दुकान हटाएं',deleteVendorConfirm:'क्या आप वाकई अपनी दुकान का प्रोफ़ाइल हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती।',deleteVendorToast:'आपकी दुकान हटा दी गई।',
+    editVendorBtn:'प्रोफ़ाइल संपादित करें',
+    editReview:'संपादित करें',saveReview:'सहेजें',cancelEdit:'रद्द करें',
+    toastReviewUpdated:'समीक्षा अपडेट हो गई!',
+    qrCode:'QR कोड',viewOnMap:'मानचित्र पर देखें',
     copyLink:'लिंक कॉपी करें',
     about1t:'हमारा मिशन',about1b:'हर छोटे विक्रेता को, चाहे वो किसी भी गली-मोहल्ले में हो, एक डिजिटल पहचान देना।',
     about2t:'समुदाय',about2b:'यह एक समुदाय है जहाँ विक्रेता और ग्राहक एक-दूसरे का साथ देते हैं।',
@@ -609,6 +759,7 @@ var T = {
     reviewsTitle:'Reviews',addReviewTitle:'Leave a Review',reviewPlaceholder:'Write your review...',namePlaceholder:'Your name',submitReview:'Submit Review',
     errName:'Please enter your business name.',errPhone:'Please enter a phone number.',
     errLoc:'Please enter your city / location.',errCat:'Please select a category.',errTeam:'Please select a team size.',
+    errDesc:'Please write a description about your shop.',
     errOffers:'Please add at least one service or product.',errSpecs:'Please add at least one speciality.',
     errPhoneInvalid:'Please enter a valid phone number.',errEmailInvalid:'Please enter a valid email address.',
     successPub:'Your shop is now live! Everyone can see it.',
@@ -660,6 +811,7 @@ var T = {
     reviewsTitle:'समीक्षा',addReviewTitle:'समीक्षा द्या',reviewPlaceholder:'आपली समीक्षा लिहा...',namePlaceholder:'आपले नाव',submitReview:'समीक्षा सादर करा',
     errName:'कृपया व्यवसायाचे नाव भरा.',errPhone:'कृपया फोन नंबर भरा.',
     errLoc:'कृपया शहर / ठिकाण भरा.',errCat:'कृपया श्रेणी निवडा.',errTeam:'कृपया संघाचा आकार निवडा.',
+    errDesc:'कृपया तुमच्या दुकानाचे वर्णन लिहा.',
     errOffers:'कृपया किमान एक सेवा किंवा उत्पादन जोडा.',errSpecs:'कृपया किमान एक विशेषता जोडा.',
     errPhoneInvalid:'कृपया एक वैध फोन नंबर प्रविष्ट करा.',errEmailInvalid:'कृपया एक वैध ईमेल पत्ता प्रविष्ट करा.',
     successPub:'आपले दुकान प्रकाशित झाले! आता सर्व पाहू शकतात.',
@@ -873,24 +1025,53 @@ function openVendor(id){
 
   var reviewsHtml = (v.reviews&&v.reviews.length>0)
     ? v.reviews.map(function(r,ri){
-        var deleteBtn = canDeleteReview(r)
-          ? '<button class="review-delete-btn" data-vid="'+id+'" data-ri="'+ri+'" style="background:none;border:1px solid #e0b0b0;color:#C0392B;font-size:11px;padding:2px 10px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;margin-left:8px;font-weight:500;">🗑 '+t('deleteReview')+'</button>'
+        var isOwner = canDeleteReview(r);
+        var actionBtns = isOwner
+          ? '<button class="review-edit-btn" data-vid="'+id+'" data-ri="'+ri+'" style="background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:2px 8px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;margin-left:6px;">✏️ '+t('editReview')+'</button>'+
+            '<button class="review-delete-btn" data-vid="'+id+'" data-ri="'+ri+'" style="background:none;border:1px solid #e0b0b0;color:#C0392B;font-size:11px;padding:2px 10px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;margin-left:4px;font-weight:500;">🗑 '+t('deleteReview')+'</button>'
           : '';
-        return '<div class="review-card"><div class="review-top" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;"><span class="review-name">'+r.name+'</span><span style="display:flex;align-items:center;gap:4px;"><span class="review-stars">'+starsHtml(r.stars)+' '+r.stars+'/5</span>'+deleteBtn+'</span></div><div class="review-text">'+r.text+'</div><div class="review-date">'+r.date+'</div></div>';
+        var editStars = '';
+        for(var s=1;s<=5;s++) editStars+='<span class="review-edit-star'+(s<=r.stars?' lit':'')+'" data-vid="'+id+'" data-ri="'+ri+'" data-star="'+s+'">★</span>';
+        return '<div class="review-card" id="review-card-'+id+'-'+ri+'">'+
+          '<div class="review-top" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">'+
+          '<span class="review-name">'+r.name+'</span>'+
+          '<span style="display:flex;align-items:center;gap:4px;">'+
+          '<span class="review-stars" id="review-stars-'+id+'-'+ri+'">'+starsHtml(r.stars)+' '+r.stars+'/5</span>'+
+          actionBtns+
+          '</span></div>'+
+          '<div class="review-text" id="review-text-disp-'+id+'-'+ri+'">'+r.text+'</div>'+
+          '<div class="review-date">'+r.date+'</div>'+
+          '<div class="review-edit-area" id="review-edit-area-'+id+'-'+ri+'">'+
+          '<div class="review-edit-stars" id="edit-stars-'+id+'-'+ri+'">'+editStars+'</div>'+
+          '<textarea class="review-edit-area" style="display:block;width:100%;font-family:Inter,sans-serif;font-size:13px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--white);min-height:60px;resize:vertical;" id="review-edit-text-'+id+'-'+ri+'">'+r.text+'</textarea>'+
+          '<div class="review-edit-btns">'+
+          '<button class="review-edit-save" data-vid="'+id+'" data-ri="'+ri+'">'+t('saveReview')+'</button>'+
+          '<button class="review-edit-cancel" data-vid="'+id+'" data-ri="'+ri+'">'+t('cancelEdit')+'</button>'+
+          '</div></div>'+
+          '</div>';
       }).join('')
     : '<div style="color:var(--muted);font-size:13px;padding:8px 0;">'+t('noReviews')+'</div>';
 
   var avgBlock = avg ? '<div class="avg-rating"><div class="avg-num">'+avg+'</div><div><div class="avg-stars">'+starsHtml(parseFloat(avg))+'</div><div style="font-size:11px;color:var(--muted);">'+v.reviews.length+' '+t('reviewCount')+'</div></div></div>' : '';
 
   var isVendorOwner = currentUser && v.ownerId && v.ownerId === currentUser.id;
-  var deleteVendorBtn = isVendorOwner
-    ? '<button class="vendor-delete-btn" data-vid="'+id+'" style="margin-top:12px;background:none;border:1.5px solid #C0392B;color:#C0392B;padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;display:inline-flex;align-items:center;gap:6px;">'+t('deleteVendorBtn')+'</button>'
+  var vendorOwnerBtns = isVendorOwner
+    ? '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">'+
+      '<button class="vendor-edit-btn" data-vid="'+id+'" style="background:none;border:1.5px solid var(--gold);color:var(--gold);padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">✏️ '+t('editVendorBtn')+'</button>'+
+      '<button class="vendor-delete-btn" data-vid="'+id+'" style="background:none;border:1.5px solid #C0392B;color:#C0392B;padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">'+t('deleteVendorBtn')+'</button>'+
+      '</div>'
     : '';
+
+  var mapLink = (v.lat && v.lng)
+    ? '<a href="https://www.openstreetmap.org/?mlat='+v.lat+'&mlon='+v.lng+'&zoom=16" target="_blank" style="font-size:12px;color:var(--gold);text-decoration:none;">🗺️ '+t('viewOnMap')+'</a>'
+    : '';
+
+  var shareUrl = window.location.href.split('#')[0]+'#vendor='+id;
 
   document.getElementById('modal-content').innerHTML =
     '<div class="detail-hero">'+
     '<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">'+
-    '<div><div class="detail-name">'+v.name+'</div><div class="detail-tagline">'+v.tagline+'</div><span class="vc-badge">'+v.cat+'</span>'+deleteVendorBtn+'</div>'+
+    '<div><div class="detail-name">'+v.name+'</div><div class="detail-tagline">'+v.tagline+'</div><span class="vc-badge">'+v.cat+'</span>'+vendorOwnerBtns+'</div>'+
     avgBlock+
     '</div></div>'+
     '<div class="detail-grid">'+
@@ -901,7 +1082,7 @@ function openVendor(id){
     '</div>'+
     '<div>'+
     '<div class="detail-card" style="margin-bottom:14px;"><div class="detail-label">'+t('detailDetails')+'</div>'+
-    '<div class="contact-row"><span class="contact-lbl">'+t('plLoc')+'</span><span class="contact-val">'+v.loc+'</span></div>'+
+    '<div class="contact-row"><span class="contact-lbl">'+t('plLoc')+'</span><span class="contact-val">'+v.loc+' '+mapLink+'</span></div>'+
     '<div class="contact-row"><span class="contact-lbl">'+t('plYear')+'</span><span class="contact-val">'+v.year+'</span></div>'+
     '<div class="contact-row"><span class="contact-lbl">'+t('plTeam')+'</span><span class="contact-val">'+v.team+'</span></div>'+
     '</div>'+
@@ -919,7 +1100,8 @@ function openVendor(id){
     '<button class="share-btn share-ig" onclick="shareIG(\''+id+'\')">📸 Instagram</button>'+
     '<button class="share-btn share-fb" onclick="window.open(\''+fbUrl+'\',\'_blank\')">Facebook</button>'+
     '<button class="share-btn share-wa" onclick="window.open(\'https://wa.me/?text='+waText+'\',\'_blank\')">WhatsApp</button>'+
-    '<button class="share-btn share-copy" onclick="copyLink(\''+shareUrl+'\')">🔗 '+t('copyLink')+'</button>'+
+    '<button class="share-btn share-copy" onclick="copyVendorLink(\''+shareUrl+'\')">🔗 '+t('copyLink')+'</button>'+
+    '<button class="share-btn" style="background:#1A1A2E;color:#C9A96E;" onclick="showQR(\''+id+'\')">⬛ '+t('qrCode')+'</button>'+
     '</div></div>'+
     // REVIEWS
     '<div class="reviews-section">'+
@@ -1005,34 +1187,7 @@ function showConfirm(msg, onOk){
   document.getElementById('confirm-ok-btn').textContent = currentLang==='en'?'Delete':currentLang==='mr'?'हटवा':'हटाएं';
   document.getElementById('confirm-overlay').classList.add('open');
 }
-document.addEventListener('DOMContentLoaded', function(){
-  // Custom confirm dialog buttons
-  document.getElementById('confirm-cancel-btn').addEventListener('click', function(){
-    document.getElementById('confirm-overlay').classList.remove('open');
-    _confirmCallback = null;
-  });
-  document.getElementById('confirm-ok-btn').addEventListener('click', function(){
-    document.getElementById('confirm-overlay').classList.remove('open');
-    if(_confirmCallback){ _confirmCallback(); _confirmCallback = null; }
-  });
 
-  // Event delegation for review delete buttons (avoids inline onclick issues)
-  document.getElementById('vendor-modal').addEventListener('click', function(e){
-    var reviewBtn = e.target.closest('.review-delete-btn');
-    if(reviewBtn){
-      e.stopPropagation();
-      var vid = reviewBtn.getAttribute('data-vid');
-      var ri = parseInt(reviewBtn.getAttribute('data-ri'), 10);
-      deleteReview(vid, ri);
-      return;
-    }
-    var vendorBtn = e.target.closest('.vendor-delete-btn');
-    if(vendorBtn){
-      e.stopPropagation();
-      deleteVendor(vendorBtn.getAttribute('data-vid'));
-    }
-  });
-});
 
 // Called from review delete buttons via data attributes
 function deleteReview(vid, ri){
@@ -1097,18 +1252,13 @@ function addFormTag(inputId, arr, displayId){
   var v = (input.value||'').trim();
   if(!v||arr.includes(v)){input.value='';return;}
   arr.push(v); input.value='';
-  var el = document.getElementById(displayId);
-  el.innerHTML = arr.map(function(s){
-    return '<span class="form-tag">'+s+'<button onclick="removeFormTag(\''+s.replace(/'/g,"&#39;")+'\',\''+displayId+'\')">×</button></span>';
-  }).join('');
+  renderFormTags(displayId, arr);
 }
 
 function removeFormTag(s, displayId){
-  var isOffer = displayId==='f-offers-tags';
-  var arr = isOffer ? fOffersList : fSpecsList;
+  var arr = displayId==='f-offers-tags' ? fOffersList : fSpecsList;
   var i = arr.indexOf(s); if(i>-1) arr.splice(i,1);
-  var el = document.getElementById(displayId);
-  el.innerHTML = arr.map(function(x){return '<span class="form-tag">'+x+'<button onclick="removeFormTag(\''+x.replace(/'/g,"&#39;")+'\',\''+displayId+'\')">×</button></span>';}).join('');
+  renderFormTags(displayId, arr);
 }
 
 ['f-offer-input','f-spec-input'].forEach(function(id){
@@ -1140,11 +1290,12 @@ function publishVendor(){
   clearFieldErrors();
 
   var name  = (document.getElementById('f-vname').value||'').trim();
-  var loc   = (document.getElementById('f-loc').value||'').trim();
+  var loc   = getFullLocation();
   var cat   = (document.getElementById('f-cat').value||'').trim();
   var team  = (document.getElementById('f-team').value||'').trim();
   var phone = (document.getElementById('f-phone').value||'').trim();
   var email = (document.getElementById('f-email').value||'').trim();
+  var desc  = (document.getElementById('f-desc').value||'').trim();
   var msg   = document.getElementById('form-success');
 
   function showErr(errKey, fieldId, tagsId){
@@ -1158,31 +1309,26 @@ function publishVendor(){
     setTimeout(function(){ msg.textContent=''; clearFieldErrors(); }, 3500);
   }
 
-  // ── Required text/select fields ──
   if(!name)  return showErr('errName',  'f-vname');
   if(!loc)   return showErr('errLoc',   'f-loc');
   if(!cat)   return showErr('errCat',   'f-cat');
   if(!team)  return showErr('errTeam',  'f-team');
-
-  // ── Tags (at least one each) ──
+  if(!desc)  return showErr('errDesc',  'f-desc');
   if(fOffersList.length === 0) return showErr('errOffers', null, 'f-offers-tags');
   if(fSpecsList.length  === 0) return showErr('errSpecs',  null, 'f-specs-tags');
-
-  // ── Phone — required + valid format ──
   if(!phone) return showErr('errPhone', 'f-phone');
   var phoneClean = phone.replace(/[\s\-().+]/g,'');
   if(!/^\d{7,15}$/.test(phoneClean)) return showErr('errPhoneInvalid', 'f-phone');
-
-  // ── Email — optional but must be valid if provided ──
   if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showErr('errEmailInvalid', 'f-email');
 
-  // ── All good — publish ──
   var newV = {
     id:'v'+Date.now(),
     name:name,
     tagline:(document.getElementById('f-tagline').value||'').trim(),
     cat:cat,
     loc:loc,
+    lat:(document.getElementById('f-lat').value||''),
+    lng:(document.getElementById('f-lng').value||''),
     year:(document.getElementById('f-year').value||'').trim(),
     team:team,
     desc:(document.getElementById('f-desc').value||'').trim(),
@@ -1213,13 +1359,424 @@ function showToast(msg){
   setTimeout(function(){el.classList.remove('show');},2800);
 }
 
+// ── COPY VENDOR LINK ──
+function copyVendorLink(url){
+  var fullUrl = url || (window.location.href.split('#')[0]+'#vendor='+selectedVendorId);
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(fullUrl).then(function(){ showToast(t('toastCopied')); });
+  } else {
+    // fallback for older browsers
+    var ta = document.createElement('textarea');
+    ta.value = fullUrl; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); showToast(t('toastCopied')); } catch(e){}
+    document.body.removeChild(ta);
+  }
+}
+
+// ── QR CODE ──
+function showQR(vid){
+  var v = vendors.find(function(x){ return x.id===vid; });
+  if(!v) return;
+  var url = window.location.href.split('#')[0]+'#vendor='+vid;
+  document.getElementById('qr-vendor-name').textContent = v.name;
+  document.getElementById('qr-vendor-sub').textContent = v.loc || '';
+  var wrap = document.getElementById('qr-canvas-wrap');
+  wrap.innerHTML = '';
+  // QRCode library (loaded via cdnjs script tag) renders into the container
+  try {
+    new QRCode(wrap, {
+      text: url,
+      width: 200,
+      height: 200,
+      colorDark: '#1A1A2E',
+      colorLight: '#FDF6EC',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  } catch(e) {
+    // Library not yet loaded or failed — show URL as fallback
+    wrap.innerHTML = '<p style="font-size:11px;word-break:break-all;color:var(--muted);padding:8px 0;">'+url+'</p>';
+  }
+  document.getElementById('qr-overlay').classList.add('open');
+}
+
+// ── EDIT VENDOR ──
+// Populates the register form with an existing vendor's data, hides the Publish
+// button and shows an Update button, then navigates to the Register page.
+var _editingVendorId = null;
+
+function editVendor(vid){
+  if(!requireGoogleLogin()) return;
+  var v = vendors.find(function(x){ return x.id===vid; });
+  if(!v) return;
+  if(!v.ownerId || v.ownerId !== currentUser.id){
+    showToast(currentLang==='en'?'You can only edit your own profile.':
+              currentLang==='mr'?'तुम्ही फक्त तुमचे स्वतःचे प्रोफाइल संपादित करू शकता.':
+              'आप केवल अपनी दुकान संपादित कर सकते हैं।');
+    return;
+  }
+  _editingVendorId = vid;
+  closeModal();
+
+  // Navigate to register page (bypass sign-in wall since user IS signed in)
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.nav-link').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('page-register').classList.add('active');
+  var nl = document.getElementById('nav-register');
+  if(nl) nl.classList.add('active');
+  window.scrollTo(0,0);
+
+  // Re-init dropdowns so they have their options before we set values
+  initLocationDropdown();
+  applyTranslations();
+
+  // Fill text fields
+  function setVal(id, val){ var el=document.getElementById(id); if(el) el.value=val||''; }
+  setVal('f-vname', v.name);
+  setVal('f-tagline', v.tagline);
+  setVal('f-year', v.year);
+  setVal('f-phone', v.phone);
+  setVal('f-wa', v.wa);
+  setVal('f-email', v.email);
+  setVal('f-web', v.web);
+  setVal('f-desc', v.desc);
+  setVal('f-lat', v.lat);
+  setVal('f-lng', v.lng);
+
+  // Update char counter
+  var descCount = document.getElementById('f-desc-count');
+  if(descCount) descCount.textContent = (v.desc||'').length+' / 300';
+
+  // Set category dropdown
+  var catEl = document.getElementById('f-cat');
+  if(catEl){
+    for(var ci=0;ci<catEl.options.length;ci++){
+      if(catEl.options[ci].value===v.cat || catEl.options[ci].text===v.cat){
+        catEl.selectedIndex=ci; break;
+      }
+    }
+  }
+
+  // Set location dropdown
+  var locEl = document.getElementById('f-loc');
+  if(locEl){
+    for(var li=0;li<locEl.options.length;li++){
+      if(locEl.options[li].value===v.loc || locEl.options[li].text===v.loc){
+        locEl.selectedIndex=li;
+        locEl.dispatchEvent(new Event('change')); // triggers sub-area + map
+        break;
+      }
+    }
+  }
+
+  // Set team dropdown
+  var teamEl = document.getElementById('f-team');
+  if(teamEl){
+    for(var ti=0;ti<teamEl.options.length;ti++){
+      if(teamEl.options[ti].value===v.team || teamEl.options[ti].text===v.team){
+        teamEl.selectedIndex=ti; break;
+      }
+    }
+  }
+
+  // Restore offers tags
+  fOffersList.length=0;
+  (v.offers||[]).forEach(function(o){ fOffersList.push(o); });
+  renderFormTags('f-offers-tags', fOffersList);
+
+  // Restore specs tags
+  fSpecsList.length=0;
+  (v.specs||[]).forEach(function(s){ fSpecsList.push(s); });
+  renderFormTags('f-specs-tags', fSpecsList);
+
+  // Swap Publish button → Update button
+  var publishBtn = document.getElementById('publish-btn');
+  if(publishBtn){
+    publishBtn.textContent = currentLang==='en'?'Update Profile':
+                              currentLang==='mr'?'प्रोफाइल अपडेट करा':
+                              'प्रोफ़ाइल अपडेट करें';
+    publishBtn.onclick = function(){ updateVendor(); };
+  }
+
+  // Show a cancel-edit link below the button
+  var formSuccess = document.getElementById('form-success');
+  if(formSuccess){
+    formSuccess.innerHTML = '<button onclick="cancelEdit()" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline;margin-top:6px;">'+(currentLang==='en'?'Cancel edit':currentLang==='mr'?'संपादन रद्द करा':'संपादन रद्द करें')+'</button>';
+    formSuccess.style.color='';
+  }
+}
+
+// Helper: re-render tag pills inside the register form
+function renderFormTags(containerId, arr){
+  var el = document.getElementById(containerId);
+  if(!el) return;
+  el.innerHTML = arr.map(function(s){
+    return '<span class="form-tag">'+s+
+      '<button onclick="removeFormTag(\''+s.replace(/'/g,"&#39;")+'\',\''+containerId+'\')">×</button></span>';
+  }).join('');
+}
+
+// Save edited vendor back to the store
+function updateVendor(){
+  if(!_editingVendorId) return;
+  var v = vendors.find(function(x){ return x.id===_editingVendorId; });
+  if(!v) return;
+
+  var name  = (document.getElementById('f-vname').value||'').trim();
+  var loc   = getFullLocation();
+  var cat   = (document.getElementById('f-cat').value||'').trim();
+  var team  = (document.getElementById('f-team').value||'').trim();
+  var phone = (document.getElementById('f-phone').value||'').trim();
+  var email = (document.getElementById('f-email').value||'').trim();
+  var desc  = (document.getElementById('f-desc').value||'').trim();
+  var msg   = document.getElementById('form-success');
+
+  // Basic validation (same rules as publishVendor)
+  function showErr(errKey, fieldId){
+    msg.innerHTML = t(errKey);
+    msg.style.color='var(--red)';
+    if(fieldId) setFieldError(fieldId,true);
+    setTimeout(function(){ msg.innerHTML=''; clearFieldErrors(); },3500);
+  }
+  if(!name)  return showErr('errName','f-vname');
+  if(!loc)   return showErr('errLoc','f-loc');
+  if(!cat)   return showErr('errCat','f-cat');
+  if(!team)  return showErr('errTeam','f-team');
+  if(!desc)  return showErr('errDesc','f-desc');
+  if(fOffersList.length===0) return showErr('errOffers',null);
+  if(fSpecsList.length===0)  return showErr('errSpecs',null);
+  if(!phone) return showErr('errPhone','f-phone');
+  var phoneClean=phone.replace(/[\s\-().+]/g,'');
+  if(!/^\d{7,15}$/.test(phoneClean)) return showErr('errPhoneInvalid','f-phone');
+  if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showErr('errEmailInvalid','f-email');
+
+  // Patch in-place so reviews are preserved
+  v.name    = name;
+  v.tagline = (document.getElementById('f-tagline').value||'').trim();
+  v.cat     = cat;
+  v.loc     = loc;
+  v.lat     = (document.getElementById('f-lat').value||'');
+  v.lng     = (document.getElementById('f-lng').value||'');
+  v.year    = (document.getElementById('f-year').value||'').trim();
+  v.team    = team;
+  v.desc    = desc;
+  v.offers  = [...fOffersList];
+  v.specs   = [...fSpecsList];
+  v.phone   = phone;
+  v.wa      = (document.getElementById('f-wa').value||'').trim();
+  v.email   = email;
+  v.web     = (document.getElementById('f-web').value||'').trim();
+
+  saveVendors();
+
+  msg.innerHTML = currentLang==='en'?'Profile updated!':
+                   currentLang==='mr'?'प्रोफाइल अपडेट झाले!':
+                   'प्रोफ़ाइल अपडेट हो गई!';
+  msg.style.color='var(--green)';
+
+  var savedId = _editingVendorId;
+  cancelEdit();
+  setTimeout(function(){ showPage('vendors'); openVendor(savedId); }, 1200);
+}
+
+// ── CANCEL EDIT ──
+// Resets the form, restores the Publish button, and clears edit state.
+function cancelEdit(){
+  _editingVendorId = null;
+  fOffersList.length=0; fSpecsList.length=0;
+  ['f-vname','f-tagline','f-loc','f-year','f-phone','f-wa','f-email','f-web','f-desc'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  ['f-cat','f-team'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.selectedIndex=0;
+  });
+  ['f-offers-tags','f-specs-tags'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.innerHTML='';
+  });
+  var descCount=document.getElementById('f-desc-count');
+  if(descCount) descCount.textContent='0 / 300';
+
+  // Restore Publish button
+  var publishBtn=document.getElementById('publish-btn');
+  if(publishBtn){
+    publishBtn.textContent=t('publishBtn');
+    publishBtn.onclick=function(){ publishVendor(); };
+  }
+
+  // Clear any cancel-edit message
+  var msg=document.getElementById('form-success');
+  if(msg){ msg.innerHTML=''; msg.style.color=''; }
+
+  clearFieldErrors();
+}
+
+// ── SAVE REVIEW (inline edit) ──
+function saveReview(vid, ri){
+  var v = vendors.find(function(x){ return x.id===vid; });
+  if(!v||!v.reviews||!v.reviews[ri]) return;
+  var textarea = document.getElementById('review-edit-text-'+vid+'-'+ri);
+  var newText = textarea ? textarea.value.trim() : '';
+  if(!newText){ showToast(t('fillFields')); return; }
+
+  // Read the edited star rating from the inline star picker state
+  var editStarContainer = document.getElementById('edit-stars-'+vid+'-'+ri);
+  var newStars = 0;
+  if(editStarContainer){
+    editStarContainer.querySelectorAll('.review-edit-star').forEach(function(s){
+      if(s.classList.contains('lit')) newStars = parseInt(s.getAttribute('data-star'),10);
+    });
+  }
+  if(!newStars) newStars = v.reviews[ri].stars; // keep old stars if nothing changed
+
+  v.reviews[ri].text  = newText;
+  v.reviews[ri].stars = newStars;
+  saveVendors();
+  showToast(t('toastReviewUpdated'));
+  openVendor(vid); // re-render modal with updated review
+}
+
+// ── CANCEL EDIT (inline review) ──
+function cancelReviewEdit(vid, ri){
+  var area  = document.getElementById('review-edit-area-'+vid+'-'+ri);
+  var disp  = document.getElementById('review-text-disp-'+vid+'-'+ri);
+  if(area) area.style.display='none';
+  if(disp) disp.style.display='';
+}
+
+// ── HASH-BASED DEEP LINKING ──
+// Reads #vendor=ID from the URL on page load and opens that vendor's modal.
+function handleHashDeepLink(){
+  var hash = window.location.hash; // e.g. "#vendor=v1234567890"
+  if(!hash) return;
+  var match = hash.match(/^#vendor=(.+)$/);
+  if(!match) return;
+  var vid = decodeURIComponent(match[1]);
+  var v = vendors.find(function(x){ return x.id===vid; });
+  if(!v) return;
+  // Show vendors page first so the modal has context behind it
+  showPage('vendors');
+  openVendor(vid);
+}
+
+// Update the URL hash whenever a vendor modal opens (for shareability)
+var _origOpenVendor = openVendor;
+openVendor = function(id){
+  _origOpenVendor(id);
+  // Push the hash without reloading
+  if(history.replaceState){
+    history.replaceState(null, '', window.location.pathname + window.location.search + '#vendor='+id);
+  }
+};
+
+// Clear hash when modal closes
+var _origCloseModal = closeModal;
+closeModal = function(){
+  _origCloseModal();
+  if(history.replaceState){
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+};
+
 // ── INIT ──
 window.addEventListener('load', function(){
   applyTranslations();
   updateAuthUI();
   updateStats();
+  initLocationDropdown();
+  handleHashDeepLink();
 });
-document.getElementById('vendor-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+// Close modal when clicking the backdrop
+document.getElementById('vendor-modal').addEventListener('click',function(e){
+  if(e.target===this) closeModal();
+});
+
+// ── EVENT DELEGATION ── (vendor-edit-btn, review-edit-btn, review-edit-star, review-edit-save, review-edit-cancel)
+document.addEventListener('DOMContentLoaded', function(){
+
+  // Confirm dialog buttons
+  document.getElementById('confirm-cancel-btn').addEventListener('click', function(){
+    document.getElementById('confirm-overlay').classList.remove('open');
+    _confirmCallback = null;
+  });
+  document.getElementById('confirm-ok-btn').addEventListener('click', function(){
+    document.getElementById('confirm-overlay').classList.remove('open');
+    if(_confirmCallback){ _confirmCallback(); _confirmCallback = null; }
+  });
+
+  // All delegation lives on the modal so it covers dynamically injected HTML
+  document.getElementById('vendor-modal').addEventListener('click', function(e){
+
+    // ── Review delete ──
+    var reviewDelBtn = e.target.closest('.review-delete-btn');
+    if(reviewDelBtn){
+      e.stopPropagation();
+      deleteReview(reviewDelBtn.getAttribute('data-vid'), parseInt(reviewDelBtn.getAttribute('data-ri'),10));
+      return;
+    }
+
+    // ── Vendor delete ──
+    var vendorDelBtn = e.target.closest('.vendor-delete-btn');
+    if(vendorDelBtn){
+      e.stopPropagation();
+      deleteVendor(vendorDelBtn.getAttribute('data-vid'));
+      return;
+    }
+
+    // ── Vendor edit ──
+    var vendorEditBtn = e.target.closest('.vendor-edit-btn');
+    if(vendorEditBtn){
+      e.stopPropagation();
+      editVendor(vendorEditBtn.getAttribute('data-vid'));
+      return;
+    }
+
+    // ── Review: open inline edit ──
+    var reviewEditBtn = e.target.closest('.review-edit-btn');
+    if(reviewEditBtn){
+      e.stopPropagation();
+      var vid = reviewEditBtn.getAttribute('data-vid');
+      var ri  = reviewEditBtn.getAttribute('data-ri');
+      var area = document.getElementById('review-edit-area-'+vid+'-'+ri);
+      var disp = document.getElementById('review-text-disp-'+vid+'-'+ri);
+      if(area){ area.style.display = area.style.display==='none'||area.style.display==='' ? 'block' : 'none'; }
+      if(disp){ disp.style.display = disp.style.display===''||disp.style.display==='none'&&area&&area.style.display!=='none' ? 'none' : ''; }
+      return;
+    }
+
+    // ── Review inline: star picker ──
+    var editStar = e.target.closest('.review-edit-star');
+    if(editStar){
+      e.stopPropagation();
+      var vid2 = editStar.getAttribute('data-vid');
+      var ri2  = editStar.getAttribute('data-ri');
+      var n    = parseInt(editStar.getAttribute('data-star'),10);
+      var container = document.getElementById('edit-stars-'+vid2+'-'+ri2);
+      if(container){
+        container.querySelectorAll('.review-edit-star').forEach(function(s){
+          s.classList.toggle('lit', parseInt(s.getAttribute('data-star'),10) <= n);
+        });
+      }
+      return;
+    }
+
+    // ── Review inline: save ──
+    var saveBtn = e.target.closest('.review-edit-save');
+    if(saveBtn){
+      e.stopPropagation();
+      saveReview(saveBtn.getAttribute('data-vid'), parseInt(saveBtn.getAttribute('data-ri'),10));
+      return;
+    }
+
+    // ── Review inline: cancel ──
+    var cancelBtn = e.target.closest('.review-edit-cancel');
+    if(cancelBtn){
+      e.stopPropagation();
+      cancelReviewEdit(cancelBtn.getAttribute('data-vid'), parseInt(cancelBtn.getAttribute('data-ri'),10));
+      return;
+    }
+  });
+});
 </script>
 </body>
 </html>
