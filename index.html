@@ -5,232 +5,254 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>अपना वेंडर — Apna Vendor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --navy:#1A1A2E;
-  --gold:#C9A96E;
-  --gold-light:#E8D5B0;
-  --cream:#FDF6EC;
-  --cream2:#F7EDD8;
-  --red:#C0392B;
-  --green:#0F6E56;
-  --text:#1A1A2E;
-  --muted:#6B6B6B;
-  --border:#E2D9CC;
-  --white:#FFFFFF;
-  --surface:#FAFAF8;
+  --navy:#1A1A2E;--gold:#C9A96E;--gold-light:#E8D5B0;
+  --cream:#FDF6EC;--cream2:#F7EDD8;--red:#C0392B;--green:#0F6E56;
+  --text:#1A1A2E;--muted:#6B6B6B;--border:#E2D9CC;--white:#FFFFFF;
 }
 html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
 
-/* ── NAV ── */
-nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;}
-.nav-logo{font-family:'Tiro Devanagari Hindi',serif;font-size:20px;color:var(--white);letter-spacing:1px;cursor:pointer;}
+/* NAV */
+nav{background:var(--navy);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:300;gap:8px;flex-wrap:nowrap;}
+.nav-logo{font-family:'Tiro Devanagari Hindi',serif;font-size:18px;color:var(--white);letter-spacing:1px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .nav-logo span{color:var(--gold);}
-.nav-links{display:flex;gap:6px;}
-.nav-link{background:none;border:none;color:#B0A090;font-size:13px;padding:7px 14px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.nav-links{display:flex;gap:4px;flex-shrink:0;}
+.nav-link{background:none;border:none;color:#B0A090;font-size:12px;padding:6px 10px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;white-space:nowrap;}
 .nav-link:hover,.nav-link.active{background:rgba(201,169,110,0.15);color:var(--gold);}
-.lang-bar{display:flex;gap:4px;}
-.auth-area{display:flex;align-items:center;gap:8px;}
-.auth-btn{padding:5px 12px;font-size:12px;border:1px solid rgba(201,169,110,0.3);border-radius:16px;cursor:pointer;background:none;color:#B0A090;font-family:'Inter',sans-serif;transition:all 0.2s;}
-.auth-btn:hover{background:rgba(201,169,110,0.15);color:var(--gold);}
-.lang-btn{padding:5px 12px;font-size:12px;border:1px solid rgba(201,169,110,0.3);border-radius:16px;cursor:pointer;background:none;color:#B0A090;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.lang-bar{display:flex;gap:3px;flex-shrink:0;}
+.lang-btn{padding:4px 10px;font-size:11px;border:1px solid rgba(201,169,110,0.3);border-radius:14px;cursor:pointer;background:none;color:#B0A090;font-family:'Inter',sans-serif;transition:all 0.2s;}
 .lang-btn.active{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:600;}
+.auth-area{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.auth-btn{padding:5px 12px;font-size:12px;border:1px solid rgba(201,169,110,0.3);border-radius:14px;cursor:pointer;background:none;color:#B0A090;font-family:'Inter',sans-serif;transition:all 0.2s;white-space:nowrap;}
+.auth-btn:hover{background:rgba(201,169,110,0.15);color:var(--gold);}
+.auth-name{color:var(--gold-light);font-size:12px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
-/* ── HERO ── */
-.hero{background:var(--navy);padding:80px 32px 60px;text-align:center;position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;top:-80px;left:-80px;width:320px;height:320px;border-radius:50%;background:rgba(201,169,110,0.06);}
-.hero::after{content:'';position:absolute;bottom:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:rgba(201,169,110,0.04);}
-.hero-logo{font-family:'Tiro Devanagari Hindi',serif;font-size:52px;color:var(--white);letter-spacing:2px;margin-bottom:8px;line-height:1.2;}
+/* HERO */
+.hero{background:var(--navy);padding:72px 32px 52px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-80px;left:-80px;width:320px;height:320px;border-radius:50%;background:rgba(201,169,110,0.06);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:rgba(201,169,110,0.04);pointer-events:none;}
+.hero-logo{font-family:'Tiro Devanagari Hindi',serif;font-size:48px;color:var(--white);letter-spacing:2px;margin-bottom:8px;line-height:1.2;}
 .hero-logo span{color:var(--gold);}
-.hero-tagline{font-family:'Tiro Devanagari Hindi',serif;font-size:18px;color:var(--gold-light);margin-bottom:6px;opacity:0.85;}
-.hero-sub{font-size:13px;color:#8A7A6A;letter-spacing:1px;margin-bottom:40px;}
+.hero-tagline{font-family:'Tiro Devanagari Hindi',serif;font-size:17px;color:var(--gold-light);margin-bottom:6px;opacity:0.9;}
+.hero-sub{font-size:12px;color:#8A7A6A;letter-spacing:1px;margin-bottom:36px;}
 .hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-.btn-primary{background:var(--gold);color:var(--navy);padding:12px 28px;border:none;border-radius:24px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Tiro Devanagari Hindi',serif;font-size:16px;transition:opacity 0.2s;}
+.btn-primary{background:var(--gold);color:var(--navy);padding:11px 26px;border:none;border-radius:24px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Tiro Devanagari Hindi',serif;transition:opacity 0.2s;}
 .btn-primary:hover{opacity:0.88;}
-.btn-outline{background:none;color:var(--gold);padding:12px 28px;border:1.5px solid var(--gold);border-radius:24px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-outline{background:none;color:var(--gold);padding:11px 26px;border:1.5px solid var(--gold);border-radius:24px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
 .btn-outline:hover{background:rgba(201,169,110,0.1);}
-.hero-stats{display:flex;gap:32px;justify-content:center;margin-top:48px;flex-wrap:wrap;}
+.hero-stats{display:flex;gap:28px;justify-content:center;margin-top:44px;flex-wrap:wrap;}
 .stat{text-align:center;}
-.stat-num{font-family:'Tiro Devanagari Hindi',serif;font-size:28px;color:var(--gold);}
-.stat-label{font-size:12px;color:#7A6A5A;margin-top:2px;}
+.stat-num{font-family:'Tiro Devanagari Hindi',serif;font-size:26px;color:var(--gold);}
+.stat-label{font-size:11px;color:#7A6A5A;margin-top:2px;}
 
-/* ── SECTIONS ── */
-.section{padding:60px 32px;}
-.section-header{text-align:center;margin-bottom:40px;}
-.section-title{font-family:'Tiro Devanagari Hindi',serif;font-size:32px;color:var(--navy);margin-bottom:6px;}
+/* SECTIONS */
+.section{padding:56px 32px;}
+.section-header{text-align:center;margin-bottom:36px;}
+.section-title{font-family:'Tiro Devanagari Hindi',serif;font-size:30px;color:var(--navy);margin-bottom:6px;}
 .section-sub{font-size:13px;color:var(--muted);}
 
-/* ── PAGES ── */
+/* PAGES */
 .page{display:none;}
 .page.active{display:block;}
 
-/* ── VENDOR GRID ── */
-.vendor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;max-width:1100px;margin:0 auto;}
-.vendor-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;}
-.vendor-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(26,26,46,0.1);}
-.vc-hero{background:var(--navy);padding:20px;position:relative;}
-.vc-name{font-family:'Tiro Devanagari Hindi',serif;font-size:18px;color:var(--white);margin-bottom:3px;}
+/* VENDOR GRID */
+.vendor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;max-width:1100px;margin:0 auto;}
+.vendor-card{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;}
+.vendor-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(26,26,46,0.1);}
+.vc-hero{background:var(--navy);padding:18px;}
+.vc-name{font-family:'Tiro Devanagari Hindi',serif;font-size:17px;color:var(--white);margin-bottom:3px;}
 .vc-tagline{font-size:12px;color:var(--gold);opacity:0.9;}
-.vc-badge{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;margin-top:8px;}
-.vc-body{padding:16px;}
-.vc-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.vc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;}
-.vc-tag{background:#F0EBE0;color:#5A4A30;font-size:11px;padding:2px 8px;border-radius:10px;}
-.vc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);}
+.vc-badge{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:600;padding:2px 9px;border-radius:10px;margin-top:6px;}
+.vc-body{padding:14px;}
+.vc-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.vc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;}
+.vc-tag{background:#F0EBE0;color:#5A4A30;font-size:11px;padding:2px 8px;border-radius:9px;}
+.vc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);}
 .vc-rating{display:flex;align-items:center;gap:4px;}
 .stars{color:var(--gold);font-size:13px;}
 .vc-rating-num{font-size:12px;color:var(--muted);}
 .vc-loc{font-size:12px;color:var(--muted);}
-.vc-phone{font-size:12px;color:var(--navy);font-weight:500;}
-.view-btn{background:var(--navy);color:var(--gold);border:none;padding:6px 14px;border-radius:12px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;}
 
-/* ── VENDOR DETAIL ── */
-.detail-back{background:none;border:none;color:var(--gold);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:20px;font-family:'Inter',sans-serif;}
-.detail-hero{background:var(--navy);border-radius:16px;padding:28px;margin-bottom:24px;}
-.detail-name{font-family:'Tiro Devanagari Hindi',serif;font-size:28px;color:var(--white);margin-bottom:4px;}
-.detail-tagline{font-size:14px;color:var(--gold);margin-bottom:12px;}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-.detail-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;}
-.detail-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+/* VENDOR DETAIL */
+.detail-hero{background:var(--navy);border-radius:14px;padding:24px;margin-bottom:20px;}
+.detail-name{font-family:'Tiro Devanagari Hindi',serif;font-size:26px;color:var(--white);margin-bottom:4px;}
+.detail-tagline{font-size:14px;color:var(--gold);margin-bottom:10px;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.detail-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.detail-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
 .detail-body{font-size:13px;color:var(--text);line-height:1.6;}
 .detail-tags{display:flex;flex-wrap:wrap;gap:5px;}
-.detail-tag{background:#E1F5EE;color:#085041;font-size:12px;padding:3px 10px;border-radius:10px;}
-.detail-spec-tag{background:#EEEDFE;color:#3C3489;font-size:12px;padding:3px 10px;border-radius:10px;}
-.contact-row{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--border);}
+.detail-tag{background:#E1F5EE;color:#085041;font-size:12px;padding:3px 10px;border-radius:9px;}
+.detail-spec-tag{background:#EEEDFE;color:#3C3489;font-size:12px;padding:3px 10px;border-radius:9px;}
+.contact-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:6px 0;border-bottom:1px solid var(--border);}
 .contact-row:last-child{border-bottom:none;}
-.contact-lbl{color:var(--muted);}
-.contact-val{font-weight:500;color:var(--text);}
+.contact-lbl{color:var(--muted);flex-shrink:0;margin-right:8px;}
+.contact-val{font-weight:500;color:var(--text);text-align:right;word-break:break-all;}
 
-/* share buttons */
-.share-section{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;margin-top:20px;}
-.share-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:12px;}
-.share-btns{display:flex;gap:10px;flex-wrap:wrap;}
-.share-btn{display:flex;align-items:center;gap:8px;padding:9px 18px;border-radius:20px;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity 0.2s;}
+/* SHARE */
+.share-section{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:16px;}
+.share-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;}
+.share-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.share-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:18px;border:none;font-size:12px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity 0.2s;}
 .share-btn:hover{opacity:0.85;}
 .share-ig{background:#E1306C;color:#fff;}
 .share-fb{background:#1877F2;color:#fff;}
 .share-wa{background:#25D366;color:#fff;}
 .share-copy{background:var(--navy);color:var(--gold);}
+.share-qr{background:#1A1A2E;color:var(--gold);}
 
-/* ── REVIEWS ── */
-.reviews-section{margin-top:24px;}
-.reviews-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.reviews-title{font-size:15px;font-weight:600;color:var(--navy);}
+/* REVIEWS */
+.reviews-section{margin-top:20px;}
+.reviews-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.reviews-title{font-size:14px;font-weight:600;color:var(--navy);}
 .avg-rating{display:flex;align-items:center;gap:8px;}
-.avg-num{font-size:28px;font-weight:700;color:var(--navy);}
-.avg-stars{font-size:18px;color:var(--gold);}
-.review-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
-.review-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.avg-num{font-size:26px;font-weight:700;color:var(--navy);}
+.avg-stars{font-size:17px;color:var(--gold);}
+.review-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:13px;margin-bottom:8px;}
 .review-name{font-size:13px;font-weight:600;color:var(--text);}
 .review-stars{font-size:13px;color:var(--gold);}
-.review-text{font-size:13px;color:var(--muted);line-height:1.5;}
+.review-text{font-size:13px;color:var(--muted);line-height:1.5;margin-top:5px;}
 .review-date{font-size:11px;color:#AAA;margin-top:4px;}
+.review-actions{display:flex;gap:6px;margin-top:6px;}
+.review-edit-area-wrap{margin-top:10px;display:none;background:var(--cream2);border-radius:8px;padding:12px;}
+.review-edit-stars{display:flex;gap:4px;margin-bottom:8px;}
+.review-edit-star{font-size:22px;cursor:pointer;color:#DDD;transition:color 0.15s;line-height:1;}
+.review-edit-star.lit{color:var(--gold);}
+.review-edit-textarea{width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--white);min-height:60px;resize:vertical;outline:none;}
+.review-edit-textarea:focus{border-color:var(--gold);}
+.review-edit-btns{display:flex;gap:7px;margin-top:7px;}
+.btn-save-review{background:var(--navy);color:var(--gold);border:none;padding:6px 16px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;}
+.btn-cancel-edit{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:10px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;}
+.btn-edit-review{background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:2px 8px;border-radius:9px;cursor:pointer;font-family:'Inter',sans-serif;}
+.btn-delete-review{background:none;border:1px solid #e0b0b0;color:var(--red);font-size:11px;padding:2px 9px;border-radius:9px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;}
 
-/* add review */
-.add-review{background:var(--cream2);border:1px solid var(--border);border-radius:12px;padding:18px;margin-top:16px;}
-.add-review-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:12px;}
-.star-picker{display:flex;gap:4px;margin-bottom:12px;}
-.star-pick{font-size:24px;cursor:pointer;color:#DDD;transition:color 0.15s;}
+/* ADD REVIEW */
+.add-review{background:var(--cream2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:14px;}
+.add-review-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;}
+.star-picker{display:flex;gap:5px;margin-bottom:10px;}
+.star-pick{font-size:26px;cursor:pointer;color:#DDD;transition:color 0.15s;}
 .star-pick.lit{color:var(--gold);}
-.review-name-input{width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--white);margin-bottom:8px;}
-.review-textarea{width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--white);min-height:72px;resize:vertical;}
-.submit-review-btn{margin-top:10px;background:var(--navy);color:var(--gold);border:none;padding:9px 20px;border-radius:16px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;}
+.review-name-input{width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:8px 11px;border:1px solid var(--border);border-radius:7px;background:var(--white);margin-bottom:7px;outline:none;}
+.review-textarea{width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:8px 11px;border:1px solid var(--border);border-radius:7px;background:var(--white);min-height:68px;resize:vertical;outline:none;}
+.review-name-input:focus,.review-textarea:focus{border-color:var(--gold);}
+.submit-review-btn{margin-top:9px;background:var(--navy);color:var(--gold);border:none;padding:8px 18px;border-radius:14px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;}
 
-/* ── REGISTER FORM ── */
-.form-wrap{max-width:800px;margin:0 auto;}
-.form-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;}
-.form-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:20px;}
-.form-card-title{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.form-card-title::before{content:'';display:inline-block;width:3px;height:12px;background:var(--gold);border-radius:2px;}
-.field{margin-bottom:12px;}
+/* REGISTER FORM */
+.form-wrap{max-width:820px;margin:0 auto;}
+.form-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;}
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:0;}
+.form-card-title{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+.form-card-title::before{content:'';display:inline-block;width:3px;height:11px;background:var(--gold);border-radius:2px;flex-shrink:0;}
+.req{color:var(--red);font-weight:700;margin-left:1px;}
+.field{margin-bottom:11px;}
 .field:last-child{margin-bottom:0;}
-.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px;font-weight:500;}
-.field input,.field textarea,.field select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:'Tiro Devanagari Hindi',serif;font-size:14px;background:var(--white);color:var(--text);outline:none;transition:border-color 0.2s;}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:500;}
+.field input,.field textarea,.field select{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:7px;font-family:'Tiro Devanagari Hindi',serif;font-size:14px;background:var(--white);color:var(--text);outline:none;transition:border-color 0.2s;}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold);}
-.field textarea{resize:vertical;min-height:80px;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.tag-row{display:flex;gap:8px;}
+.field textarea{resize:vertical;min-height:78px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.tag-row{display:flex;gap:7px;}
 .tag-row input{flex:1;}
-.add-tag-btn{flex-shrink:0;padding:0 14px;background:var(--navy);color:var(--gold);border:none;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;}
-.tags-display{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;}
-.form-tag{background:#FAEEDA;color:#633806;font-size:12px;padding:3px 10px 3px 12px;border-radius:20px;display:flex;align-items:center;gap:4px;}
+.add-tag-btn{flex-shrink:0;padding:0 13px;background:var(--navy);color:var(--gold);border:none;border-radius:7px;cursor:pointer;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;height:38px;}
+.tags-display{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;min-height:10px;}
+.form-tag{background:#FAEEDA;color:#633806;font-size:12px;padding:3px 10px 3px 11px;border-radius:18px;display:flex;align-items:center;gap:3px;}
 .form-tag button{background:none;border:none;color:#854F0B;cursor:pointer;font-size:14px;padding:0;line-height:1;}
 .char-count{font-size:11px;color:var(--muted);text-align:right;margin-top:2px;}
-.publish-btn{width:100%;padding:14px;font-size:17px;background:var(--navy);color:var(--gold);border:none;border-radius:12px;cursor:pointer;font-family:'Tiro Devanagari Hindi',serif;letter-spacing:1px;margin-top:20px;transition:opacity 0.2s;}
+.publish-btn{width:100%;padding:13px;font-size:16px;background:var(--navy);color:var(--gold);border:none;border-radius:10px;cursor:pointer;font-family:'Tiro Devanagari Hindi',serif;letter-spacing:0.5px;margin-top:18px;transition:opacity 0.2s;}
 .publish-btn:hover{opacity:0.88;}
-.success-msg{text-align:center;font-size:14px;font-weight:600;margin-top:10px;min-height:20px;}
+.success-msg{text-align:center;font-size:14px;font-weight:600;margin-top:9px;min-height:20px;}
 
-/* ── ABOUT ── */
-.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:900px;margin:0 auto;}
-.about-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;}
-.about-icon{font-size:32px;margin-bottom:12px;}
-.about-title{font-family:'Tiro Devanagari Hindi',serif;font-size:18px;color:var(--navy);margin-bottom:6px;}
+/* LOCATION FIELD */
+.loc-input-wrap{position:relative;}
+.loc-text-input{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:7px;font-family:'Inter',sans-serif;font-size:13px;background:var(--white);color:var(--text);outline:none;transition:border-color 0.2s;}
+.loc-text-input:focus{border-color:var(--gold);}
+.loc-suggestions{position:absolute;top:100%;left:0;right:0;background:var(--white);border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;max-height:200px;overflow-y:auto;z-index:50;display:none;box-shadow:0 4px 16px rgba(0,0,0,0.08);}
+.loc-suggestion{padding:8px 12px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--border);}
+.loc-suggestion:last-child{border-bottom:none;}
+.loc-suggestion:hover,.loc-suggestion.active{background:var(--cream2);}
+.loc-suggestion-state{font-size:11px;color:var(--muted);}
+.map-picker-wrap{margin-top:8px;}
+.map-hint{font-size:11px;color:var(--muted);margin-bottom:5px;}
+#vendor-map-picker{width:100%;height:200px;border-radius:8px;border:1px solid var(--border);overflow:hidden;}
+.map-coords{font-size:11px;color:var(--green);margin-top:4px;min-height:16px;}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;max-width:900px;margin:0 auto;}
+.about-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:22px;text-align:center;}
+.about-icon{font-size:30px;margin-bottom:10px;}
+.about-title{font-family:'Tiro Devanagari Hindi',serif;font-size:17px;color:var(--navy);margin-bottom:5px;}
 .about-text{font-size:13px;color:var(--muted);line-height:1.6;}
 
-/* ── TOAST ── */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:var(--gold);padding:12px 24px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:all 0.3s;z-index:999;pointer-events:none;}
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:var(--gold);padding:11px 22px;border-radius:22px;font-size:13px;font-weight:500;opacity:0;transition:all 0.3s;z-index:9999;pointer-events:none;max-width:90vw;text-align:center;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* ── CUSTOM CONFIRM DIALOG ── */
-.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,0.6);z-index:500;align-items:center;justify-content:center;}
-.confirm-overlay.open{display:flex;}
-.confirm-box{background:var(--white);border-radius:16px;padding:28px 24px;max-width:340px;width:90%;text-align:center;box-shadow:0 12px 48px rgba(26,26,46,0.25);}
-.confirm-icon{font-size:32px;margin-bottom:12px;}
-.confirm-msg{font-size:14px;color:var(--text);line-height:1.5;margin-bottom:20px;font-family:'Inter',sans-serif;}
+/* CONFIRM DIALOG */
+.overlay-bg{display:none;position:fixed;inset:0;background:rgba(26,26,46,0.65);z-index:500;align-items:center;justify-content:center;padding:20px;}
+.overlay-bg.open{display:flex;}
+.confirm-box{background:var(--white);border-radius:14px;padding:26px 22px;max-width:340px;width:100%;text-align:center;box-shadow:0 12px 48px rgba(26,26,46,0.2);}
+.confirm-icon{font-size:30px;margin-bottom:10px;}
+.confirm-msg{font-size:14px;color:var(--text);line-height:1.5;margin-bottom:18px;font-family:'Inter',sans-serif;}
 .confirm-btns{display:flex;gap:10px;justify-content:center;}
-.confirm-cancel{padding:9px 22px;border:1.5px solid var(--border);border-radius:20px;background:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;}
+.confirm-cancel{padding:8px 20px;border:1.5px solid var(--border);border-radius:18px;background:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;}
 .confirm-cancel:hover{background:var(--cream2);}
-.confirm-ok{padding:9px 22px;border:none;border-radius:20px;background:var(--red);color:#fff;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;}
+.confirm-ok{padding:8px 20px;border:none;border-radius:18px;background:var(--red);color:#fff;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;}
 .confirm-ok:hover{opacity:0.85;}
 
-/* ── MODAL ── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,0.7);z-index:200;overflow-y:auto;padding:20px;}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,0.7);z-index:200;overflow-y:auto;padding:16px;}
 .modal-overlay.open{display:flex;align-items:flex-start;justify-content:center;}
-.modal{background:var(--cream);border-radius:20px;width:100%;max-width:860px;padding:28px;position:relative;margin:auto;}
-.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);}
+.modal{background:var(--cream);border-radius:18px;width:100%;max-width:860px;padding:24px;position:relative;margin:auto;}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);line-height:1;padding:4px;}
 
-/* search */
-.search-bar{display:flex;gap:10px;max-width:600px;margin:0 auto 32px;align-items:center;}
-.search-bar input{flex:1;padding:11px 18px;border:1.5px solid var(--border);border-radius:24px;font-family:'Tiro Devanagari Hindi',serif;font-size:14px;background:var(--white);outline:none;}
+/* SEARCH */
+.search-bar{display:flex;gap:9px;max-width:580px;margin:0 auto 28px;align-items:center;}
+.search-bar input{flex:1;padding:10px 16px;border:1.5px solid var(--border);border-radius:22px;font-family:'Tiro Devanagari Hindi',serif;font-size:14px;background:var(--white);outline:none;}
 .search-bar input:focus{border-color:var(--gold);}
-.filter-select{padding:11px 14px;border:1.5px solid var(--border);border-radius:24px;font-size:13px;background:var(--white);outline:none;cursor:pointer;}
+.filter-select{padding:10px 12px;border:1.5px solid var(--border);border-radius:22px;font-size:13px;background:var(--white);outline:none;cursor:pointer;font-family:'Inter',sans-serif;}
 
-/* empty state */
+/* EMPTY STATE */
 .empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
-.empty-state-icon{font-size:48px;margin-bottom:12px;}
+.empty-state-icon{font-size:44px;margin-bottom:10px;}
 .empty-state p{font-size:14px;}
 
-/* responsive */
-@media(max-width:640px){
-  .form-grid,.detail-grid{grid-template-columns:1fr;}
-  .hero-logo{font-size:36px;}
-  .section{padding:40px 16px;}
-  nav{padding:0 16px;}
-  .hero{padding:60px 16px 40px;}
-}
-/* Required asterisk */
-.req{color:var(--red);font-weight:700;margin-left:2px;}
-/* Edit review inline */
-.review-edit-area{margin-top:8px;display:none;}
-.review-edit-area textarea{width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--white);min-height:60px;resize:vertical;}
-.review-edit-btns{display:flex;gap:8px;margin-top:6px;}
-.review-edit-save{background:var(--navy);color:var(--gold);border:none;padding:6px 16px;border-radius:12px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;}
-.review-edit-cancel{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 16px;border-radius:12px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;}
-/* Edit star picker inline */
-.review-edit-stars{display:flex;gap:4px;margin-bottom:6px;}
-.review-edit-star{font-size:20px;cursor:pointer;color:#DDD;transition:color 0.15s;}
-.review-edit-star.lit{color:var(--gold);}
-/* QR overlay */
-.qr-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,0.75);z-index:600;align-items:center;justify-content:center;}
+/* QR OVERLAY */
+.qr-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,0.78);z-index:600;align-items:center;justify-content:center;padding:20px;}
 .qr-overlay.open{display:flex;}
-.qr-box{background:var(--white);border-radius:20px;padding:32px 28px;text-align:center;max-width:320px;width:90%;box-shadow:0 12px 48px rgba(26,26,46,0.25);}
-.qr-title{font-family:'Tiro Devanagari Hindi',serif;font-size:18px;color:var(--navy);margin-bottom:4px;}
-.qr-sub{font-size:12px;color:var(--muted);margin-bottom:18px;}
-.qr-close{margin-top:18px;background:var(--navy);color:var(--gold);border:none;padding:9px 24px;border-radius:20px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;}
+.qr-box{background:var(--white);border-radius:18px;padding:28px 24px;text-align:center;max-width:300px;width:100%;box-shadow:0 12px 48px rgba(26,26,46,0.25);}
+.qr-vendor-name{font-family:'Tiro Devanagari Hindi',serif;font-size:17px;color:var(--navy);margin-bottom:3px;}
+.qr-vendor-sub{font-size:12px;color:var(--muted);margin-bottom:16px;}
+.qr-close{margin-top:16px;background:var(--navy);color:var(--gold);border:none;padding:8px 22px;border-radius:18px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;}
+
+/* VENDOR OWNER BUTTONS */
+.vendor-owner-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.btn-edit-vendor{background:rgba(201,169,110,0.12);border:1.5px solid var(--gold);color:var(--gold);padding:7px 16px;border-radius:18px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:5px;}
+.btn-edit-vendor:hover{background:rgba(201,169,110,0.22);}
+.btn-delete-vendor{background:none;border:1.5px solid var(--red);color:var(--red);padding:7px 16px;border-radius:18px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:5px;}
+.btn-delete-vendor:hover{background:rgba(192,57,43,0.06);}
+
+/* EDIT MODAL (vendor edit form inside modal) */
+.edit-form-wrap{padding:4px 0;}
+.edit-section-title{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:14px 0 8px;display:flex;align-items:center;gap:7px;}
+.edit-section-title::before{content:'';display:inline-block;width:3px;height:11px;background:var(--gold);border-radius:2px;flex-shrink:0;}
+
+/* RESPONSIVE */
+@media(max-width:720px){
+  .form-grid,.detail-grid{grid-template-columns:1fr;}
+  .hero-logo{font-size:34px;}
+  .section{padding:36px 14px;}
+  nav{padding:0 12px;height:56px;}
+  .nav-links{display:none;}
+  .hero{padding:52px 14px 36px;}
+}
 </style>
 </head>
 <body>
@@ -238,10 +260,10 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
 <nav>
   <div class="nav-logo" onclick="showPage('home')">अपना <span>वेंडर</span></div>
   <div class="nav-links">
-    <button class="nav-link active" id="nav-home" onclick="showPage('home')" data-key="navHome">होम</button>
-    <button class="nav-link" id="nav-vendors" onclick="showPage('vendors')" data-key="navVendors">विक्रेता</button>
-    <button class="nav-link" id="nav-register" onclick="showPage('register')" data-key="navRegister">पंजीकरण</button>
-    <button class="nav-link" id="nav-about" onclick="showPage('about')" data-key="navAbout">हमारे बारे में</button>
+    <button class="nav-link active" id="nav-home" onclick="showPage('home')">होम</button>
+    <button class="nav-link" id="nav-vendors" onclick="showPage('vendors')">विक्रेता</button>
+    <button class="nav-link" id="nav-register" onclick="showPage('register')">पंजीकरण</button>
+    <button class="nav-link" id="nav-about" onclick="showPage('about')">हमारे बारे में</button>
   </div>
   <div class="lang-bar">
     <button class="lang-btn active" onclick="setLang('hi')">हिंदी</button>
@@ -253,15 +275,25 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
 
 <div class="toast" id="toast"></div>
 
-<!-- CUSTOM CONFIRM DIALOG -->
-<div class="confirm-overlay" id="confirm-overlay">
+<!-- CONFIRM DIALOG -->
+<div class="overlay-bg" id="confirm-overlay">
   <div class="confirm-box">
-    <div class="confirm-icon">🗑️</div>
+    <div class="confirm-icon">⚠️</div>
     <div class="confirm-msg" id="confirm-msg"></div>
     <div class="confirm-btns">
-      <button class="confirm-cancel" id="confirm-cancel-btn"></button>
-      <button class="confirm-ok" id="confirm-ok-btn"></button>
+      <button class="confirm-cancel" id="confirm-cancel-btn">रद्द करें</button>
+      <button class="confirm-ok" id="confirm-ok-btn">हटाएं</button>
     </div>
+  </div>
+</div>
+
+<!-- QR OVERLAY -->
+<div class="qr-overlay" id="qr-overlay">
+  <div class="qr-box">
+    <div class="qr-vendor-name" id="qr-vendor-name"></div>
+    <div class="qr-vendor-sub" id="qr-vendor-sub"></div>
+    <div id="qr-canvas-wrap"></div>
+    <button class="qr-close" onclick="document.getElementById('qr-overlay').classList.remove('open')">✕ बंद करें</button>
   </div>
 </div>
 
@@ -277,20 +309,20 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
     </div>
     <div class="hero-stats">
       <div class="stat"><div class="stat-num" id="stat-count">0</div><div class="stat-label" id="stat-label1">पंजीकृत विक्रेता</div></div>
-      <div class="stat"><div class="stat-num" id="stat-states">0</div><div class="stat-label" id="stat-label2">राज्य</div></div>
+      <div class="stat"><div class="stat-num" id="stat-states">0</div><div class="stat-label" id="stat-label2">स्थान</div></div>
       <div class="stat"><div class="stat-num" id="stat-free">मुफ़्त</div><div class="stat-label" id="stat-label3">हमेशा के लिए</div></div>
     </div>
   </div>
   <div class="section" style="background:var(--white);">
     <div class="section-header">
       <div class="section-title" id="home-why-title">यह क्यों?</div>
-      <div class="section-sub" id="home-why-sub">गरीब से गरीब व्यापारी भी डिजिटल दुनिया में अपनी पहचान बना सके</div>
+      <div class="section-sub" id="home-why-sub">हर छोटे व्यापारी को डिजिटल दुनिया में अपनी पहचान मिले</div>
     </div>
     <div class="about-grid">
-      <div class="about-card"><div class="about-icon">🌐</div><div class="about-title" id="why1-t">डिजिटल पहचान</div><div class="about-text" id="why1-b">इंटरनेट पर अपनी दुकान की छवि बनाएं और लाखों ग्राहकों तक पहुंचें।</div></div>
+      <div class="about-card"><div class="about-icon">🌐</div><div class="about-title" id="why1-t">डिजिटल पहचान</div><div class="about-text" id="why1-b">इंटरनेट पर अपनी दुकान की उपस्थिति बनाएं और अधिक ग्राहकों तक पहुंचें।</div></div>
       <div class="about-card"><div class="about-icon">⭐</div><div class="about-title" id="why2-t">रेटिंग और समीक्षा</div><div class="about-text" id="why2-b">ग्राहक आपको रेट करें, समीक्षा दें और आपका विश्वास बढ़ाएं।</div></div>
       <div class="about-card"><div class="about-icon">📱</div><div class="about-title" id="why3-t">सोशल मीडिया</div><div class="about-text" id="why3-b">Instagram, Facebook और WhatsApp पर अपनी दुकान शेयर करें।</div></div>
-      <div class="about-card"><div class="about-icon">🆓</div><div class="about-title" id="why4-t">बिल्कुल मुफ़्त</div><div class="about-text" id="why4-b">कोई शुल्क नहीं, कोई छुपी फीस नहीं। हमेशा के लिए मुफ़्त।</div></div>
+      <div class="about-card"><div class="about-icon">🆓</div><div class="about-title" id="why4-t">बिल्कुल मुफ़्त</div><div class="about-text" id="why4-b">कोई शुल्क नहीं, कोई छुपी फीस नहीं — हमेशा के लिए मुफ़्त।</div></div>
     </div>
   </div>
 </div>
@@ -306,9 +338,6 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
       <input type="text" id="search-input" placeholder="दुकान या सेवा खोजें..." oninput="filterVendors()">
       <select class="filter-select" id="cat-filter" onchange="filterVendors()">
         <option value="">सभी श्रेणी</option>
-        <option>खान-पान</option><option>दर्जी</option><option>प्रिंटिंग</option>
-        <option>ट्रांसपोर्ट</option><option>मरम्मत</option><option>होलसेल</option>
-        <option>फूलवाला</option><option>टेक सेवा</option><option>कपड़े</option>
       </select>
     </div>
     <div class="vendor-grid" id="vendor-grid"></div>
@@ -317,89 +346,89 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
 
 <!-- REGISTER -->
 <div class="page" id="page-register">
-  <div class="section">
+  <div class="section" id="register-section">
     <div class="section-header">
       <div class="section-title" id="reg-title">अपनी दुकान पंजीकृत करें</div>
       <div class="section-sub" id="reg-sub">नीचे अपनी जानकारी भरें और अपनी डिजिटल पहचान बनाएं</div>
     </div>
-    <div class="form-wrap">
+    <div class="form-wrap" id="register-form-wrap">
       <div class="form-grid">
-        <div>
-          <div class="form-card" style="margin-bottom:16px;">
+        <!-- LEFT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="form-card">
             <div class="form-card-title" id="fc-identity">दुकान की पहचान</div>
             <div class="field"><label id="fl-vname">व्यापार का नाम <span class="req">*</span></label><input type="text" id="f-vname"></div>
-            <div class="field"><label id="fl-tagline">टैगलाइन</label><input type="text" id="f-tagline"></div>
+            <div class="field"><label id="fl-tagline">टैगलाइन</label><input type="text" id="f-tagline" placeholder="जैसे: ताज़ा खाना, हर दिन"></div>
             <div class="row2">
               <div class="field"><label id="fl-cat">श्रेणी <span class="req">*</span></label>
-                <select id="f-cat">
-                  <option value="">चुनें...</option>
-                  <option>खान-पान</option><option>दर्जी</option><option>प्रिंटिंग</option>
-                  <option>ट्रांसपोर्ट</option><option>मरम्मत</option><option>होलसेल</option>
-                  <option>फूलवाला</option><option>टेक सेवा</option><option>कपड़े</option><option>अन्य</option>
-                </select>
+                <select id="f-cat"><option value="">चुनें...</option></select>
               </div>
-              <div class="field"><label id="fl-loc">शहर / स्थान <span class="req">*</span></label>
-                <select id="f-loc"><option value="">चुनें...</option></select>
-              </div>
+              <div class="field"><label id="fl-year">स्थापना वर्ष</label><input type="number" id="f-year" placeholder="2015" min="1900" max="2030"></div>
             </div>
-            <div id="f-loc-subarea-wrap" style="display:none;" class="field">
-              <label id="fl-loc-sub">क्षेत्र / इलाका <span class="req">*</span></label>
-              <select id="f-loc-sub"><option value="">चुनें...</option></select>
-            </div>
-            <div class="field" style="margin-top:4px;">
-              <label id="fl-map">📍 मानचित्र पर स्थान (वैकल्पिक)</label>
-              <div id="vendor-map-picker" style="width:100%;height:220px;border-radius:10px;border:1px solid var(--border);margin-top:4px;overflow:hidden;"></div>
-              <div id="vendor-map-coords" style="font-size:11px;color:var(--muted);margin-top:4px;"></div>
-              <input type="hidden" id="f-lat"><input type="hidden" id="f-lng">
-            </div>
-            <div class="row2">
-              <div class="field"><label id="fl-year">स्थापना वर्ष</label><input type="number" id="f-year" placeholder="2010"></div>
-              <div class="field"><label id="fl-team">टीम का आकार <span class="req">*</span></label>
-                <select id="f-team">
-                  <option value="">चुनें...</option>
-                  <option>सिर्फ मैं</option><option>२–५ लोग</option><option>६–१५ लोग</option>
-                  <option>१६–५० लोग</option><option>५०+ लोग</option>
-                </select>
-              </div>
+            <div class="field"><label id="fl-team">टीम का आकार <span class="req">*</span></label>
+              <select id="f-team"><option value="">चुनें...</option></select>
             </div>
           </div>
-          <div class="form-card" style="margin-bottom:16px;">
-            <div class="form-card-title" id="fc-about">हमारे बारे में</div>
+
+          <div class="form-card">
+            <div class="form-card-title" id="fc-location">स्थान की जानकारी</div>
             <div class="field">
-              <label id="fl-desc">विवरण <span class="req">*</span></label>
+              <label id="fl-loc">शहर / स्थान <span class="req">*</span></label>
+              <div class="loc-input-wrap">
+                <input type="text" class="loc-text-input" id="f-loc-text" placeholder="जैसे: Andheri, Mumbai, Maharashtra" autocomplete="off">
+                <div class="loc-suggestions" id="loc-suggestions"></div>
+              </div>
+              <input type="hidden" id="f-loc-value">
+            </div>
+            <div class="map-picker-wrap">
+              <div class="map-hint" id="fl-map">📍 नक्शे पर अपना सटीक स्थान चुनें (वैकल्पिक) — क्लिक करें</div>
+              <div id="vendor-map-picker"></div>
+              <div class="map-coords" id="vendor-map-coords"></div>
+              <input type="hidden" id="f-lat"><input type="hidden" id="f-lng">
+            </div>
+          </div>
+
+          <div class="form-card">
+            <div class="form-card-title" id="fc-about">विवरण <span class="req" style="font-size:10px;">*</span></div>
+            <div class="field">
+              <label id="fl-desc">अपनी दुकान के बारे में बताएं <span class="req">*</span></label>
               <textarea id="f-desc" maxlength="300" oninput="document.getElementById('f-desc-count').textContent=this.value.length+' / 300'"></textarea>
               <div class="char-count" id="f-desc-count">0 / 300</div>
             </div>
           </div>
+
           <div class="form-card">
             <div class="form-card-title" id="fc-contact">संपर्क जानकारी</div>
             <div class="row2">
-              <div class="field"><label id="fl-phone">फोन नंबर <span class="req">*</span></label><input type="tel" id="f-phone"></div>
-              <div class="field"><label id="fl-wa">व्हाट्सएप</label><input type="tel" id="f-wa"></div>
+              <div class="field"><label id="fl-phone">फोन नंबर <span class="req">*</span></label><input type="tel" id="f-phone" placeholder="+91 98765 43210"></div>
+              <div class="field"><label id="fl-wa">WhatsApp</label><input type="tel" id="f-wa"></div>
             </div>
-            <div class="field"><label id="fl-email">ईमेल</label><input type="email" id="f-email"></div>
-            <div class="field"><label id="fl-web">वेबसाइट</label><input type="text" id="f-web"></div>
+            <div class="field"><label id="fl-email">ईमेल</label><input type="email" id="f-email" placeholder="dukaan@example.com"></div>
+            <div class="field"><label id="fl-web">वेबसाइट</label><input type="text" id="f-web" placeholder="www.example.com"></div>
           </div>
         </div>
-        <div>
-          <div class="form-card" style="margin-bottom:16px;">
-            <div class="form-card-title" id="fc-offers">हम क्या देते हैं <span class="req">*</span></div>
+
+        <!-- RIGHT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="form-card">
+            <div class="form-card-title" id="fc-offers">हम क्या देते हैं <span class="req" style="font-size:10px;">*</span></div>
             <div class="field">
-              <label id="fl-offers">सेवा या उत्पाद जोड़ें</label>
+              <label id="fl-offers">सेवा या उत्पाद जोड़ें <span class="req">*</span></label>
               <div class="tag-row">
-                <input type="text" id="f-offer-input">
-                <button class="add-tag-btn" onclick="addFormTag('f-offer-input',fOffersList,'f-offers-tags')" id="fbtn-offer">+ जोड़ें</button>
+                <input type="text" id="f-offer-input" placeholder="जैसे: शादी का खाना">
+                <button class="add-tag-btn" id="fbtn-offer" onclick="addFormTag('f-offer-input',fOffersList,'f-offers-tags')">+ जोड़ें</button>
               </div>
               <div class="tags-display" id="f-offers-tags"></div>
             </div>
           </div>
+
           <div class="form-card">
-            <div class="form-card-title" id="fc-spec">विशेषताएं <span class="req">*</span></div>
+            <div class="form-card-title" id="fc-spec">विशेषताएं <span class="req" style="font-size:10px;">*</span></div>
             <div class="field">
-              <label id="fl-spec">आप क्यों खास हैं?</label>
+              <label id="fl-spec">आप क्यों खास हैं? <span class="req">*</span></label>
               <div class="tag-row">
-                <input type="text" id="f-spec-input">
-                <button class="add-tag-btn" onclick="addFormTag('f-spec-input',fSpecsList,'f-specs-tags')" id="fbtn-spec">+ जोड़ें</button>
+                <input type="text" id="f-spec-input" placeholder="जैसे: 24 घंटे उपलब्ध">
+                <button class="add-tag-btn" id="fbtn-spec" onclick="addFormTag('f-spec-input',fSpecsList,'f-specs-tags')">+ जोड़ें</button>
               </div>
               <div class="tags-display" id="f-specs-tags"></div>
             </div>
@@ -419,7 +448,7 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
       <div class="section-title" id="about-title">अपना वेंडर के बारे में</div>
       <div class="section-sub" id="about-sub">भारत के छोटे व्यापारियों के लिए एक मुफ़्त डिजिटल मंच</div>
     </div>
-    <div class="about-grid" style="max-width:700px;margin:0 auto;">
+    <div class="about-grid" style="max-width:680px;margin:0 auto;">
       <div class="about-card"><div class="about-icon">🏪</div><div class="about-title" id="about1-t">हमारा मिशन</div><div class="about-text" id="about1-b">हर छोटे विक्रेता को, चाहे वो किसी भी गली-मोहल्ले में हो, एक डिजिटल पहचान देना।</div></div>
       <div class="about-card"><div class="about-icon">🤝</div><div class="about-title" id="about2-t">समुदाय</div><div class="about-text" id="about2-b">यह एक समुदाय है जहाँ विक्रेता और ग्राहक एक-दूसरे का साथ देते हैं।</div></div>
       <div class="about-card"><div class="about-icon">💡</div><div class="about-title" id="about3-t">तकनीक</div><div class="about-text" id="about3-b">सरल तकनीक जो हर किसी के लिए आसान हो — स्मार्टफोन हो या कंप्यूटर।</div></div>
@@ -427,19 +456,7 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
   </div>
 </div>
 
-<!-- QR CODE OVERLAY -->
-<div class="qr-overlay" id="qr-overlay">
-  <div class="qr-box">
-    <div class="qr-title" id="qr-vendor-name"></div>
-    <div class="qr-sub" id="qr-vendor-sub"></div>
-    <div id="qr-canvas-wrap"></div>
-    <button class="qr-close" onclick="document.getElementById('qr-overlay').classList.remove('open')">✕ Close</button>
-  </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- VENDOR MODAL -->
 <div class="modal-overlay" id="vendor-modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
@@ -448,136 +465,272 @@ nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justif
 </div>
 
 <script>
-// ── DATA ──
-// Clear any old seed vendors (v1/v2/v3) left over from previous versions
+// ── CLEAR OLD SEED DATA ──
 (function(){
-  var stored = JSON.parse(localStorage.getItem('av_vendors') || '[]');
-  var cleaned = stored.filter(function(v){ return v.id !== 'v1' && v.id !== 'v2' && v.id !== 'v3'; });
-  if(cleaned.length !== stored.length){ localStorage.setItem('av_vendors', JSON.stringify(cleaned)); }
+  var stored = JSON.parse(localStorage.getItem('av_vendors')||'[]');
+  var cleaned = stored.filter(function(v){return v.id!=='v1'&&v.id!=='v2'&&v.id!=='v3';});
+  if(cleaned.length!==stored.length) localStorage.setItem('av_vendors',JSON.stringify(cleaned));
 })();
-var vendors = JSON.parse(localStorage.getItem('av_vendors') || '[]');
-var currentUser = loadCurrentUser();
+
+var vendors = JSON.parse(localStorage.getItem('av_vendors')||'[]');
+var currentUser = (function(){try{return JSON.parse(localStorage.getItem('av_user'))||null;}catch(e){return null;}})();
 var currentLang = 'hi';
 var selectedVendorId = null;
 var selectedStars = 0;
+var fOffersList = [], fSpecsList = [];
+var editingVendorId = null; // which vendor is being edited
 
-function loadCurrentUser(){
-  try{ return JSON.parse(localStorage.getItem('av_user')) || null; }
-  catch(e){ return null; }
-}
-function saveCurrentUser(user){
-  currentUser = user;
-  if(user){ localStorage.setItem('av_user', JSON.stringify(user)); }
-  else { localStorage.removeItem('av_user'); }
-  updateAuthUI();
-  // If the register page is showing the sign-in wall, restore the real form now
-  var regPage = document.getElementById('page-register');
-  if(regPage && regPage.classList.contains('active')){
-    if(user){
-      // Restore the real form by reloading the page section
-      location.reload();
-    }
-  }
-  // Refresh vendor modal if open (so review form appears/disappears correctly)
-  if(selectedVendorId && document.getElementById('vendor-modal').classList.contains('open')){
-    openVendor(selectedVendorId);
-  }
-}
-function updateAuthUI(){
-  var authArea = document.getElementById('auth-area');
-  if(!authArea) return;
-  if(currentUser){
-    authArea.innerHTML =
-      '<span style="color:#fff;font-size:13px;margin-right:6px;">'+(currentUser.name||currentUser.email||'User')+'</span>'+
-      '<button class="auth-btn" onclick="signOut()">'+t('logoutBtn')+'</button>';
-  } else {
-    authArea.innerHTML = '<div id="google-signin-button"></div>';
-    renderGoogleButton();
-  }
-}
-
-function renderGoogleButton(){
-  var container = document.getElementById('google-signin-button');
-  if(!container) return;
-  if(window.google && google.accounts && google.accounts.id){
-    google.accounts.id.renderButton(container, { theme:'outline', size:'small', width:'180' });
-  }
-  // If Google SDK not ready yet, onGoogleLibraryLoad (below) will call this again
-}
-
-// Google calls this automatically once its SDK has fully loaded
-window.onGoogleLibraryLoad = function(){
-  google.accounts.id.initialize({
-    client_id: '690805050238-52e8fqjqt65kroi8opndu2t5j3hvo7dv.apps.googleusercontent.com',
-    callback: handleCredentialResponse,
-    auto_select: false,
-    cancel_on_tap_outside: true
-  });
-  // Only render button if user is not already signed in
-  if(!currentUser){
-    renderGoogleButton();
+// ── TRANSLATIONS ──
+var T = {
+  hi:{
+    navHome:'होम', navVendors:'विक्रेता', navRegister:'पंजीकरण', navAbout:'हमारे बारे में',
+    heroTagline:'अपना विक्रेता, अपना भरोसा', heroBtn1:'अपनी दुकान जोड़ें', heroBtn2:'विक्रेता देखें',
+    statL1:'पंजीकृत विक्रेता', statL2:'स्थान', statL3:'हमेशा के लिए', statFree:'मुफ़्त',
+    vendorsTitle:'सभी विक्रेता', vendorsSub:'हमारे समुदाय के विक्रेताओं से मिलें',
+    regTitle:'अपनी दुकान पंजीकृत करें', regSub:'नीचे अपनी जानकारी भरें और अपनी डिजिटल पहचान बनाएं',
+    aboutTitle:'अपना वेंडर के बारे में', aboutSub:'भारत के छोटे व्यापारियों के लिए एक मुफ़्त डिजिटल मंच',
+    homeWhyTitle:'यह क्यों?', homeWhySub:'हर छोटे व्यापारी को डिजिटल दुनिया में अपनी पहचान मिले',
+    why1t:'डिजिटल पहचान', why1b:'इंटरनेट पर अपनी दुकान की उपस्थिति बनाएं और अधिक ग्राहकों तक पहुंचें।',
+    why2t:'रेटिंग और समीक्षा', why2b:'ग्राहक आपको रेट करें, समीक्षा दें और आपका विश्वास बढ़ाएं।',
+    why3t:'सोशल मीडिया', why3b:'Instagram, Facebook और WhatsApp पर अपनी दुकान शेयर करें।',
+    why4t:'बिल्कुल मुफ़्त', why4b:'कोई शुल्क नहीं, कोई छुपी फीस नहीं — हमेशा के लिए मुफ़्त।',
+    fcIdentity:'दुकान की पहचान', fcLocation:'स्थान की जानकारी', fcAbout:'विवरण', fcOffers:'हम क्या देते हैं', fcSpec:'विशेषताएं', fcContact:'संपर्क जानकारी',
+    flVname:'व्यापार का नाम', flTagline:'टैगलाइन', flCat:'श्रेणी', flLoc:'शहर / स्थान', flYear:'स्थापना वर्ष', flTeam:'टीम का आकार',
+    flDesc:'अपनी दुकान के बारे में बताएं', flOffers:'सेवा या उत्पाद जोड़ें', flSpec:'आप क्यों खास हैं?',
+    flPhone:'फोन नंबर', flWa:'WhatsApp', flEmail:'ईमेल', flWeb:'वेबसाइट',
+    flMap:'📍 नक्शे पर अपना सटीक स्थान चुनें (वैकल्पिक) — क्लिक करें',
+    fbtnOffer:'+ जोड़ें', fbtnSpec:'+ जोड़ें',
+    publishBtn:'मेरी दुकान प्रकाशित करें', updateBtn:'बदलाव सहेजें',
+    searchPlaceholder:'दुकान या सेवा खोजें...',
+    shareTitle:'सोशल मीडिया पर शेयर करें',
+    reviewsTitle:'समीक्षाएं', addReviewTitle:'समीक्षा लिखें', reviewPlaceholder:'अपनी समीक्षा यहाँ लिखें...', namePlaceholder:'आपका नाम', submitReview:'समीक्षा जमा करें',
+    errName:'कृपया व्यापार का नाम भरें।', errPhone:'कृपया फोन नंबर भरें।',
+    errLoc:'कृपया शहर / स्थान चुनें या भरें।', errCat:'कृपया श्रेणी चुनें।', errTeam:'कृपया टीम का आकार चुनें।',
+    errDesc:'कृपया अपनी दुकान का विवरण भरें।',
+    errOffers:'कृपया कम से कम एक सेवा या उत्पाद जोड़ें।', errSpecs:'कृपया कम से कम एक विशेषता जोड़ें।',
+    errPhoneInvalid:'कृपया एक मान्य फोन नंबर दर्ज करें।', errEmailInvalid:'कृपया एक मान्य ईमेल पता दर्ज करें।',
+    successPub:'आपकी दुकान प्रकाशित हो गई! अब इसे सभी देख सकते हैं।',
+    successUpdate:'आपकी दुकान की जानकारी अपडेट हो गई।',
+    toastCopied:'लिंक कॉपी हो गया!', toastReview:'आपकी समीक्षा जुड़ गई!', toastReviewUpdated:'समीक्षा अपडेट हो गई!',
+    detailAbout:'के बारे में', detailOffers:'हम क्या देते हैं', detailSpec:'विशेषताएं', detailContact:'संपर्क', detailDetails:'विवरण',
+    plLoc:'स्थान', plYear:'स्थापना', plTeam:'टीम', plPhone:'फोन', plWa:'WhatsApp', plEmail:'ईमेल', plWeb:'वेबसाइट',
+    emptyVendors:'अभी कोई विक्रेता नहीं मिला।', inputFont:"'Tiro Devanagari Hindi',serif",
+    noReviews:'अभी कोई समीक्षा नहीं है। पहले लिखें!', reviewCount:'समीक्षाएं',
+    deleteReview:'हटाएं', deleteConfirm:'क्या आप इस समीक्षा को हटाना चाहते हैं?',
+    editReview:'संपादित करें', saveReview:'सहेजें', cancelEdit:'रद्द करें',
+    editVendorBtn:'प्रोफ़ाइल संपादित करें', deleteVendorBtn:'प्रोफ़ाइल हटाएं',
+    deleteVendorConfirm:'क्या आप वाकई अपनी दुकान का प्रोफ़ाइल हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं होगी।',
+    deleteVendorToast:'आपकी दुकान हटा दी गई।',
+    copyLink:'लिंक कॉपी करें', qrCode:'QR कोड', viewOnMap:'नक्शे पर देखें',
+    confirmCancel:'रद्द करें', confirmOk:'हटाएं',
+    about1t:'हमारा मिशन', about1b:'हर छोटे विक्रेता को, चाहे वो किसी भी गली-मोहल्ले में हो, एक डिजिटल पहचान देना।',
+    about2t:'समुदाय', about2b:'यह एक समुदाय है जहाँ विक्रेता और ग्राहक एक-दूसरे का साथ देते हैं।',
+    about3t:'तकनीक', about3b:'सरल तकनीक जो हर किसी के लिए आसान हो — स्मार्टफोन हो या कंप्यूटर।',
+    pageTitle:'अपना वेंडर — Apna Vendor',
+    catAll:'सभी श्रेणियां', catChoose:'श्रेणी चुनें...',
+    cats:['खान-पान','दर्जी','प्रिंटिंग','ट्रांसपोर्ट','मरम्मत','होलसेल','फूलवाला','टेक सेवा','कपड़े'],
+    catOther:'अन्य',
+    teamChoose:'टीम का आकार चुनें...',
+    teams:['सिर्फ मैं','2–5 लोग','6–15 लोग','16–50 लोग','50+ लोग'],
+    loginRequired:'पहले Google से साइन इन करें।',
+    signedIn:'सफलतापूर्वक साइन इन हुए।', signedOut:'साइन आउट हो गए।',
+    logoutBtn:'लॉगआउट',
+    fillFields:'कृपया सभी जानकारी भरें और रेटिंग चुनें।',
+    signInToRegister:'दुकान पंजीकृत करने के लिए साइन इन करें',
+    signInToRegisterSub:'अपनी डिजिटल पहचान बनाने के लिए Google से साइन इन करें।',
+    signInToReview:'समीक्षा लिखने के लिए Google से साइन इन करें।',
+    qrTitle:'यह QR कोड स्कैन करें', qrSub:'प्रोफ़ाइल खोलने के लिए'
+  },
+  en:{
+    navHome:'Home', navVendors:'Vendors', navRegister:'Register', navAbout:'About',
+    heroTagline:'Your Vendor, Your Trust', heroBtn1:'Add Your Shop', heroBtn2:'Browse Vendors',
+    statL1:'Registered Vendors', statL2:'Locations', statL3:'Forever Free', statFree:'Free',
+    vendorsTitle:'All Vendors', vendorsSub:'Meet the vendors in our community',
+    regTitle:'Register Your Shop', regSub:'Fill in your details and build your digital presence',
+    aboutTitle:'About Apna Vendor', aboutSub:'A free digital platform for small vendors across India',
+    homeWhyTitle:'Why Apna Vendor?', homeWhySub:'Every small vendor deserves a digital identity',
+    why1t:'Digital Identity', why1b:'Build your shop\'s presence on the internet and reach more customers.',
+    why2t:'Ratings & Reviews', why2b:'Let customers rate and review your business to build trust.',
+    why3t:'Social Media', why3b:'Share your shop on Instagram, Facebook and WhatsApp.',
+    why4t:'Completely Free', why4b:'No charges, no hidden fees — free forever.',
+    fcIdentity:'Vendor Identity', fcLocation:'Location', fcAbout:'Description', fcOffers:'What We Offer', fcSpec:'Specialities', fcContact:'Contact Details',
+    flVname:'Business Name', flTagline:'Tagline', flCat:'Category', flLoc:'City / Location', flYear:'Est. Year', flTeam:'Team Size',
+    flDesc:'Describe your shop', flOffers:'Add a service or product', flSpec:'What makes you stand out?',
+    flPhone:'Phone Number', flWa:'WhatsApp', flEmail:'Email', flWeb:'Website',
+    flMap:'📍 Pin your exact stall location on the map (optional) — click to place',
+    fbtnOffer:'+ Add', fbtnSpec:'+ Add',
+    publishBtn:'Publish My Profile', updateBtn:'Save Changes',
+    searchPlaceholder:'Search shops or services...',
+    shareTitle:'Share on Social Media',
+    reviewsTitle:'Reviews', addReviewTitle:'Write a Review', reviewPlaceholder:'Write your review here...', namePlaceholder:'Your name', submitReview:'Submit Review',
+    errName:'Please enter your business name.', errPhone:'Please enter a phone number.',
+    errLoc:'Please choose or enter your city / location.', errCat:'Please select a category.', errTeam:'Please select a team size.',
+    errDesc:'Please write a description about your shop.',
+    errOffers:'Please add at least one service or product.', errSpecs:'Please add at least one speciality.',
+    errPhoneInvalid:'Please enter a valid phone number.', errEmailInvalid:'Please enter a valid email address.',
+    successPub:'Your shop is now live! Everyone can see it.',
+    successUpdate:'Your profile has been updated.',
+    toastCopied:'Link copied!', toastReview:'Your review has been added!', toastReviewUpdated:'Review updated!',
+    detailAbout:'About', detailOffers:'What We Offer', detailSpec:'Specialities', detailContact:'Contact', detailDetails:'Details',
+    plLoc:'Location', plYear:'Est.', plTeam:'Team', plPhone:'Phone', plWa:'WhatsApp', plEmail:'Email', plWeb:'Website',
+    emptyVendors:'No vendors found.', inputFont:"'Inter',sans-serif",
+    noReviews:'No reviews yet. Be the first!', reviewCount:'reviews',
+    deleteReview:'Delete', deleteConfirm:'Are you sure you want to delete this review?',
+    editReview:'Edit', saveReview:'Save', cancelEdit:'Cancel',
+    editVendorBtn:'Edit Profile', deleteVendorBtn:'Delete Profile',
+    deleteVendorConfirm:'Are you sure you want to delete your vendor profile? This cannot be undone.',
+    deleteVendorToast:'Your profile has been deleted.',
+    copyLink:'Copy Link', qrCode:'QR Code', viewOnMap:'View on Map',
+    confirmCancel:'Cancel', confirmOk:'Delete',
+    about1t:'Our Mission', about1b:'To give every small vendor, wherever they may be, a digital identity.',
+    about2t:'Community', about2b:'A community where vendors and customers support each other.',
+    about3t:'Technology', about3b:'Simple technology that works for everyone — smartphone or computer.',
+    pageTitle:'Apna Vendor — Your Shop, Your Identity',
+    catAll:'All Categories', catChoose:'Choose category...',
+    cats:['Food & Catering','Tailor','Printing','Transport','Repairs','Wholesale','Florist','Tech Services','Clothing'],
+    catOther:'Other',
+    teamChoose:'Choose team size...',
+    teams:['Just me','2–5 people','6–15 people','16–50 people','50+ people'],
+    loginRequired:'Please sign in with Google first.',
+    signedIn:'Signed in successfully.', signedOut:'Signed out.',
+    logoutBtn:'Logout',
+    fillFields:'Please fill all fields and pick a star rating.',
+    signInToRegister:'Sign in to Register Your Shop',
+    signInToRegisterSub:'Sign in with Google to build your digital presence.',
+    signInToReview:'Sign in with Google to leave a review.',
+    qrTitle:'Scan this QR code', qrSub:'to open this profile'
+  },
+  mr:{
+    navHome:'होम', navVendors:'विक्रेते', navRegister:'नोंदणी', navAbout:'आमच्याबद्दल',
+    heroTagline:'आपला विक्रेता, आपला विश्वास', heroBtn1:'माझे दुकान जोडा', heroBtn2:'विक्रेते पहा',
+    statL1:'नोंदणीकृत विक्रेते', statL2:'ठिकाणे', statL3:'कायमचे मोफत', statFree:'मोफत',
+    vendorsTitle:'सर्व विक्रेते', vendorsSub:'आमच्या समुदायातील विक्रेत्यांना भेटा',
+    regTitle:'आपले दुकान नोंदवा', regSub:'खाली माहिती भरा आणि डिजिटल ओळख बनवा',
+    aboutTitle:'अपना वेंडर बद्दल', aboutSub:'भारतातील छोट्या व्यापाऱ्यांसाठी एक मोफत डिजिटल व्यासपीठ',
+    homeWhyTitle:'हे का?', homeWhySub:'प्रत्येक छोट्या विक्रेत्याला डिजिटल ओळख मिळावी',
+    why1t:'डिजिटल ओळख', why1b:'इंटरनेटवर आपल्या दुकानाची उपस्थिती तयार करा आणि अधिक ग्राहकांपर्यंत पोहोचा.',
+    why2t:'रेटिंग आणि समीक्षा', why2b:'ग्राहक तुम्हाला रेट करतील, समीक्षा देतील आणि विश्वास वाढवतील.',
+    why3t:'सोशल मीडिया', why3b:'Instagram, Facebook आणि WhatsApp वर दुकान शेअर करा.',
+    why4t:'पूर्णपणे मोफत', why4b:'कोणतेही शुल्क नाही, कोणतीही छुपी फी नाही — कायमचे मोफत.',
+    fcIdentity:'दुकानाची ओळख', fcLocation:'ठिकाण', fcAbout:'वर्णन', fcOffers:'आम्ही काय देतो', fcSpec:'विशेषता', fcContact:'संपर्क माहिती',
+    flVname:'व्यवसायाचे नाव', flTagline:'टॅगलाइन', flCat:'श्रेणी', flLoc:'शहर / ठिकाण', flYear:'स्थापना वर्ष', flTeam:'संघाचा आकार',
+    flDesc:'आपल्या दुकानाबद्दल सांगा', flOffers:'सेवा किंवा उत्पादन जोडा', flSpec:'तुम्ही विशेष का आहात?',
+    flPhone:'फोन नंबर', flWa:'WhatsApp', flEmail:'ईमेल', flWeb:'वेबसाइट',
+    flMap:'📍 नकाशावर तुमचे अचूक ठिकाण निवडा (पर्यायी) — क्लिक करा',
+    fbtnOffer:'+ जोडा', fbtnSpec:'+ जोडा',
+    publishBtn:'माझे दुकान प्रकाशित करा', updateBtn:'बदल जतन करा',
+    searchPlaceholder:'दुकान किंवा सेवा शोधा...',
+    shareTitle:'सोशल मीडियावर शेअर करा',
+    reviewsTitle:'समीक्षा', addReviewTitle:'समीक्षा लिहा', reviewPlaceholder:'आपली समीक्षा येथे लिहा...', namePlaceholder:'आपले नाव', submitReview:'समीक्षा सादर करा',
+    errName:'कृपया व्यवसायाचे नाव भरा.', errPhone:'कृपया फोन नंबर भरा.',
+    errLoc:'कृपया शहर / ठिकाण निवडा किंवा भरा.', errCat:'कृपया श्रेणी निवडा.', errTeam:'कृपया संघाचा आकार निवडा.',
+    errDesc:'कृपया तुमच्या दुकानाचे वर्णन लिहा.',
+    errOffers:'कृपया किमान एक सेवा किंवा उत्पादन जोडा.', errSpecs:'कृपया किमान एक विशेषता जोडा.',
+    errPhoneInvalid:'कृपया एक वैध फोन नंबर प्रविष्ट करा.', errEmailInvalid:'कृपया एक वैध ईमेल पत्ता प्रविष्ट करा.',
+    successPub:'आपले दुकान प्रकाशित झाले! आता सर्व पाहू शकतात.',
+    successUpdate:'तुमचे प्रोफाइल अपडेट झाले.',
+    toastCopied:'लिंक कॉपी झाली!', toastReview:'आपली समीक्षा जोडली गेली!', toastReviewUpdated:'समीक्षा अपडेट झाली!',
+    detailAbout:'बद्दल', detailOffers:'आम्ही काय देतो', detailSpec:'विशेषता', detailContact:'संपर्क', detailDetails:'तपशील',
+    plLoc:'ठिकाण', plYear:'स्थापना', plTeam:'संघ', plPhone:'फोन', plWa:'WhatsApp', plEmail:'ईमेल', plWeb:'वेबसाइट',
+    emptyVendors:'कोणतेही विक्रेते सापडले नाहीत.', inputFont:"'Tiro Devanagari Hindi',serif",
+    noReviews:'अद्याप कोणतीही समीक्षा नाही. प्रथम लिहा!', reviewCount:'समीक्षा',
+    deleteReview:'हटवा', deleteConfirm:'तुम्हाला ही समीक्षा हटवायची आहे का?',
+    editReview:'संपादित करा', saveReview:'जतन करा', cancelEdit:'रद्द करा',
+    editVendorBtn:'प्रोफाइल संपादित करा', deleteVendorBtn:'प्रोफाइल हटवा',
+    deleteVendorConfirm:'तुम्हाला खरोखर तुमचे विक्रेता प्रोफाइल हटवायचे आहे का? ही क्रिया पूर्ववत होणार नाही.',
+    deleteVendorToast:'तुमचे प्रोफाइल हटवले गेले.',
+    copyLink:'लिंक कॉपी करा', qrCode:'QR कोड', viewOnMap:'नकाशावर पहा',
+    confirmCancel:'रद्द करा', confirmOk:'हटवा',
+    about1t:'आमचे ध्येय', about1b:'प्रत्येक छोट्या विक्रेत्याला, कुठेही असला तरी, डिजिटल ओळख देणे.',
+    about2t:'समुदाय', about2b:'एक समुदाय जिथे विक्रेते आणि ग्राहक एकमेकांना साथ देतात.',
+    about3t:'तंत्रज्ञान', about3b:'सोपे तंत्रज्ञान जे सर्वांसाठी सहज असेल — स्मार्टफोन किंवा संगणक.',
+    pageTitle:'अपना वेंडर — तुमचे दुकान, तुमची ओळख',
+    catAll:'सर्व श्रेण्या', catChoose:'श्रेणी निवडा...',
+    cats:['खान-पान','शिंपी','प्रिंटिंग','वाहतूक','दुरुस्ती','घाऊक','फुलवाला','टेक सेवा','कपडे'],
+    catOther:'इतर',
+    teamChoose:'संघाचा आकार निवडा...',
+    teams:['फक्त मी','2–5 जण','6–15 जण','16–50 जण','50+ जण'],
+    loginRequired:'कृपया आधी Google ने साइन इन करा.',
+    signedIn:'यशस्वीरित्या साइन इन झाले.', signedOut:'साइन आउट केले.',
+    logoutBtn:'लॉगआउट',
+    fillFields:'कृपया सर्व माहिती भरा आणि रेटिंग निवडा.',
+    signInToRegister:'दुकान नोंदवण्यासाठी साइन इन करा',
+    signInToRegisterSub:'तुमची डिजिटल ओळख तयार करण्यासाठी Google ने साइन इन करा.',
+    signInToReview:'समीक्षा लिहण्यासाठी Google ने साइन इन करा.',
+    qrTitle:'हा QR कोड स्कॅन करा', qrSub:'प्रोफाइल उघडण्यासाठी'
   }
 };
-function handleCredentialResponse(response){
-  if(!response || !response.credential) return;
-  var payload = parseJwt(response.credential);
-  if(!payload) return;
-  saveCurrentUser({ id: payload.sub, name: payload.name || payload.email, email: payload.email, picture: payload.picture });
+
+function t(key){ return (T[currentLang]&&T[currentLang][key]!==undefined) ? T[currentLang][key] : key; }
+
+// ── AUTH ──
+function updateAuthUI(){
+  var area = document.getElementById('auth-area');
+  if(!area) return;
+  if(currentUser){
+    area.innerHTML = '<span class="auth-name">'+(currentUser.name||currentUser.email||'')+'</span>'+
+      '<button class="auth-btn" onclick="signOut()">'+t('logoutBtn')+'</button>';
+  } else {
+    area.innerHTML = '<div id="google-signin-button"></div>';
+    renderGoogleButton();
+  }
+}
+function renderGoogleButton(){
+  var c = document.getElementById('google-signin-button');
+  if(c && window.google && google.accounts && google.accounts.id)
+    google.accounts.id.renderButton(c,{theme:'outline',size:'small',width:'160'});
+}
+window.onGoogleLibraryLoad = function(){
+  google.accounts.id.initialize({
+    client_id:'690805050238-52e8fqjqt65kroi8opndu2t5j3hvo7dv.apps.googleusercontent.com',
+    callback:handleCredentialResponse, auto_select:false, cancel_on_tap_outside:true
+  });
+  if(!currentUser) renderGoogleButton();
+};
+function handleCredentialResponse(resp){
+  if(!resp||!resp.credential) return;
+  var p = parseJwt(resp.credential);
+  if(!p) return;
+  saveCurrentUser({id:p.sub, name:p.name||p.email, email:p.email, picture:p.picture});
   showToast(t('signedIn'));
 }
 function parseJwt(token){
   try{
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g,'+').replace(/_/g,'/');
-    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c){
-      return '%'+('00'+c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-    return JSON.parse(jsonPayload);
-  } catch(e){ return null; }
+    var b = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    return JSON.parse(decodeURIComponent(atob(b).split('').map(function(c){return'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2);}).join('')));
+  }catch(e){return null;}
+}
+function saveCurrentUser(user){
+  currentUser = user;
+  if(user) localStorage.setItem('av_user',JSON.stringify(user));
+  else localStorage.removeItem('av_user');
+  updateAuthUI();
+  if(selectedVendorId && document.getElementById('vendor-modal').classList.contains('open'))
+    openVendor(selectedVendorId);
+  // If on register sign-in wall, reload to show form
+  var rp = document.getElementById('page-register');
+  if(user && rp && rp.classList.contains('active')) location.reload();
 }
 function signOut(){
   saveCurrentUser(null);
-  if(window.google && google.accounts && google.accounts.id && google.accounts.id.disableAutoSelect){
-    google.accounts.id.disableAutoSelect();
-  }
+  if(window.google&&google.accounts&&google.accounts.id) google.accounts.id.disableAutoSelect();
   showToast(t('signedOut'));
 }
-function requireGoogleLogin(){
-  if(!currentUser){
-    showToast(t('loginRequired'));
-    return false;
-  }
-  return true;
-}
+function requireLogin(){ if(!currentUser){showToast(t('loginRequired'));return false;} return true; }
 
-// seed data removed — app starts empty
-
-
-function saveVendors(){
-  localStorage.setItem('av_vendors', JSON.stringify(vendors));
-  updateStats();
-}
+// ── DATA ──
+function saveVendors(){ localStorage.setItem('av_vendors',JSON.stringify(vendors)); updateStats(); }
 
 function updateStats(){
-  // Vendor count
-  var countEl = document.getElementById('stat-count');
-  if(countEl) countEl.textContent = vendors.length;
-
-  // Unique locations — split each vendor's loc by comma and collect distinct trimmed parts
-  var locations = {};
-  vendors.forEach(function(v){
-    if(v.loc){
-      v.loc.split(',').forEach(function(part){
-        var p = part.trim();
-        if(p) locations[p.toLowerCase()] = true;
-      });
-    }
-  });
-  var statesEl = document.getElementById('stat-states');
-  if(statesEl) statesEl.textContent = Object.keys(locations).length || 0;
+  var ce = document.getElementById('stat-count');
+  if(ce) ce.textContent = vendors.length;
+  var locs = {};
+  vendors.forEach(function(v){ if(v.loc) v.loc.split(',').forEach(function(p){ var x=p.trim(); if(x) locs[x.toLowerCase()]=1; }); });
+  var se = document.getElementById('stat-states');
+  if(se) se.textContent = Object.keys(locs).length||0;
 }
 
-// ── INDIA LOCATIONS ──
+// ── INDIA LOCATIONS DATA ──
 var INDIA_LOCS = {
   'Andaman & Nicobar Islands':['Port Blair'],
   'Andhra Pradesh':['Visakhapatnam','Vijayawada','Guntur','Nellore','Kurnool','Kakinada','Tirupati','Rajahmundry'],
@@ -600,7 +753,7 @@ var INDIA_LOCS = {
   'Ladakh':['Leh','Kargil'],
   'Lakshadweep':['Kavaratti'],
   'Madhya Pradesh':['Bhopal','Indore','Jabalpur','Gwalior','Ujjain','Sagar','Dewas','Satna','Ratlam'],
-  'Maharashtra':['Mumbai','Pune','Nagpur','Nashik','Aurangabad','Solapur','Amravati','Kolhapur','Thane','Navi Mumbai'],
+  'Maharashtra':['Mumbai — Andheri','Mumbai — Bandra','Mumbai — Borivali','Mumbai — Chembur','Mumbai — Colaba','Mumbai — CST / Fort','Mumbai — Dahisar','Mumbai — Dadar','Mumbai — Dharavi','Mumbai — Ghatkopar','Mumbai — Goregaon','Mumbai — Juhu','Mumbai — Kandivali','Mumbai — Kurla','Mumbai — Lower Parel','Mumbai — Mahim','Mumbai — Malad','Mumbai — Matunga','Mumbai — Mulund','Mumbai — Powai','Mumbai — Santacruz','Mumbai — Versova','Mumbai — Vikhroli','Mumbai — Vile Parle','Mumbai — Worli','Mumbai — Jogeshwari','Pune','Nagpur','Nashik','Aurangabad','Solapur','Amravati','Kolhapur','Thane','Navi Mumbai'],
   'Manipur':['Imphal','Thoubal','Bishnupur'],
   'Meghalaya':['Shillong','Tura','Jowai'],
   'Mizoram':['Aizawl','Lunglei'],
@@ -617,52 +770,81 @@ var INDIA_LOCS = {
   'Uttarakhand':['Dehradun','Haridwar','Roorkee','Haldwani','Rishikesh','Nainital','Mussoorie'],
   'West Bengal':['Kolkata','Howrah','Asansol','Siliguri','Durgapur','Bardhaman','Malda']
 };
-// Mumbai sub-areas
-var MUMBAI_AREAS = ['Andheri','Bandra','Borivali','Chembur','Colaba','CST / Fort','Dahisar','Dadar','Dharavi','Ghatkopar','Goregaon','Jogeshwari','Juhu','Kandivali','Kurla','Lower Parel','Mahim','Malad','Matunga','Mulund','Powai','Santacruz','Versova','Vikhroli','Vile Parle','Worli'];
 
-var _mapPicker = null; var _mapMarker = null;
+// Build flat search list: [{display, value, state}]
+var LOC_LIST = [];
+Object.keys(INDIA_LOCS).sort().forEach(function(state){
+  INDIA_LOCS[state].forEach(function(city){
+    LOC_LIST.push({display: city + ', ' + state, city: city, state: state});
+  });
+});
 
-function initLocationDropdown(){
-  var locSel = document.getElementById('f-loc');
-  if(!locSel) return;
-  var choose = t('catChoose');
-  locSel.innerHTML = '<option value="">'+choose+'</option>'+
-    Object.keys(INDIA_LOCS).sort().map(function(state){
-      return '<optgroup label="'+state+'">'+
-        INDIA_LOCS[state].map(function(city){ return '<option value="'+city+', '+state+'">'+city+'</option>'; }).join('')+
-      '</optgroup>';
+// ── LOCATION AUTOCOMPLETE ──
+var _locSelectedFromDropdown = false;
+function initLocationField(textId, hiddenId, suggestId){
+  var inp = document.getElementById(textId);
+  var hid = document.getElementById(hiddenId||'f-loc-value');
+  var sug = document.getElementById(suggestId||'loc-suggestions');
+  if(!inp) return;
+  inp.addEventListener('input', function(){
+    _locSelectedFromDropdown = false;
+    hid.value = inp.value; // allow free text too
+    var q = inp.value.trim().toLowerCase();
+    if(q.length < 1){ sug.style.display='none'; return; }
+    var matches = LOC_LIST.filter(function(l){ return l.display.toLowerCase().includes(q); }).slice(0,10);
+    if(!matches.length){ sug.style.display='none'; return; }
+    sug.innerHTML = matches.map(function(l,i){
+      return '<div class="loc-suggestion" data-val="'+l.display+'" data-idx="'+i+'">'+
+        '<strong>'+l.city+'</strong><span class="loc-suggestion-state">, '+l.state+'</span></div>';
     }).join('');
-  locSel.onchange = function(){
-    var val = locSel.value;
-    var wrap = document.getElementById('f-loc-subarea-wrap');
-    var subSel = document.getElementById('f-loc-sub');
-    if(val && val.startsWith('Mumbai')){
-      wrap.style.display = '';
-      subSel.innerHTML = '<option value="">'+choose+'</option>'+
-        MUMBAI_AREAS.map(function(a){ return '<option value="'+a+'">'+a+'</option>'; }).join('');
-    } else {
-      wrap.style.display = 'none';
-      subSel.innerHTML = '<option value="">'+choose+'</option>';
-    }
+    sug.style.display='block';
+  });
+  sug.addEventListener('mousedown', function(e){
+    var item = e.target.closest('.loc-suggestion');
+    if(!item) return;
+    var val = item.getAttribute('data-val');
+    inp.value = val; hid.value = val;
+    _locSelectedFromDropdown = true;
+    sug.style.display='none';
     initMapPicker(val);
-  };
+  });
+  document.addEventListener('click', function(e){
+    if(!inp.contains(e.target)&&!sug.contains(e.target)) sug.style.display='none';
+  });
 }
 
-function initMapPicker(locationName){
+// ── MAP PICKER ──
+var _mapPicker = null, _mapMarker = null;
+var CITY_CENTRES = {
+  'Mumbai':{ lat:19.076, lng:72.877, zoom:12},
+  'Delhi':{ lat:28.644, lng:77.216, zoom:11},
+  'New Delhi':{ lat:28.644, lng:77.216, zoom:12},
+  'Bengaluru':{ lat:12.972, lng:77.594, zoom:12},
+  'Kolkata':{ lat:22.572, lng:88.363, zoom:12},
+  'Chennai':{ lat:13.083, lng:80.270, zoom:12},
+  'Hyderabad':{ lat:17.385, lng:78.486, zoom:12},
+  'Pune':{ lat:18.520, lng:73.856, zoom:12},
+  'Ahmedabad':{ lat:23.023, lng:72.572, zoom:12},
+  'Jaipur':{ lat:26.912, lng:75.787, zoom:12},
+  'Lucknow':{ lat:26.846, lng:80.946, zoom:12},
+  'Surat':{ lat:21.170, lng:72.831, zoom:12}
+};
+
+function initMapPicker(locationHint){
   var container = document.getElementById('vendor-map-picker');
   if(!container) return;
-  // Default India centre
-  var lat = 20.5937, lng = 78.9629, zoom = 5;
-  // Rough centres for a few major cities
-  var centres = {'Mumbai':{ lat:19.076,lng:72.877,zoom:12},'Delhi':{ lat:28.644,lng:77.216,zoom:11},'Bengaluru':{ lat:12.972,lng:77.594,zoom:12},'Kolkata':{ lat:22.572,lng:88.363,zoom:12},'Chennai':{ lat:13.083,lng:80.270,zoom:12},'Hyderabad':{ lat:17.385,lng:78.486,zoom:12},'Pune':{ lat:18.520,lng:73.856,zoom:12},'Ahmedabad':{ lat:23.023,lng:72.572,zoom:12}};
-  if(locationName){
-    var city = locationName.split(',')[0].trim();
-    if(centres[city]){ lat=centres[city].lat; lng=centres[city].lng; zoom=centres[city].zoom; }
+  var lat=20.5937, lng=78.9629, zoom=5;
+  if(locationHint){
+    var city = locationHint.split(/,|—/)[0].trim().replace(/Mumbai\s*—\s*/,'');
+    if(locationHint.toLowerCase().includes('mumbai')){ lat=19.076; lng=72.877; zoom=13; }
+    else if(CITY_CENTRES[city]){ lat=CITY_CENTRES[city].lat; lng=CITY_CENTRES[city].lng; zoom=CITY_CENTRES[city].zoom; }
   }
   if(_mapPicker){ _mapPicker.remove(); _mapPicker=null; _mapMarker=null; }
+  // Show the map container
+  container.style.height='200px';
   setTimeout(function(){
     _mapPicker = L.map('vendor-map-picker').setView([lat,lng],zoom);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(_mapPicker);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19}).addTo(_mapPicker);
     _mapPicker.on('click',function(e){
       var la=e.latlng.lat.toFixed(6), ln=e.latlng.lng.toFixed(6);
       document.getElementById('f-lat').value=la;
@@ -671,302 +853,103 @@ function initMapPicker(locationName){
       if(_mapMarker) _mapPicker.removeLayer(_mapMarker);
       _mapMarker = L.marker([la,ln]).addTo(_mapPicker);
     });
-  },100);
+  },120);
 }
 
-function getFullLocation(){
-  var loc = (document.getElementById('f-loc').value||'').trim();
-  var sub = (document.getElementById('f-loc-sub').value||'').trim();
-  if(sub && loc.startsWith('Mumbai')) return sub+', '+loc;
-  return loc;
-}
-var T = {
-  hi:{
-    navHome:'होम',navVendors:'विक्रेता',navRegister:'पंजीकरण',navAbout:'हमारे बारे में',
-    heroTagline:'अपना विक्रेता, अपना भरोसा',heroBtn1:'अपनी दुकान जोड़ें',heroBtn2:'विक्रेता देखें',
-    statL1:'पंजीकृत विक्रेता',statL2:'राज्य',statL3:'हमेशा के लिए',statFree:'मुफ़्त',
-    vendorsTitle:'सभी विक्रेता',vendorsSub:'हमारे समुदाय के विक्रेताओं से मिलें',
-    regTitle:'अपनी दुकान पंजीकृत करें',regSub:'नीचे अपनी जानकारी भरें और अपनी डिजिटल पहचान बनाएं',
-    aboutTitle:'अपना वेंडर के बारे में',aboutSub:'भारत के छोटे व्यापारियों के लिए एक मुफ़्त डिजिटल मंच',
-    homeWhyTitle:'यह क्यों?',homeWhySub:'गरीब से गरीब व्यापारी भी डिजिटल दुनिया में अपनी पहचान बना सके',
-    why1t:'डिजिटल पहचान',why1b:'इंटरनेट पर अपनी दुकान की छवि बनाएं।',
-    why2t:'रेटिंग और समीक्षा',why2b:'ग्राहक आपको रेट करें और आपका विश्वास बढ़ाएं।',
-    why3t:'सोशल मीडिया',why3b:'Instagram, Facebook पर अपनी दुकान शेयर करें।',
-    why4t:'बिल्कुल मुफ़्त',why4b:'कोई शुल्क नहीं। हमेशा के लिए मुफ़्त।',
-    fcIdentity:'दुकान की पहचान',fcAbout:'हमारे बारे में',fcOffers:'हम क्या देते हैं',fcSpec:'विशेषताएं',fcContact:'संपर्क जानकारी',
-    flVname:'व्यापार का नाम *',flTagline:'टैगलाइन',flCat:'श्रेणी',flLoc:'शहर / स्थान',flYear:'स्थापना वर्ष',flTeam:'टीम का आकार',
-    flDesc:'विवरण',flOffers:'सेवा या उत्पाद जोड़ें',flSpec:'आप क्यों खास हैं?',
-    flPhone:'फोन नंबर *',flWa:'व्हाट्सएप',flEmail:'ईमेल',flWeb:'वेबसाइट',
-    fbtnOffer:'+ जोड़ें',fbtnSpec:'+ जोड़ें',publishBtn:'मेरी दुकान प्रकाशित करें',
-    viewBtn:'देखें',searchPlaceholder:'दुकान या सेवा खोजें...',
-    shareTitle:'सोशल मीडिया पर शेयर करें',
-    reviewsTitle:'समीक्षाएं',addReviewTitle:'समीक्षा दें',reviewPlaceholder:'अपनी समीक्षा लिखें...',namePlaceholder:'आपका नाम',submitReview:'समीक्षा जमा करें',
-    errName:'कृपया व्यापार का नाम भरें।',errPhone:'कृपया फोन नंबर भरें।',
-    errLoc:'कृपया शहर / स्थान भरें।',errCat:'कृपया श्रेणी चुनें।',errTeam:'कृपया टीम का आकार चुनें।',
-    errDesc:'कृपया अपनी दुकान का विवरण भरें।',
-    errOffers:'कृपया कम से कम एक सेवा या उत्पाद जोड़ें।',errSpecs:'कृपया कम से कम एक विशेषता जोड़ें।',
-    errPhoneInvalid:'कृपया एक मान्य फोन नंबर दर्ज करें।',errEmailInvalid:'कृपया एक मान्य ईमेल पता दर्ज करें।',
-    successPub:'आपकी दुकान प्रकाशित हो गई! अब इसे सभी देख सकते हैं।',
-    toastCopied:'लिंक कॉपी हो गया!',toastReview:'आपकी समीक्षा जुड़ गई!',
-    detailAbout:'के बारे में',detailOffers:'हम क्या देते हैं',detailSpec:'विशेषताएं',detailContact:'संपर्क',detailDetails:'विवरण',
-    plLoc:'स्थान',plYear:'स्थापना',plTeam:'टीम',plPhone:'फोन',plWa:'व्हाट्सएप',plEmail:'ईमेल',plWeb:'वेबसाइट',
-    emptyVendors:'अभी कोई विक्रेता नहीं मिला।',inputFont:"'Tiro Devanagari Hindi',serif",
-    noReviews:'अभी कोई समीक्षा नहीं। पहले बनें!',reviewCount:'समीक्षाएं',
-    deleteReview:'हटाएं',deleteConfirm:'क्या आप इस समीक्षा को हटाना चाहते हैं?',
-    deleteVendorBtn:'🗑 मेरी दुकान हटाएं',deleteVendorConfirm:'क्या आप वाकई अपनी दुकान का प्रोफ़ाइल हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती।',deleteVendorToast:'आपकी दुकान हटा दी गई।',
-    editVendorBtn:'प्रोफ़ाइल संपादित करें',
-    editReview:'संपादित करें',saveReview:'सहेजें',cancelEdit:'रद्द करें',
-    toastReviewUpdated:'समीक्षा अपडेट हो गई!',
-    qrCode:'QR कोड',viewOnMap:'मानचित्र पर देखें',
-    copyLink:'लिंक कॉपी करें',
-    about1t:'हमारा मिशन',about1b:'हर छोटे विक्रेता को, चाहे वो किसी भी गली-मोहल्ले में हो, एक डिजिटल पहचान देना।',
-    about2t:'समुदाय',about2b:'यह एक समुदाय है जहाँ विक्रेता और ग्राहक एक-दूसरे का साथ देते हैं।',
-    about3t:'तकनीक',about3b:'सरल तकनीक जो हर किसी के लिए आसान हो — स्मार्टफोन हो या कंप्यूटर।',
-    pageTitle:'अपना वेंडर — Apna Vendor',
-    catAll:'सभी श्रेणी',catChoose:'चुनें...',
-    cats:['खान-पान','दर्जी','प्रिंटिंग','ट्रांसपोर्ट','मरम्मत','होलसेल','फूलवाला','टेक सेवा','कपड़े'],
-    catOther:'अन्य',
-    teamChoose:'चुनें...',
-    teams:['सिर्फ मैं','२–५ लोग','६–१५ लोग','१६–५० लोग','५०+ लोग'],
-    loginRequired:'कृपया पहले Google से साइन इन करें।',
-    signedIn:'सफलतापूर्वक साइन इन हुआ।',signedOut:'साइन आउट किया गया।',
-    logoutBtn:'लॉगआउट',
-    fillFields:'कृपया सभी जानकारी भरें और रेटिंग चुनें।',
-    signInToRegister:'दुकान पंजीकृत करने के लिए साइन इन करें',
-    signInToRegisterSub:'अपनी डिजिटल पहचान बनाने के लिए Google से साइन इन करें।',
-    signInToReview:'समीक्षा देने के लिए Google से साइन इन करें।',
-    signInBtn:'Google से साइन इन करें'
-  },
-  en:{
-    navHome:'Home',navVendors:'Vendors',navRegister:'Register',navAbout:'About',
-    heroTagline:'Your Vendor, Your Trust',heroBtn1:'Add Your Shop',heroBtn2:'Browse Vendors',
-    statL1:'Registered Vendors',statL2:'States',statL3:'Forever Free',statFree:'Free',
-    vendorsTitle:'All Vendors',vendorsSub:'Meet the vendors in our community',
-    regTitle:'Register Your Shop',regSub:'Fill in your details and build your digital presence',
-    aboutTitle:'About Apna Vendor',aboutSub:'A free digital platform for small vendors across India',
-    homeWhyTitle:'Why Apna Vendor?',homeWhySub:'Every small vendor deserves a digital identity',
-    why1t:'Digital Identity',why1b:'Build your shop\'s presence on the internet.',
-    why2t:'Ratings & Reviews',why2b:'Let customers rate and review your business.',
-    why3t:'Social Media',why3b:'Share your shop on Instagram and Facebook.',
-    why4t:'Completely Free',why4b:'No charges. Free forever.',
-    fcIdentity:'Vendor Identity',fcAbout:'About Us',fcOffers:'What We Offer',fcSpec:'Specialities',fcContact:'Contact Details',
-    flVname:'Business Name *',flTagline:'Tagline',flCat:'Category',flLoc:'City / Location',flYear:'Est. Year',flTeam:'Team Size',
-    flDesc:'Description',flOffers:'Add a service or product',flSpec:'What makes you stand out?',
-    flPhone:'Phone Number *',flWa:'WhatsApp',flEmail:'Email',flWeb:'Website',
-    fbtnOffer:'+ Add',fbtnSpec:'+ Add',publishBtn:'Publish My Vendor Profile',
-    viewBtn:'View',searchPlaceholder:'Search shops or services...',
-    shareTitle:'Share on Social Media',
-    reviewsTitle:'Reviews',addReviewTitle:'Leave a Review',reviewPlaceholder:'Write your review...',namePlaceholder:'Your name',submitReview:'Submit Review',
-    errName:'Please enter your business name.',errPhone:'Please enter a phone number.',
-    errLoc:'Please enter your city / location.',errCat:'Please select a category.',errTeam:'Please select a team size.',
-    errDesc:'Please write a description about your shop.',
-    errOffers:'Please add at least one service or product.',errSpecs:'Please add at least one speciality.',
-    errPhoneInvalid:'Please enter a valid phone number.',errEmailInvalid:'Please enter a valid email address.',
-    successPub:'Your shop is now live! Everyone can see it.',
-    toastCopied:'Link copied!',toastReview:'Your review has been added!',
-    detailAbout:'About',detailOffers:'What We Offer',detailSpec:'Specialities',detailContact:'Contact',detailDetails:'Details',
-    plLoc:'Location',plYear:'Est.',plTeam:'Team',plPhone:'Phone',plWa:'WhatsApp',plEmail:'Email',plWeb:'Website',
-    emptyVendors:'No vendors found.',inputFont:"'Inter',sans-serif",
-    noReviews:'No reviews yet. Be the first!',reviewCount:'reviews',
-    deleteReview:'Delete',deleteConfirm:'Are you sure you want to delete this review?',
-    deleteVendorBtn:'🗑 Delete My Profile',deleteVendorConfirm:'Are you sure you want to delete your vendor profile? This cannot be undone.',deleteVendorToast:'Your profile has been deleted.',
-    copyLink:'Copy Link',
-    about1t:'Our Mission',about1b:'To give every small vendor, wherever they may be, a digital identity.',
-    about2t:'Community',about2b:'A community where vendors and customers support each other.',
-    about3t:'Technology',about3b:'Simple technology that works for everyone — smartphone or computer.',
-    pageTitle:'Apna Vendor — Your Shop, Your Identity',
-    catAll:'All Categories',catChoose:'Choose...',
-    cats:['Food & Catering','Tailor','Printing','Transport','Repairs','Wholesale','Florist','Tech Services','Clothing'],
-    catOther:'Other',
-    teamChoose:'Choose...',
-    teams:['Just me','2–5 people','6–15 people','16–50 people','50+ people'],
-    loginRequired:'Please sign in with Google first.',
-    signedIn:'Signed in successfully.',signedOut:'Signed out.',
-    logoutBtn:'Logout',
-    fillFields:'Please fill all fields and pick a star rating.',
-    signInToRegister:'Sign in to Register Your Shop',
-    signInToRegisterSub:'Sign in with Google to build your digital presence.',
-    signInToReview:'Sign in with Google to leave a review.',
-    signInBtn:'Sign in with Google'
-  },
-  mr:{
-    navHome:'होम',navVendors:'विक्रेते',navRegister:'नोंदणी',navAbout:'आमच्याबद्दल',
-    heroTagline:'अपना विक्रेता, अपना भरोसा',heroBtn1:'माझे दुकान जोडा',heroBtn2:'विक्रेते पहा',
-    statL1:'नोंदणीकृत विक्रेते',statL2:'राज्ये',statL3:'कायमचे मोफत',statFree:'मोफत',
-    vendorsTitle:'सर्व विक्रेते',vendorsSub:'आमच्या समुदायातील विक्रेत्यांना भेटा',
-    regTitle:'आपले दुकान नोंदवा',regSub:'खाली माहिती भरा आणि डिजिटल ओळख बनवा',
-    aboutTitle:'अपना वेंडर बद्दल',aboutSub:'भारतातील छोट्या व्यापाऱ्यांसाठी एक मोफत डिजिटल व्यासपीठ',
-    homeWhyTitle:'हे का?',homeWhySub:'प्रत्येक छोट्या विक्रेत्याला डिजिटल ओळख मिळावी',
-    why1t:'डिजिटल ओळख',why1b:'इंटरनेटवर आपल्या दुकानाची प्रतिमा तयार करा।',
-    why2t:'रेटिंग आणि समीक्षा',why2b:'ग्राहक तुम्हाला रेट करतील आणि विश्वास वाढवतील.',
-    why3t:'सोशल मीडिया',why3b:'Instagram, Facebook वर दुकान शेअर करा.',
-    why4t:'पूर्णपणे मोफत',why4b:'कोणतेही शुल्क नाही. कायमचे मोफत.',
-    fcIdentity:'दुकानाची ओळख',fcAbout:'आमच्याबद्दल',fcOffers:'आम्ही काय देतो',fcSpec:'विशेषता',fcContact:'संपर्क माहिती',
-    flVname:'व्यवसायाचे नाव *',flTagline:'टॅगलाइन',flCat:'श्रेणी',flLoc:'शहर / ठिकाण',flYear:'स्थापना वर्ष',flTeam:'संघाचा आकार',
-    flDesc:'वर्णन',flOffers:'सेवा किंवा उत्पादन जोडा',flSpec:'तुम्ही विशेष का आहात?',
-    flPhone:'फोन नंबर *',flWa:'व्हॉट्सअॅप',flEmail:'ईमेल',flWeb:'वेबसाइट',
-    fbtnOffer:'+ जोडा',fbtnSpec:'+ जोडा',publishBtn:'माझे दुकान प्रकाशित करा',
-    viewBtn:'पहा',searchPlaceholder:'दुकान किंवा सेवा शोधा...',
-    shareTitle:'सोशल मीडियावर शेअर करा',
-    reviewsTitle:'समीक्षा',addReviewTitle:'समीक्षा द्या',reviewPlaceholder:'आपली समीक्षा लिहा...',namePlaceholder:'आपले नाव',submitReview:'समीक्षा सादर करा',
-    errName:'कृपया व्यवसायाचे नाव भरा.',errPhone:'कृपया फोन नंबर भरा.',
-    errLoc:'कृपया शहर / ठिकाण भरा.',errCat:'कृपया श्रेणी निवडा.',errTeam:'कृपया संघाचा आकार निवडा.',
-    errDesc:'कृपया तुमच्या दुकानाचे वर्णन लिहा.',
-    errOffers:'कृपया किमान एक सेवा किंवा उत्पादन जोडा.',errSpecs:'कृपया किमान एक विशेषता जोडा.',
-    errPhoneInvalid:'कृपया एक वैध फोन नंबर प्रविष्ट करा.',errEmailInvalid:'कृपया एक वैध ईमेल पत्ता प्रविष्ट करा.',
-    successPub:'आपले दुकान प्रकाशित झाले! आता सर्व पाहू शकतात.',
-    toastCopied:'लिंक कॉपी झाली!',toastReview:'आपली समीक्षा जोडली गेली!',
-    detailAbout:'बद्दल',detailOffers:'आम्ही काय देतो',detailSpec:'विशेषता',detailContact:'संपर्क',detailDetails:'तपशील',
-    plLoc:'ठिकाण',plYear:'स्थापना',plTeam:'संघ',plPhone:'फोन',plWa:'व्हॉट्सअॅप',plEmail:'ईमेल',plWeb:'वेबसाइट',
-    emptyVendors:'कोणतेही विक्रेते सापडले नाहीत.',inputFont:"'Tiro Devanagari Hindi',serif",
-    noReviews:'अद्याप कोणतीही समीक्षा नाही. प्रथम व्हा!',reviewCount:'समीक्षा',
-    deleteReview:'हटवा',deleteConfirm:'तुम्हाला ही समीक्षा हटवायची आहे का?',
-    deleteVendorBtn:'🗑 माझे दुकान हटवा',deleteVendorConfirm:'तुम्हाला खरोखर तुमचे विक्रेता प्रोफाइल हटवायचे आहे का? ही क्रिया पूर्ववत करता येणार नाही.',deleteVendorToast:'तुमचे प्रोफाइल हटवले गेले.',
-    copyLink:'लिंक कॉपी करा',
-    about1t:'आमचे ध्येय',about1b:'प्रत्येक छोट्या विक्रेत्याला, कुठेही असला तरी, डिजिटल ओळख देणे.',
-    about2t:'समुदाय',about2b:'एक समुदाय जिथे विक्रेते आणि ग्राहक एकमेकांना साथ देतात.',
-    about3t:'तंत्रज्ञान',about3b:'सोपे तंत्रज्ञान जे सर्वांसाठी सहज असेल — स्मार्टफोन किंवा संगणक.',
-    pageTitle:'अपना वेंडर — तुमचे दुकान, तुमची ओळख',
-    catAll:'सर्व श्रेण्या',catChoose:'निवडा...',
-    cats:['खान-पान','शिंपी','प्रिंटिंग','वाहतूक','दुरुस्ती','घाऊक','फुलवाला','टेक सेवा','कपडे'],
-    catOther:'इतर',
-    teamChoose:'निवडा...',
-    teams:['फक्त मी','२–५ जण','६–१५ जण','१६–५० जण','५०+ जण'],
-    loginRequired:'कृपया आधी Google ने साइन इन करा.',
-    signedIn:'यशस्वीरित्या साइन इन झाले.',signedOut:'साइन आउट केले.',
-    logoutBtn:'लॉगआउट',
-    fillFields:'कृपया सर्व माहिती भरा आणि रेटिंग निवडा.',
-    signInToRegister:'दुकान नोंदवण्यासाठी साइन इन करा',
-    signInToRegisterSub:'तुमची डिजिटल ओळख तयार करण्यासाठी Google ने साइन इन करा.',
-    signInToReview:'समीक्षा देण्यासाठी Google ने साइन इन करा.',
-    signInBtn:'Google ने साइन इन करा'
+// ── TRANSLATIONS APPLY ──
+function applyTranslations(){
+  document.title = t('pageTitle');
+  var idMap = {
+    navHome:'nav-home', navVendors:'nav-vendors', navRegister:'nav-register', navAbout:'nav-about',
+    heroTagline:'hero-tagline', heroBtn1:'hero-btn1', heroBtn2:'hero-btn2',
+    statL1:'stat-label1', statL2:'stat-label2', statL3:'stat-label3', statFree:'stat-free',
+    vendorsTitle:'vendors-title', vendorsSub:'vendors-sub', regTitle:'reg-title', regSub:'reg-sub',
+    aboutTitle:'about-title', aboutSub:'about-sub', homeWhyTitle:'home-why-title', homeWhySub:'home-why-sub',
+    why1t:'why1-t', why1b:'why1-b', why2t:'why2-t', why2b:'why2-b', why3t:'why3-t', why3b:'why3-b', why4t:'why4-t', why4b:'why4-b',
+    fcIdentity:'fc-identity', fcAbout:'fc-about', fcOffers:'fc-offers', fcSpec:'fc-spec', fcContact:'fc-contact', fcLocation:'fc-location',
+    flVname:'fl-vname', flTagline:'fl-tagline', flCat:'fl-cat', flLoc:'fl-loc', flYear:'fl-year', flTeam:'fl-team',
+    flDesc:'fl-desc', flOffers:'fl-offers', flSpec:'fl-spec', flPhone:'fl-phone', flWa:'fl-wa', flEmail:'fl-email', flWeb:'fl-web', flMap:'fl-map',
+    fbtnOffer:'fbtn-offer', fbtnSpec:'fbtn-spec', publishBtn:'publish-btn',
+    about1t:'about1-t', about1b:'about1-b', about2t:'about2-t', about2b:'about2-b', about3t:'about3-t', about3b:'about3-b'
+  };
+  Object.keys(idMap).forEach(function(k){
+    var el = document.getElementById(idMap[k]);
+    if(el) el.textContent = t(k);
+  });
+  var si = document.getElementById('search-input');
+  if(si) si.placeholder = t('searchPlaceholder');
+  // Category filter
+  var cf = document.getElementById('cat-filter');
+  if(cf){ var cats=t('cats');
+    cf.innerHTML='<option value="">'+t('catAll')+'</option>'+cats.map(function(c){return'<option>'+c+'</option>';}).join('');
   }
-};
-
-function t(key){ return T[currentLang][key] || key; }
+  // Form category
+  var fc = document.getElementById('f-cat');
+  if(fc){ var cats2=t('cats');
+    fc.innerHTML='<option value="">'+t('catChoose')+'</option>'+cats2.map(function(c){return'<option>'+c+'</option>';}).join('')+'<option>'+t('catOther')+'</option>';
+  }
+  // Form team
+  var ft = document.getElementById('f-team');
+  if(ft){ ft.innerHTML='<option value="">'+t('teamChoose')+'</option>'+t('teams').map(function(s){return'<option>'+s+'</option>';}).join(''); }
+  // Confirm dialog
+  var cc = document.getElementById('confirm-cancel-btn');
+  if(cc) cc.textContent = t('confirmCancel');
+  var co = document.getElementById('confirm-ok-btn');
+  if(co) co.textContent = t('confirmOk');
+  // QR close btn text
+  var qrc = document.querySelector('.qr-close');
+  if(qrc) qrc.textContent = '✕ '+(currentLang==='en'?'Close':currentLang==='mr'?'बंद करा':'बंद करें');
+  // Font
+  document.querySelectorAll('.field input,.field textarea,.field select,.loc-text-input').forEach(function(el){
+    el.style.fontFamily = t('inputFont');
+  });
+}
 
 function setLang(lang){
   currentLang = lang;
   document.querySelectorAll('.lang-btn').forEach(function(b,i){b.classList.toggle('active',['hi','en','mr'][i]===lang);});
   applyTranslations();
   renderVendorGrid();
-  // Re-render modal if it's currently open
-  if(selectedVendorId && document.getElementById('vendor-modal').classList.contains('open')){
+  if(selectedVendorId && document.getElementById('vendor-modal').classList.contains('open'))
     openVendor(selectedVendorId);
-  }
-}
-
-function applyTranslations(){
-  var keys = ['navHome','navVendors','navRegister','navAbout','heroTagline','heroBtn1','heroBtn2',
-    'statL1','statL2','statL3','statFree','vendorsTitle','vendorsSub','regTitle','regSub','aboutTitle','aboutSub',
-    'homeWhyTitle','homeWhySub','why1t','why1b','why2t','why2b','why3t','why3b','why4t','why4b',
-    'fcIdentity','fcAbout','fcOffers','fcSpec','fcContact',
-    'flVname','flTagline','flCat','flLoc','flYear','flTeam','flDesc','flOffers','flSpec',
-    'flPhone','flWa','flEmail','flWeb','fbtnOffer','fbtnSpec','publishBtn',
-    'about1t','about1b','about2t','about2b','about3t','about3b'];
-  var idMap = {
-    navHome:'nav-home',navVendors:'nav-vendors',navRegister:'nav-register',navAbout:'nav-about',
-    heroTagline:'hero-tagline',heroBtn1:'hero-btn1',heroBtn2:'hero-btn2',
-    statL1:'stat-label1',statL2:'stat-label2',statL3:'stat-label3',statFree:'stat-free',
-    vendorsTitle:'vendors-title',vendorsSub:'vendors-sub',regTitle:'reg-title',regSub:'reg-sub',
-    aboutTitle:'about-title',aboutSub:'about-sub',homeWhyTitle:'home-why-title',homeWhySub:'home-why-sub',
-    why1t:'why1-t',why1b:'why1-b',why2t:'why2-t',why2b:'why2-b',why3t:'why3-t',why3b:'why3-b',why4t:'why4-t',why4b:'why4-b',
-    fcIdentity:'fc-identity',fcAbout:'fc-about',fcOffers:'fc-offers',fcSpec:'fc-spec',fcContact:'fc-contact',
-    flVname:'fl-vname',flTagline:'fl-tagline',flCat:'fl-cat',flLoc:'fl-loc',flYear:'fl-year',flTeam:'fl-team',
-    flDesc:'fl-desc',flOffers:'fl-offers',flSpec:'fl-spec',
-    flPhone:'fl-phone',flWa:'fl-wa',flEmail:'fl-email',flWeb:'fl-web',
-    fbtnOffer:'fbtn-offer',fbtnSpec:'fbtn-spec',publishBtn:'publish-btn',
-    about1t:'about1-t',about1b:'about1-b',about2t:'about2-t',about2b:'about2-b',about3t:'about3-t',about3b:'about3-b'
-  };
-  keys.forEach(function(k){ var el=document.getElementById(idMap[k]); if(el) el.textContent=t(k); });
-
-  // Page title
-  document.title = t('pageTitle');
-
-  // Search placeholder
-  var si = document.getElementById('search-input');
-  if(si) si.placeholder = t('searchPlaceholder');
-
-  // Category filter dropdown
-  var cf = document.getElementById('cat-filter');
-  if(cf){
-    var cats = t('cats'); var catAll = t('catAll');
-    cf.innerHTML = '<option value="">'+catAll+'</option>'+
-      cats.map(function(c){ return '<option>'+c+'</option>'; }).join('');
-  }
-
-  // Registration form category dropdown
-  var fc = document.getElementById('f-cat');
-  if(fc){
-    var cats2 = t('cats');
-    fc.innerHTML = '<option value="">'+t('catChoose')+'</option>'+
-      cats2.map(function(c){ return '<option>'+c+'</option>'; }).join('')+
-      '<option>'+t('catOther')+'</option>';
-  }
-
-  // Registration form team size dropdown
-  var ft = document.getElementById('f-team');
-  if(ft){
-    ft.innerHTML = '<option value="">'+t('teamChoose')+'</option>'+
-      t('teams').map(function(s){ return '<option>'+s+'</option>'; }).join('');
-  }
-
-  // Logout button text (if visible)
-  var lb = document.querySelector('.auth-btn[onclick="signOut()"]');
-  if(lb) lb.textContent = t('logoutBtn');
-
-  // Input font
-  document.querySelectorAll('.field input,.field textarea,.field select').forEach(function(el){
-    el.style.fontFamily = t('inputFont');
-  });
+  updateAuthUI();
 }
 
 // ── PAGES ──
 function showPage(p){
-  // Guard: register page requires sign-in
-  if(p === 'register' && !currentUser){
-    showRegisterSignInWall();
-    return;
-  }
+  if(p==='register' && !currentUser){ showSignInWall(); return; }
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('.nav-link').forEach(function(el){el.classList.remove('active');});
   document.getElementById('page-'+p).classList.add('active');
   var nl = document.getElementById('nav-'+p);
   if(nl) nl.classList.add('active');
   if(p==='vendors') renderVendorGrid();
+  if(p==='register' && editingVendorId===null) resetRegisterForm();
   window.scrollTo(0,0);
 }
 
-function showRegisterSignInWall(){
-  // Show the register page but replace contents with sign-in wall
+function showSignInWall(){
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
-  document.querySelectorAll('.nav-link').forEach(function(el){el.classList.remove('active');});
   document.getElementById('page-register').classList.add('active');
-  var nl = document.getElementById('nav-register');
-  if(nl) nl.classList.add('active');
-  // Show sign-in wall overlay inside the register section
-  var section = document.querySelector('#page-register .section');
-  if(section){
-    section.innerHTML =
-      '<div style="text-align:center;padding:80px 20px;max-width:420px;margin:0 auto;">'+
-      '<div style="font-size:52px;margin-bottom:20px;">🔒</div>'+
-      '<div style="font-family:\'Tiro Devanagari Hindi\',serif;font-size:26px;color:var(--navy);margin-bottom:10px;">'+t('signInToRegister')+'</div>'+
-      '<div style="font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.6;">'+t('signInToRegisterSub')+'</div>'+
-      '<div id="google-register-signin" style="display:flex;justify-content:center;"></div>'+
-      '</div>';
-    setTimeout(function(){
-      var c = document.getElementById('google-register-signin');
-      if(c && window.google && google.accounts && google.accounts.id){
-        google.accounts.id.renderButton(c, {theme:'filled_blue', size:'large', width:'280'});
-      }
-    }, 50);
-  }
+  var nl = document.getElementById('nav-register'); if(nl) nl.classList.add('active');
+  document.getElementById('register-section').innerHTML =
+    '<div style="text-align:center;padding:80px 20px;max-width:400px;margin:0 auto;">'+
+    '<div style="font-size:50px;margin-bottom:18px;">🔒</div>'+
+    '<div style="font-family:\'Tiro Devanagari Hindi\',serif;font-size:24px;color:var(--navy);margin-bottom:10px;">'+t('signInToRegister')+'</div>'+
+    '<div style="font-size:13px;color:var(--muted);margin-bottom:26px;line-height:1.6;">'+t('signInToRegisterSub')+'</div>'+
+    '<div id="google-reg-signin" style="display:flex;justify-content:center;"></div>'+
+    '</div>';
+  setTimeout(function(){
+    var c=document.getElementById('google-reg-signin');
+    if(c&&window.google&&google.accounts&&google.accounts.id)
+      google.accounts.id.renderButton(c,{theme:'filled_blue',size:'large',width:'260'});
+  },50);
   window.scrollTo(0,0);
 }
 
 // ── VENDOR GRID ──
 function avgRating(v){
-  if(!v.reviews||v.reviews.length===0) return null;
+  if(!v.reviews||!v.reviews.length) return null;
   return (v.reviews.reduce(function(a,r){return a+r.stars;},0)/v.reviews.length).toFixed(1);
 }
 function starsHtml(n){
@@ -974,116 +957,124 @@ function starsHtml(n){
   for(var i=1;i<=5;i++) s+=(i<=num?'★':'☆');
   return s;
 }
-
 function filterVendors(){
-  var q = (document.getElementById('search-input').value||'').toLowerCase();
-  var cat = document.getElementById('cat-filter').value;
-  var filtered = vendors.filter(function(v){
-    var matchQ = !q || v.name.toLowerCase().includes(q)||v.desc.toLowerCase().includes(q)||(v.cat||'').includes(q);
-    var matchC = !cat || v.cat===cat;
-    return matchQ && matchC;
-  });
-  renderVendorGrid(filtered);
+  var q=(document.getElementById('search-input').value||'').toLowerCase();
+  var cat=document.getElementById('cat-filter').value;
+  renderVendorGrid(vendors.filter(function(v){
+    return (!q||v.name.toLowerCase().includes(q)||v.desc.toLowerCase().includes(q)||((v.cat||'').toLowerCase()).includes(q))
+        && (!cat||v.cat===cat);
+  }));
 }
-
 function renderVendorGrid(list){
-  var grid = document.getElementById('vendor-grid');
-  var data = list || vendors;
+  var grid=document.getElementById('vendor-grid');
+  var data=list||vendors;
   updateStats();
-  if(data.length===0){
+  if(!data.length){
     grid.innerHTML='<div class="empty-state"><div class="empty-state-icon">🏪</div><p>'+t('emptyVendors')+'</p></div>';
     return;
   }
-  grid.innerHTML = data.map(function(v){
-    var avg = avgRating(v);
-    var ratingHtml = avg ? '<div class="vc-rating"><span class="stars">'+starsHtml(parseFloat(avg))+'</span><span class="vc-rating-num">'+avg+' ('+v.reviews.length+')</span></div>' : '<div class="vc-rating-num" style="font-size:11px;color:#aaa;">'+t('noReviews').split('.')[0]+'</div>';
-    var offerTags = (v.offers||[]).slice(0,3).map(function(o){return '<span class="vc-tag">'+o+'</span>';}).join('');
-    return '<div class="vendor-card" onclick="openVendor(\''+v.id+'\')">'+
-      '<div class="vc-hero">'+
-      '<div class="vc-name">'+v.name+'</div>'+
-      '<div class="vc-tagline">'+v.tagline+'</div>'+
-      '<span class="vc-badge">'+v.cat+'</span>'+
-      '</div>'+
-      '<div class="vc-body">'+
-      '<div class="vc-desc">'+v.desc+'</div>'+
-      '<div class="vc-tags">'+offerTags+'</div>'+
-      '<div class="vc-footer">'+ratingHtml+'<div class="vc-loc">📍 '+v.loc+'</div></div>'+
-      '</div></div>';
+  grid.innerHTML=data.map(function(v){
+    var avg=avgRating(v);
+    var rHtml=avg
+      ?'<div class="vc-rating"><span class="stars">'+starsHtml(parseFloat(avg))+'</span><span class="vc-rating-num">'+avg+' ('+v.reviews.length+')</span></div>'
+      :'<div class="vc-rating-num" style="font-size:11px;color:#bbb;">'+t('noReviews').split('.')[0]+'</div>';
+    var tags=(v.offers||[]).slice(0,3).map(function(o){return'<span class="vc-tag">'+o+'</span>';}).join('');
+    return'<div class="vendor-card" onclick="openVendor(\''+v.id+'\')">'+
+      '<div class="vc-hero"><div class="vc-name">'+v.name+'</div><div class="vc-tagline">'+v.tagline+'</div><span class="vc-badge">'+v.cat+'</span></div>'+
+      '<div class="vc-body"><div class="vc-desc">'+v.desc+'</div><div class="vc-tags">'+tags+'</div>'+
+      '<div class="vc-footer">'+rHtml+'<div class="vc-loc">📍 '+v.loc+'</div></div></div></div>';
   }).join('');
 }
 
-// ── VENDOR DETAIL ──
+// ── VENDOR DETAIL MODAL ──
 function openVendor(id){
-  selectedVendorId = id;
-  var v = vendors.find(function(x){return x.id===id;});
+  selectedVendorId=id;
+  var v=vendors.find(function(x){return x.id===id;});
   if(!v) return;
-  var avg = avgRating(v);
-  var shareUrl = 'https://apnavendor.in/vendor/'+id;
-  var igText = encodeURIComponent('🏪 '+v.name+' — '+v.tagline+'\n📍 '+v.loc+'\n📞 '+v.phone+'\n\nFind us on Apna Vendor! #ApnaVendor #SmallBusiness #India');
-  var fbUrl = 'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(shareUrl)+'&quote='+encodeURIComponent(v.name+' — '+v.tagline);
-  var waText = encodeURIComponent('नमस्ते! मैं *'+v.name+'* हूँ।\n📍 '+v.loc+'\n📞 '+v.phone+'\n\nहमारी दुकान देखें: '+shareUrl);
+  var avg=avgRating(v);
+  var shareUrl=window.location.href.split('#')[0]+'#vendor='+id;
+  var fbUrl='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(shareUrl);
+  var waMsg=encodeURIComponent('🏪 *'+v.name+'*\n📍 '+v.loc+'\n📞 '+v.phone+'\n\n'+shareUrl);
 
-  var reviewsHtml = (v.reviews&&v.reviews.length>0)
-    ? v.reviews.map(function(r,ri){
-        var isOwner = canDeleteReview(r);
-        var actionBtns = isOwner
-          ? '<button class="review-edit-btn" data-vid="'+id+'" data-ri="'+ri+'" style="background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:2px 8px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;margin-left:6px;">✏️ '+t('editReview')+'</button>'+
-            '<button class="review-delete-btn" data-vid="'+id+'" data-ri="'+ri+'" style="background:none;border:1px solid #e0b0b0;color:#C0392B;font-size:11px;padding:2px 10px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;margin-left:4px;font-weight:500;">🗑 '+t('deleteReview')+'</button>'
-          : '';
-        var editStars = '';
-        for(var s=1;s<=5;s++) editStars+='<span class="review-edit-star'+(s<=r.stars?' lit':'')+'" data-vid="'+id+'" data-ri="'+ri+'" data-star="'+s+'">★</span>';
-        return '<div class="review-card" id="review-card-'+id+'-'+ri+'">'+
-          '<div class="review-top" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">'+
-          '<span class="review-name">'+r.name+'</span>'+
-          '<span style="display:flex;align-items:center;gap:4px;">'+
-          '<span class="review-stars" id="review-stars-'+id+'-'+ri+'">'+starsHtml(r.stars)+' '+r.stars+'/5</span>'+
-          actionBtns+
-          '</span></div>'+
-          '<div class="review-text" id="review-text-disp-'+id+'-'+ri+'">'+r.text+'</div>'+
-          '<div class="review-date">'+r.date+'</div>'+
-          '<div class="review-edit-area" id="review-edit-area-'+id+'-'+ri+'">'+
-          '<div class="review-edit-stars" id="edit-stars-'+id+'-'+ri+'">'+editStars+'</div>'+
-          '<textarea class="review-edit-area" style="display:block;width:100%;font-family:Inter,sans-serif;font-size:13px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--white);min-height:60px;resize:vertical;" id="review-edit-text-'+id+'-'+ri+'">'+r.text+'</textarea>'+
-          '<div class="review-edit-btns">'+
-          '<button class="review-edit-save" data-vid="'+id+'" data-ri="'+ri+'">'+t('saveReview')+'</button>'+
-          '<button class="review-edit-cancel" data-vid="'+id+'" data-ri="'+ri+'">'+t('cancelEdit')+'</button>'+
-          '</div></div>'+
-          '</div>';
-      }).join('')
-    : '<div style="color:var(--muted);font-size:13px;padding:8px 0;">'+t('noReviews')+'</div>';
+  var reviewsHtml=(v.reviews&&v.reviews.length)
+    ?v.reviews.map(function(r,ri){
+      var mine=currentUser&&r.ownerId&&r.ownerId===currentUser.id;
+      var acts=mine
+        ?'<div class="review-actions">'+
+          '<button class="btn-edit-review" data-vid="'+id+'" data-ri="'+ri+'">✏️ '+t('editReview')+'</button>'+
+          '<button class="btn-delete-review" data-vid="'+id+'" data-ri="'+ri+'">🗑 '+t('deleteReview')+'</button>'+
+          '</div>'
+        :'';
+      var eStars='';for(var s=1;s<=5;s++) eStars+='<span class="review-edit-star'+(s<=r.stars?' lit':'')+'" data-star="'+s+'">★</span>';
+      return'<div class="review-card" id="rc-'+id+'-'+ri+'">'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px;">'+
+        '<span class="review-name">'+r.name+'</span>'+
+        '<span class="review-stars" id="rs-'+id+'-'+ri+'">'+starsHtml(r.stars)+' '+r.stars+'/5</span>'+
+        '</div>'+
+        '<div class="review-text" id="rt-'+id+'-'+ri+'">'+r.text+'</div>'+
+        '<div class="review-date">'+r.date+'</div>'+
+        acts+
+        '<div class="review-edit-area-wrap" id="rea-'+id+'-'+ri+'">'+
+        '<div class="review-edit-stars" id="res-'+id+'-'+ri+'">'+eStars+'</div>'+
+        '<textarea class="review-edit-textarea" id="ret-'+id+'-'+ri+'">'+r.text+'</textarea>'+
+        '<div class="review-edit-btns">'+
+        '<button class="btn-save-review" data-vid="'+id+'" data-ri="'+ri+'">'+t('saveReview')+'</button>'+
+        '<button class="btn-cancel-edit" data-vid="'+id+'" data-ri="'+ri+'">'+t('cancelEdit')+'</button>'+
+        '</div></div></div>';
+    }).join('')
+    :'<div style="color:var(--muted);font-size:13px;padding:8px 0;">'+t('noReviews')+'</div>';
 
-  var avgBlock = avg ? '<div class="avg-rating"><div class="avg-num">'+avg+'</div><div><div class="avg-stars">'+starsHtml(parseFloat(avg))+'</div><div style="font-size:11px;color:var(--muted);">'+v.reviews.length+' '+t('reviewCount')+'</div></div></div>' : '';
+  var avgBlock=avg
+    ?'<div class="avg-rating"><div class="avg-num">'+avg+'</div><div><div class="avg-stars">'+starsHtml(parseFloat(avg))+'</div><div style="font-size:11px;color:var(--muted);">'+v.reviews.length+' '+t('reviewCount')+'</div></div></div>'
+    :'';
 
-  var isVendorOwner = currentUser && v.ownerId && v.ownerId === currentUser.id;
-  var vendorOwnerBtns = isVendorOwner
-    ? '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">'+
-      '<button class="vendor-edit-btn" data-vid="'+id+'" style="background:none;border:1.5px solid var(--gold);color:var(--gold);padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">✏️ '+t('editVendorBtn')+'</button>'+
-      '<button class="vendor-delete-btn" data-vid="'+id+'" style="background:none;border:1.5px solid #C0392B;color:#C0392B;padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">'+t('deleteVendorBtn')+'</button>'+
+  var isOwner=currentUser&&v.ownerId&&v.ownerId===currentUser.id;
+  var ownerBtns=isOwner
+    ?'<div class="vendor-owner-btns">'+
+      '<button class="btn-edit-vendor" data-vid="'+id+'">✏️ '+t('editVendorBtn')+'</button>'+
+      '<button class="btn-delete-vendor" data-vid="'+id+'">🗑 '+t('deleteVendorBtn')+'</button>'+
       '</div>'
-    : '';
+    :'';
 
-  var mapLink = (v.lat && v.lng)
-    ? '<a href="https://www.openstreetmap.org/?mlat='+v.lat+'&mlon='+v.lng+'&zoom=16" target="_blank" style="font-size:12px;color:var(--gold);text-decoration:none;">🗺️ '+t('viewOnMap')+'</a>'
-    : '';
+  var mapLink=(v.lat&&v.lng)
+    ?'&nbsp;<a href="https://www.openstreetmap.org/?mlat='+v.lat+'&mlon='+v.lng+'&zoom=16" target="_blank" style="color:var(--gold);font-size:12px;text-decoration:none;">🗺️ '+t('viewOnMap')+'</a>'
+    :'';
 
-  var shareUrl = window.location.href.split('#')[0]+'#vendor='+id;
+  var reviewForm=currentUser
+    ?'<div class="add-review">'+
+      '<div class="add-review-title">'+t('addReviewTitle')+'</div>'+
+      '<div class="star-picker" id="star-picker">'+
+      '<span class="star-pick" onclick="setStars(1)">★</span><span class="star-pick" onclick="setStars(2)">★</span>'+
+      '<span class="star-pick" onclick="setStars(3)">★</span><span class="star-pick" onclick="setStars(4)">★</span>'+
+      '<span class="star-pick" onclick="setStars(5)">★</span></div>'+
+      '<input class="review-name-input" id="review-name" value="'+(currentUser.name||'')+'" readonly>'+
+      '<textarea class="review-textarea" id="review-text" placeholder="'+t('reviewPlaceholder')+'"></textarea>'+
+      '<button class="submit-review-btn" onclick="submitReview(\''+id+'\')">'+t('submitReview')+'</button>'+
+      '</div>'
+    :'<div class="add-review" style="text-align:center;padding:22px 16px;">'+
+      '<div style="font-size:26px;margin-bottom:8px;">🔒</div>'+
+      '<div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:12px;">'+t('signInToReview')+'</div>'+
+      '<div id="google-review-btn" style="display:flex;justify-content:center;"></div>'+
+      '</div>';
 
-  document.getElementById('modal-content').innerHTML =
+  document.getElementById('modal-content').innerHTML=
     '<div class="detail-hero">'+
-    '<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">'+
-    '<div><div class="detail-name">'+v.name+'</div><div class="detail-tagline">'+v.tagline+'</div><span class="vc-badge">'+v.cat+'</span>'+vendorOwnerBtns+'</div>'+
-    avgBlock+
-    '</div></div>'+
+    '<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;">'+
+    '<div><div class="detail-name">'+v.name+'</div>'+
+    '<div class="detail-tagline">'+v.tagline+'</div>'+
+    '<span class="vc-badge">'+v.cat+'</span>'+ownerBtns+'</div>'+
+    avgBlock+'</div></div>'+
+
     '<div class="detail-grid">'+
     '<div>'+
     '<div class="detail-card" style="margin-bottom:14px;"><div class="detail-label">'+t('detailAbout')+'</div><div class="detail-body">'+v.desc+'</div></div>'+
-    '<div class="detail-card" style="margin-bottom:14px;"><div class="detail-label">'+t('detailOffers')+'</div><div class="detail-tags">'+(v.offers||[]).map(function(o){return '<span class="detail-tag">'+o+'</span>';}).join('')+'</div></div>'+
-    '<div class="detail-card"><div class="detail-label">'+t('detailSpec')+'</div><div class="detail-tags">'+(v.specs||[]).map(function(s){return '<span class="detail-spec-tag">'+s+'</span>';}).join('')+'</div></div>'+
+    '<div class="detail-card" style="margin-bottom:14px;"><div class="detail-label">'+t('detailOffers')+'</div><div class="detail-tags">'+(v.offers||[]).map(function(o){return'<span class="detail-tag">'+o+'</span>';}).join('')+'</div></div>'+
+    '<div class="detail-card"><div class="detail-label">'+t('detailSpec')+'</div><div class="detail-tags">'+(v.specs||[]).map(function(s){return'<span class="detail-spec-tag">'+s+'</span>';}).join('')+'</div></div>'+
     '</div>'+
     '<div>'+
     '<div class="detail-card" style="margin-bottom:14px;"><div class="detail-label">'+t('detailDetails')+'</div>'+
-    '<div class="contact-row"><span class="contact-lbl">'+t('plLoc')+'</span><span class="contact-val">'+v.loc+' '+mapLink+'</span></div>'+
-    '<div class="contact-row"><span class="contact-lbl">'+t('plYear')+'</span><span class="contact-val">'+v.year+'</span></div>'+
+    '<div class="contact-row"><span class="contact-lbl">'+t('plLoc')+'</span><span class="contact-val">'+v.loc+mapLink+'</span></div>'+
+    (v.year?'<div class="contact-row"><span class="contact-lbl">'+t('plYear')+'</span><span class="contact-val">'+v.year+'</span></div>':'')+
     '<div class="contact-row"><span class="contact-lbl">'+t('plTeam')+'</span><span class="contact-val">'+v.team+'</span></div>'+
     '</div>'+
     '<div class="detail-card"><div class="detail-label">'+t('detailContact')+'</div>'+
@@ -1091,178 +1082,251 @@ function openVendor(id){
     (v.wa?'<div class="contact-row"><span class="contact-lbl">'+t('plWa')+'</span><span class="contact-val">'+v.wa+'</span></div>':'')+
     (v.email?'<div class="contact-row"><span class="contact-lbl">'+t('plEmail')+'</span><span class="contact-val">'+v.email+'</span></div>':'')+
     (v.web?'<div class="contact-row"><span class="contact-lbl">'+t('plWeb')+'</span><span class="contact-val">'+v.web+'</span></div>':'')+
-    '</div>'+
-    '</div></div>'+
-    // SHARE
+    '</div></div></div>'+
+
     '<div class="share-section">'+
     '<div class="share-title">'+t('shareTitle')+'</div>'+
     '<div class="share-btns">'+
     '<button class="share-btn share-ig" onclick="shareIG(\''+id+'\')">📸 Instagram</button>'+
     '<button class="share-btn share-fb" onclick="window.open(\''+fbUrl+'\',\'_blank\')">Facebook</button>'+
-    '<button class="share-btn share-wa" onclick="window.open(\'https://wa.me/?text='+waText+'\',\'_blank\')">WhatsApp</button>'+
+    '<button class="share-btn share-wa" onclick="window.open(\'https://wa.me/?text='+waMsg+'\',\'_blank\')">WhatsApp</button>'+
     '<button class="share-btn share-copy" onclick="copyVendorLink(\''+shareUrl+'\')">🔗 '+t('copyLink')+'</button>'+
-    '<button class="share-btn" style="background:#1A1A2E;color:#C9A96E;" onclick="showQR(\''+id+'\')">⬛ '+t('qrCode')+'</button>'+
+    '<button class="share-btn share-qr" onclick="showQR(\''+id+'\')">⬛ '+t('qrCode')+'</button>'+
     '</div></div>'+
-    // REVIEWS
+
     '<div class="reviews-section">'+
     '<div class="reviews-header"><div class="reviews-title">'+t('reviewsTitle')+'</div></div>'+
-    reviewsHtml+
-    (currentUser
-      ? '<div class="add-review">'+
-        '<div class="add-review-title">'+t('addReviewTitle')+'</div>'+
-        '<div class="star-picker" id="star-picker">'+
-        '<span class="star-pick" onclick="setStars(1)">★</span>'+
-        '<span class="star-pick" onclick="setStars(2)">★</span>'+
-        '<span class="star-pick" onclick="setStars(3)">★</span>'+
-        '<span class="star-pick" onclick="setStars(4)">★</span>'+
-        '<span class="star-pick" onclick="setStars(5)">★</span>'+
-        '</div>'+
-        '<input class="review-name-input" id="review-name" placeholder="'+t('namePlaceholder')+'" style="font-family:'+t('inputFont')+'" value="'+(currentUser.name||'')+'" readonly>'+
-        '<textarea class="review-textarea" id="review-text" placeholder="'+t('reviewPlaceholder')+'" style="font-family:'+t('inputFont')+'"></textarea>'+
-        '<button class="submit-review-btn" onclick="submitReview(\''+id+'\')">'+t('submitReview')+'</button>'+
-        '</div>'
-      : '<div class="add-review" style="text-align:center;padding:24px 18px;">'+
-        '<div style="font-size:28px;margin-bottom:10px;">🔒</div>'+
-        '<div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px;">'+t('signInToReview')+'</div>'+
-        '<div id="google-review-signin" style="display:flex;justify-content:center;margin-top:14px;"></div>'+
-        '</div>'
-    )+
+    reviewsHtml+reviewForm+
     '</div>';
 
-  selectedStars = 0;
+  selectedStars=0;
   document.getElementById('vendor-modal').classList.add('open');
-  // If not signed in, render Google button inside the review sign-in wall
   if(!currentUser){
     setTimeout(function(){
-      var c = document.getElementById('google-review-signin');
-      if(c && window.google && google.accounts && google.accounts.id){
-        google.accounts.id.renderButton(c, {theme:'outline', size:'medium', width:'240'});
-      }
-    }, 50);
+      var c=document.getElementById('google-review-btn');
+      if(c&&window.google&&google.accounts&&google.accounts.id)
+        google.accounts.id.renderButton(c,{theme:'outline',size:'medium',width:'220'});
+    },50);
   }
+  // Wire edit-star clicks for reviews
+  document.querySelectorAll('.review-edit-stars .review-edit-star').forEach(function(star){
+    star.addEventListener('click',function(){
+      var wrap = star.closest('.review-edit-stars');
+      var n = parseInt(star.getAttribute('data-star'),10);
+      wrap.setAttribute('data-sel',n);
+      wrap.querySelectorAll('.review-edit-star').forEach(function(s,i){ s.classList.toggle('lit',i<n); });
+    });
+  });
 }
 
 function closeModal(){
   document.getElementById('vendor-modal').classList.remove('open');
-  selectedVendorId = null;
-  selectedStars = 0;
+  selectedVendorId=null; selectedStars=0;
 }
-
 function setStars(n){
-  selectedStars = n;
+  selectedStars=n;
   document.querySelectorAll('.star-pick').forEach(function(s,i){s.classList.toggle('lit',i<n);});
 }
 
-// ── REVIEW OWNERSHIP via Google sign-in ──
-// If the user is signed in, their Google account ID is used to track ownership.
-// Reviews created without signing in remain anonymous and cannot be deleted.
-
+// ── SUBMIT / EDIT REVIEWS ──
 function submitReview(vid){
-  if(!requireGoogleLogin()) return;
-  var name = currentUser.name || currentUser.email || (document.getElementById('review-name').value||'').trim();
-  var text = (document.getElementById('review-text').value||'').trim();
-  if(!name||!text||!selectedStars){ showToast(t('fillFields')); return; }
-  var v = vendors.find(function(x){return x.id===vid;});
+  if(!requireLogin()) return;
+  var text=(document.getElementById('review-text').value||'').trim();
+  if(!text||!selectedStars){showToast(t('fillFields'));return;}
+  var v=vendors.find(function(x){return x.id===vid;});
   if(!v) return;
   if(!v.reviews) v.reviews=[];
-  var months = {hi:['जनवरी','फरवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'],en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],mr:['जानेवारी','फेब्रुवारी','मार्च','एप्रिल','मे','जून','जुलै','ऑगस्ट','सप्टेंबर','ऑक्टोबर','नोव्हेंबर','डिसेंबर']};
-  var d = new Date(); var dateStr = months[currentLang][d.getMonth()]+' '+d.getFullYear();
-  // Store the current user's id on the review so we can verify ownership later
-  v.reviews.push({name:name, stars:selectedStars, text:text, date:dateStr, ownerId: currentUser ? currentUser.id : null});
-  saveVendors();
-  showToast(t('toastReview'));
-  openVendor(vid);
+  var months={hi:['जनवरी','फरवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'],en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],mr:['जानेवारी','फेब्रुवारी','मार्च','एप्रिल','मे','जून','जुलै','ऑगस्ट','सप्टेंबर','ऑक्टोबर','नोव्हेंबर','डिसेंबर']};
+  var d=new Date(); var dateStr=months[currentLang][d.getMonth()]+' '+d.getFullYear();
+  v.reviews.push({name:currentUser.name||currentUser.email,stars:selectedStars,text:text,date:dateStr,ownerId:currentUser.id});
+  saveVendors(); showToast(t('toastReview')); openVendor(vid);
 }
 
-function canDeleteReview(review){
-  return currentUser && review.ownerId && review.ownerId === currentUser.id;
-}
-
-// Custom confirm dialog (avoids browser blocking native confirm())
-var _confirmCallback = null;
-function showConfirm(msg, onOk){
-  _confirmCallback = onOk;
-  document.getElementById('confirm-msg').textContent = msg;
-  document.getElementById('confirm-cancel-btn').textContent = currentLang==='en'?'Cancel':currentLang==='mr'?'रद्द करा':'रद्द करें';
-  document.getElementById('confirm-ok-btn').textContent = currentLang==='en'?'Delete':currentLang==='mr'?'हटवा':'हटाएं';
+// ── CONFIRM DIALOG ──
+var _confirmCb=null;
+function showConfirm(msg,onOk){
+  _confirmCb=onOk;
+  document.getElementById('confirm-msg').textContent=msg;
   document.getElementById('confirm-overlay').classList.add('open');
 }
 
-
-// Called from review delete buttons via data attributes
-function deleteReview(vid, ri){
-  var v = vendors.find(function(x){return x.id===vid;});
+// ── DELETE REVIEW ──
+function deleteReview(vid,ri){
+  var v=vendors.find(function(x){return x.id===vid;});
   if(!v||!v.reviews||!v.reviews[ri]) return;
-  if(!canDeleteReview(v.reviews[ri])){
-    showToast(currentLang==='en'?'You can only delete your own reviews.':currentLang==='mr'?'तुम्ही फक्त तुमच्या स्वतःच्या समीक्षा हटवू शकता.':'आप केवल अपनी समीक्षाएं हटा सकते हैं।');
-    return;
-  }
-  showConfirm(t('deleteConfirm'), function(){
-    // Re-fetch vendor in case state changed
-    var v2 = vendors.find(function(x){return x.id===vid;});
-    if(!v2||!v2.reviews) return;
-    v2.reviews.splice(ri, 1);
-    saveVendors();
+  if(!currentUser||v.reviews[ri].ownerId!==currentUser.id){showToast(t('loginRequired'));return;}
+  showConfirm(t('deleteConfirm'),function(){
+    v.reviews.splice(ri,1); saveVendors();
     showToast(currentLang==='en'?'Review deleted.':currentLang==='mr'?'समीक्षा हटवली.':'समीक्षा हटाई गई।');
     openVendor(vid);
   });
 }
 
+// ── EDIT REVIEW ──
+function openEditReview(vid,ri){
+  var areaId='rea-'+vid+'-'+ri;
+  var area=document.getElementById(areaId);
+  if(!area) return;
+  area.style.display='block';
+}
+function cancelEditReview(vid,ri){
+  var area=document.getElementById('rea-'+vid+'-'+ri);
+  if(area) area.style.display='none';
+}
+function saveEditReview(vid,ri){
+  var v=vendors.find(function(x){return x.id===vid;});
+  if(!v||!v.reviews||!v.reviews[ri]) return;
+  var textEl=document.getElementById('ret-'+vid+'-'+ri);
+  var starsWrap=document.getElementById('res-'+vid+'-'+ri);
+  var newText=(textEl.value||'').trim();
+  if(!newText){showToast(t('fillFields'));return;}
+  var newStars=parseInt(starsWrap.getAttribute('data-sel')||v.reviews[ri].stars,10);
+  v.reviews[ri].text=newText;
+  v.reviews[ri].stars=newStars;
+  saveVendors(); showToast(t('toastReviewUpdated')); openVendor(vid);
+}
 
+// ── DELETE VENDOR ──
 function deleteVendor(vid){
-  var v = vendors.find(function(x){return x.id===vid;});
-  if(!v) return;
-  if(!currentUser){
-    showToast(currentLang==='en'?'Please sign in with Google first.':'कृपया पहले Google से साइन इन करें।');
-    return;
-  }
-  if(!v.ownerId || v.ownerId !== currentUser.id){
-    showToast(currentLang==='en'?'You can only delete your own profile.':currentLang==='mr'?'तुम्ही फक्त तुमचे स्वतःचे प्रोफाइल हटवू शकता.':'आप केवल अपनी दुकान हटा सकते हैं।');
-    return;
-  }
-  showConfirm(t('deleteVendorConfirm'), function(){
-    var idx = vendors.findIndex(function(x){return x.id===vid;});
-    if(idx > -1) vendors.splice(idx, 1);
-    saveVendors();
-    closeModal();
-    showToast(t('deleteVendorToast'));
-    renderVendorGrid();
+  var v=vendors.find(function(x){return x.id===vid;});
+  if(!v||!currentUser||v.ownerId!==currentUser.id){showToast(t('loginRequired'));return;}
+  showConfirm(t('deleteVendorConfirm'),function(){
+    vendors.splice(vendors.findIndex(function(x){return x.id===vid;}),1);
+    saveVendors(); closeModal(); showToast(t('deleteVendorToast')); renderVendorGrid();
   });
 }
 
+// ── EDIT VENDOR ──
+function editVendor(vid){
+  var v=vendors.find(function(x){return x.id===vid;});
+  if(!v||!currentUser||v.ownerId!==currentUser.id) return;
+  editingVendorId=vid;
+  closeModal();
+  // Navigate to register page and pre-fill
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.nav-link').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('page-register').classList.add('active');
+  var nl=document.getElementById('nav-register'); if(nl) nl.classList.add('active');
+  // Restore original register section HTML if needed
+  restoreRegisterSection();
+  setTimeout(function(){
+    fillFormForEdit(v);
+    window.scrollTo(0,0);
+  },80);
+}
+
+function restoreRegisterSection(){
+  // If the section was replaced by sign-in wall, reload it — but we're signed in so this shouldn't happen
+  var wrap=document.getElementById('register-form-wrap');
+  if(!wrap){ location.reload(); return; }
+  // Update button text
+  var pb=document.getElementById('publish-btn');
+  if(pb) pb.textContent=t(editingVendorId?'updateBtn':'publishBtn');
+  var hdr=document.getElementById('reg-title');
+  if(hdr) hdr.textContent=editingVendorId
+    ?(currentLang==='en'?'Edit Your Profile':currentLang==='mr'?'प्रोफाइल संपादित करा':'प्रोफ़ाइल संपादित करें')
+    :t('regTitle');
+}
+
+function fillFormForEdit(v){
+  restoreRegisterSection();
+  var set=function(id,val){var el=document.getElementById(id);if(el)el.value=val||'';};
+  set('f-vname',v.name); set('f-tagline',v.tagline); set('f-year',v.year);
+  set('f-phone',v.phone); set('f-wa',v.wa); set('f-email',v.email); set('f-web',v.web);
+  set('f-desc',v.desc);
+  document.getElementById('f-desc-count').textContent=(v.desc||'').length+' / 300';
+  // Cat
+  var fc=document.getElementById('f-cat');
+  if(fc){Array.from(fc.options).forEach(function(o){o.selected=o.value===v.cat||o.text===v.cat;});}
+  // Team
+  var ft=document.getElementById('f-team');
+  if(ft){Array.from(ft.options).forEach(function(o){o.selected=o.value===v.team||o.text===v.team;});}
+  // Location
+  var li=document.getElementById('f-loc-text'); if(li) li.value=v.loc||'';
+  var lh=document.getElementById('f-loc-value'); if(lh) lh.value=v.loc||'';
+  // Lat/lng
+  set('f-lat',v.lat||''); set('f-lng',v.lng||'');
+  if(v.lat&&v.lng) document.getElementById('vendor-map-coords').textContent='📍 '+v.lat+', '+v.lng;
+  // Tags
+  fOffersList=[...(v.offers||[])]; fSpecsList=[...(v.specs||[])];
+  renderTagList('f-offers-tags',fOffersList); renderTagList('f-specs-tags',fSpecsList);
+  // Init map
+  initMapPicker(v.loc);
+  if(v.lat&&v.lng){
+    setTimeout(function(){
+      if(_mapPicker){
+        _mapPicker.setView([v.lat,v.lng],15);
+        if(_mapMarker) _mapPicker.removeLayer(_mapMarker);
+        _mapMarker=L.marker([v.lat,v.lng]).addTo(_mapPicker);
+      }
+    },250);
+  }
+}
+
+function renderTagList(displayId,arr){
+  var el=document.getElementById(displayId);
+  if(!el) return;
+  el.innerHTML=arr.map(function(s){
+    return'<span class="form-tag">'+s+'<button onclick="removeFormTag(\''+s.replace(/'/g,"&#39;")+'\',\''+displayId+'\')">×</button></span>';
+  }).join('');
+}
+
+function resetRegisterForm(){
+  editingVendorId=null;
+  fOffersList=[]; fSpecsList=[];
+  ['f-vname','f-tagline','f-year','f-phone','f-wa','f-email','f-web','f-desc','f-loc-text','f-loc-value','f-lat','f-lng'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  ['f-cat','f-team'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0;});
+  ['f-offers-tags','f-specs-tags'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML='';});
+  document.getElementById('f-desc-count').textContent='0 / 300';
+  document.getElementById('vendor-map-coords').textContent='';
+  var pb=document.getElementById('publish-btn');
+  if(pb) pb.textContent=t('publishBtn');
+  var hdr=document.getElementById('reg-title');
+  if(hdr) hdr.textContent=t('regTitle');
+}
+
+// ── SHARE ──
 function shareIG(vid){
-  var v = vendors.find(function(x){return x.id===vid;});
+  var v=vendors.find(function(x){return x.id===vid;});
   if(!v) return;
-  var text = '🏪 '+v.name+'\n'+v.tagline+'\n📍 '+v.loc+'\n📞 '+v.phone+'\n\n#ApnaVendor #SmallBusiness #MadeInIndia';
-  navigator.clipboard.writeText(text).then(function(){
-    showToast(currentLang==='en'?'Caption copied! Now paste in Instagram.':currentLang==='mr'?'कॅप्शन कॉपी झाली! Instagram मध्ये पेस्ट करा.':'कैप्शन कॉपी हुई! Instagram में पेस्ट करें।');
+  navigator.clipboard.writeText('🏪 '+v.name+'\n'+v.tagline+'\n📍 '+v.loc+'\n📞 '+v.phone+'\n\n#ApnaVendor #SmallBusiness').then(function(){
+    showToast(currentLang==='en'?'Caption copied! Paste in Instagram.':currentLang==='mr'?'कॅप्शन कॉपी झाली!':'कैप्शन कॉपी हुई!');
   });
   window.open('https://www.instagram.com/','_blank');
 }
-
-function copyLink(url){
+function copyVendorLink(url){
   navigator.clipboard.writeText(url).then(function(){showToast(t('toastCopied'));});
 }
-
-// ── REGISTER ──
-var fOffersList = [], fSpecsList = [];
-
-function addFormTag(inputId, arr, displayId){
-  var input = document.getElementById(inputId);
-  var v = (input.value||'').trim();
-  if(!v||arr.includes(v)){input.value='';return;}
-  arr.push(v); input.value='';
-  renderFormTags(displayId, arr);
+function showQR(vid){
+  var v=vendors.find(function(x){return x.id===vid;});
+  if(!v) return;
+  var url=window.location.href.split('#')[0]+'#vendor='+vid;
+  document.getElementById('qr-vendor-name').textContent=v.name;
+  document.getElementById('qr-vendor-sub').textContent=t('qrTitle');
+  var wrap=document.getElementById('qr-canvas-wrap');
+  wrap.innerHTML='';
+  try{ new QRCode(wrap,{text:url,width:200,height:200,correctLevel:QRCode.CorrectLevel.M}); }
+  catch(e){ wrap.innerHTML='<p style="color:var(--muted);font-size:12px;">QR unavailable</p>'; }
+  document.getElementById('qr-overlay').classList.add('open');
 }
 
-function removeFormTag(s, displayId){
-  var arr = displayId==='f-offers-tags' ? fOffersList : fSpecsList;
-  var i = arr.indexOf(s); if(i>-1) arr.splice(i,1);
-  renderFormTags(displayId, arr);
+// ── REGISTER / UPDATE ──
+function addFormTag(inputId,arr,displayId){
+  var inp=document.getElementById(inputId);
+  var v=(inp.value||'').trim();
+  if(!v||arr.includes(v)){inp.value='';return;}
+  arr.push(v); inp.value='';
+  renderTagList(displayId,arr);
 }
-
+function removeFormTag(s,displayId){
+  var arr=(displayId==='f-offers-tags')?fOffersList:fSpecsList;
+  var i=arr.indexOf(s); if(i>-1) arr.splice(i,1);
+  renderTagList(displayId,arr);
+}
 ['f-offer-input','f-spec-input'].forEach(function(id){
-  var el = document.getElementById(id);
+  var el=document.getElementById(id);
   if(el) el.addEventListener('keydown',function(e){
     if(e.key==='Enter'){
       if(id==='f-offer-input') addFormTag('f-offer-input',fOffersList,'f-offers-tags');
@@ -1271,85 +1335,81 @@ function removeFormTag(s, displayId){
   });
 });
 
-function setFieldError(id, hasError){
-  var el = document.getElementById(id);
-  if(!el) return;
-  el.style.borderColor = hasError ? 'var(--red)' : '';
-  el.style.boxShadow  = hasError ? '0 0 0 2px rgba(192,57,43,0.15)' : '';
+function setFieldErr(id,has){
+  var el=document.getElementById(id); if(!el) return;
+  el.style.borderColor=has?'var(--red)':'';
+  el.style.boxShadow=has?'0 0 0 2px rgba(192,57,43,0.15)':'';
 }
-function clearFieldErrors(){
-  ['f-vname','f-loc','f-cat','f-team','f-phone','f-email'].forEach(function(id){ setFieldError(id, false); });
-  ['f-offers-tags','f-specs-tags'].forEach(function(id){
-    var el = document.getElementById(id);
-    if(el){ el.style.outline=''; }
-  });
+function clearErrs(){
+  ['f-vname','f-loc-text','f-cat','f-team','f-desc','f-phone','f-email'].forEach(function(id){setFieldErr(id,false);});
+  ['f-offers-tags','f-specs-tags'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.outline='';});
 }
 
 function publishVendor(){
-  if(!requireGoogleLogin()) return;
-  clearFieldErrors();
+  if(!requireLogin()) return;
+  clearErrs();
+  var name=(document.getElementById('f-vname').value||'').trim();
+  var locText=(document.getElementById('f-loc-text').value||'').trim();
+  var locHid=(document.getElementById('f-loc-value').value||'').trim();
+  var loc=locText||locHid; // accept free text or selected
+  var cat=(document.getElementById('f-cat').value||'').trim();
+  var team=(document.getElementById('f-team').value||'').trim();
+  var desc=(document.getElementById('f-desc').value||'').trim();
+  var phone=(document.getElementById('f-phone').value||'').trim();
+  var email=(document.getElementById('f-email').value||'').trim();
+  var msg=document.getElementById('form-success');
 
-  var name  = (document.getElementById('f-vname').value||'').trim();
-  var loc   = getFullLocation();
-  var cat   = (document.getElementById('f-cat').value||'').trim();
-  var team  = (document.getElementById('f-team').value||'').trim();
-  var phone = (document.getElementById('f-phone').value||'').trim();
-  var email = (document.getElementById('f-email').value||'').trim();
-  var desc  = (document.getElementById('f-desc').value||'').trim();
-  var msg   = document.getElementById('form-success');
-
-  function showErr(errKey, fieldId, tagsId){
-    msg.textContent = t(errKey);
-    msg.style.color = 'var(--red)';
-    if(fieldId) setFieldError(fieldId, true);
-    if(tagsId){
-      var el = document.getElementById(tagsId);
-      if(el) el.style.outline = '2px solid var(--red)';
-    }
-    setTimeout(function(){ msg.textContent=''; clearFieldErrors(); }, 3500);
+  function showErr(key,fid,tid){
+    msg.textContent=t(key); msg.style.color='var(--red)';
+    if(fid) setFieldErr(fid,true);
+    if(tid){var el=document.getElementById(tid);if(el)el.style.outline='2px solid var(--red)';}
+    setTimeout(function(){msg.textContent='';clearErrs();},3500);
   }
+  if(!name) return showErr('errName','f-vname');
+  if(!loc)  return showErr('errLoc','f-loc-text');
+  if(!cat)  return showErr('errCat','f-cat');
+  if(!team) return showErr('errTeam','f-team');
+  if(!desc) return showErr('errDesc','f-desc');
+  if(!fOffersList.length) return showErr('errOffers',null,'f-offers-tags');
+  if(!fSpecsList.length)  return showErr('errSpecs',null,'f-specs-tags');
+  if(!phone) return showErr('errPhone','f-phone');
+  if(!/^\d{7,15}$/.test(phone.replace(/[\s\-().+]/g,''))) return showErr('errPhoneInvalid','f-phone');
+  if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showErr('errEmailInvalid','f-email');
 
-  if(!name)  return showErr('errName',  'f-vname');
-  if(!loc)   return showErr('errLoc',   'f-loc');
-  if(!cat)   return showErr('errCat',   'f-cat');
-  if(!team)  return showErr('errTeam',  'f-team');
-  if(!desc)  return showErr('errDesc',  'f-desc');
-  if(fOffersList.length === 0) return showErr('errOffers', null, 'f-offers-tags');
-  if(fSpecsList.length  === 0) return showErr('errSpecs',  null, 'f-specs-tags');
-  if(!phone) return showErr('errPhone', 'f-phone');
-  var phoneClean = phone.replace(/[\s\-().+]/g,'');
-  if(!/^\d{7,15}$/.test(phoneClean)) return showErr('errPhoneInvalid', 'f-phone');
-  if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showErr('errEmailInvalid', 'f-email');
+  var lat=document.getElementById('f-lat').value||'';
+  var lng=document.getElementById('f-lng').value||'';
 
-  var newV = {
-    id:'v'+Date.now(),
-    name:name,
-    tagline:(document.getElementById('f-tagline').value||'').trim(),
-    cat:cat,
-    loc:loc,
-    lat:(document.getElementById('f-lat').value||''),
-    lng:(document.getElementById('f-lng').value||''),
-    year:(document.getElementById('f-year').value||'').trim(),
-    team:team,
-    desc:(document.getElementById('f-desc').value||'').trim(),
-    offers:[...fOffersList],
-    specs:[...fSpecsList],
-    phone:phone,
-    wa:(document.getElementById('f-wa').value||'').trim(),
-    email:email,
-    web:(document.getElementById('f-web').value||'').trim(),
-    reviews:[],
-    ownerId: currentUser ? currentUser.id : null
-  };
-  vendors.push(newV);
-  saveVendors();
-  fOffersList.length=0; fSpecsList.length=0;
-  ['f-vname','f-tagline','f-loc','f-year','f-phone','f-wa','f-email','f-web','f-desc'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
-  ['f-cat','f-team'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0;});
-  ['f-offers-tags','f-specs-tags'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML='';});
-  document.getElementById('f-desc-count').textContent='0 / 300';
-  msg.textContent=t('successPub'); msg.style.color='var(--green)';
-  setTimeout(function(){msg.textContent='';showPage('vendors');},2500);
+  if(editingVendorId){
+    // UPDATE existing
+    var v=vendors.find(function(x){return x.id===editingVendorId;});
+    if(!v) return;
+    v.name=name; v.tagline=(document.getElementById('f-tagline').value||'').trim();
+    v.cat=cat; v.loc=loc; v.lat=lat; v.lng=lng;
+    v.year=(document.getElementById('f-year').value||'').trim();
+    v.team=team; v.desc=desc;
+    v.offers=[...fOffersList]; v.specs=[...fSpecsList];
+    v.phone=phone; v.wa=(document.getElementById('f-wa').value||'').trim();
+    v.email=email; v.web=(document.getElementById('f-web').value||'').trim();
+    saveVendors();
+    msg.textContent=t('successUpdate'); msg.style.color='var(--green)';
+    setTimeout(function(){msg.textContent='';openVendor(editingVendorId);closeModal();showPage('vendors');editingVendorId=null;},2000);
+  } else {
+    // NEW vendor
+    var newV={
+      id:'v'+Date.now(), name:name,
+      tagline:(document.getElementById('f-tagline').value||'').trim(),
+      cat:cat, loc:loc, lat:lat, lng:lng,
+      year:(document.getElementById('f-year').value||'').trim(),
+      team:team, desc:desc,
+      offers:[...fOffersList], specs:[...fSpecsList],
+      phone:phone, wa:(document.getElementById('f-wa').value||'').trim(),
+      email:email, web:(document.getElementById('f-web').value||'').trim(),
+      reviews:[], ownerId:currentUser?currentUser.id:null
+    };
+    vendors.push(newV); saveVendors();
+    msg.textContent=t('successPub'); msg.style.color='var(--green)';
+    setTimeout(function(){msg.textContent='';resetRegisterForm();showPage('vendors');},2500);
+  }
 }
 
 // ── TOAST ──
@@ -1359,423 +1419,56 @@ function showToast(msg){
   setTimeout(function(){el.classList.remove('show');},2800);
 }
 
-// ── COPY VENDOR LINK ──
-function copyVendorLink(url){
-  var fullUrl = url || (window.location.href.split('#')[0]+'#vendor='+selectedVendorId);
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(fullUrl).then(function(){ showToast(t('toastCopied')); });
-  } else {
-    // fallback for older browsers
-    var ta = document.createElement('textarea');
-    ta.value = fullUrl; ta.style.position='fixed'; ta.style.opacity='0';
-    document.body.appendChild(ta); ta.select();
-    try{ document.execCommand('copy'); showToast(t('toastCopied')); } catch(e){}
-    document.body.removeChild(ta);
-  }
-}
-
-// ── QR CODE ──
-function showQR(vid){
-  var v = vendors.find(function(x){ return x.id===vid; });
-  if(!v) return;
-  var url = window.location.href.split('#')[0]+'#vendor='+vid;
-  document.getElementById('qr-vendor-name').textContent = v.name;
-  document.getElementById('qr-vendor-sub').textContent = v.loc || '';
-  var wrap = document.getElementById('qr-canvas-wrap');
-  wrap.innerHTML = '';
-  // QRCode library (loaded via cdnjs script tag) renders into the container
-  try {
-    new QRCode(wrap, {
-      text: url,
-      width: 200,
-      height: 200,
-      colorDark: '#1A1A2E',
-      colorLight: '#FDF6EC',
-      correctLevel: QRCode.CorrectLevel.H
-    });
-  } catch(e) {
-    // Library not yet loaded or failed — show URL as fallback
-    wrap.innerHTML = '<p style="font-size:11px;word-break:break-all;color:var(--muted);padding:8px 0;">'+url+'</p>';
-  }
-  document.getElementById('qr-overlay').classList.add('open');
-}
-
-// ── EDIT VENDOR ──
-// Populates the register form with an existing vendor's data, hides the Publish
-// button and shows an Update button, then navigates to the Register page.
-var _editingVendorId = null;
-
-function editVendor(vid){
-  if(!requireGoogleLogin()) return;
-  var v = vendors.find(function(x){ return x.id===vid; });
-  if(!v) return;
-  if(!v.ownerId || v.ownerId !== currentUser.id){
-    showToast(currentLang==='en'?'You can only edit your own profile.':
-              currentLang==='mr'?'तुम्ही फक्त तुमचे स्वतःचे प्रोफाइल संपादित करू शकता.':
-              'आप केवल अपनी दुकान संपादित कर सकते हैं।');
-    return;
-  }
-  _editingVendorId = vid;
-  closeModal();
-
-  // Navigate to register page (bypass sign-in wall since user IS signed in)
-  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
-  document.querySelectorAll('.nav-link').forEach(function(el){el.classList.remove('active');});
-  document.getElementById('page-register').classList.add('active');
-  var nl = document.getElementById('nav-register');
-  if(nl) nl.classList.add('active');
-  window.scrollTo(0,0);
-
-  // Re-init dropdowns so they have their options before we set values
-  initLocationDropdown();
-  applyTranslations();
-
-  // Fill text fields
-  function setVal(id, val){ var el=document.getElementById(id); if(el) el.value=val||''; }
-  setVal('f-vname', v.name);
-  setVal('f-tagline', v.tagline);
-  setVal('f-year', v.year);
-  setVal('f-phone', v.phone);
-  setVal('f-wa', v.wa);
-  setVal('f-email', v.email);
-  setVal('f-web', v.web);
-  setVal('f-desc', v.desc);
-  setVal('f-lat', v.lat);
-  setVal('f-lng', v.lng);
-
-  // Update char counter
-  var descCount = document.getElementById('f-desc-count');
-  if(descCount) descCount.textContent = (v.desc||'').length+' / 300';
-
-  // Set category dropdown
-  var catEl = document.getElementById('f-cat');
-  if(catEl){
-    for(var ci=0;ci<catEl.options.length;ci++){
-      if(catEl.options[ci].value===v.cat || catEl.options[ci].text===v.cat){
-        catEl.selectedIndex=ci; break;
-      }
-    }
-  }
-
-  // Set location dropdown
-  var locEl = document.getElementById('f-loc');
-  if(locEl){
-    for(var li=0;li<locEl.options.length;li++){
-      if(locEl.options[li].value===v.loc || locEl.options[li].text===v.loc){
-        locEl.selectedIndex=li;
-        locEl.dispatchEvent(new Event('change')); // triggers sub-area + map
-        break;
-      }
-    }
-  }
-
-  // Set team dropdown
-  var teamEl = document.getElementById('f-team');
-  if(teamEl){
-    for(var ti=0;ti<teamEl.options.length;ti++){
-      if(teamEl.options[ti].value===v.team || teamEl.options[ti].text===v.team){
-        teamEl.selectedIndex=ti; break;
-      }
-    }
-  }
-
-  // Restore offers tags
-  fOffersList.length=0;
-  (v.offers||[]).forEach(function(o){ fOffersList.push(o); });
-  renderFormTags('f-offers-tags', fOffersList);
-
-  // Restore specs tags
-  fSpecsList.length=0;
-  (v.specs||[]).forEach(function(s){ fSpecsList.push(s); });
-  renderFormTags('f-specs-tags', fSpecsList);
-
-  // Swap Publish button → Update button
-  var publishBtn = document.getElementById('publish-btn');
-  if(publishBtn){
-    publishBtn.textContent = currentLang==='en'?'Update Profile':
-                              currentLang==='mr'?'प्रोफाइल अपडेट करा':
-                              'प्रोफ़ाइल अपडेट करें';
-    publishBtn.onclick = function(){ updateVendor(); };
-  }
-
-  // Show a cancel-edit link below the button
-  var formSuccess = document.getElementById('form-success');
-  if(formSuccess){
-    formSuccess.innerHTML = '<button onclick="cancelEdit()" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline;margin-top:6px;">'+(currentLang==='en'?'Cancel edit':currentLang==='mr'?'संपादन रद्द करा':'संपादन रद्द करें')+'</button>';
-    formSuccess.style.color='';
-  }
-}
-
-// Helper: re-render tag pills inside the register form
-function renderFormTags(containerId, arr){
-  var el = document.getElementById(containerId);
-  if(!el) return;
-  el.innerHTML = arr.map(function(s){
-    return '<span class="form-tag">'+s+
-      '<button onclick="removeFormTag(\''+s.replace(/'/g,"&#39;")+'\',\''+containerId+'\')">×</button></span>';
-  }).join('');
-}
-
-// Save edited vendor back to the store
-function updateVendor(){
-  if(!_editingVendorId) return;
-  var v = vendors.find(function(x){ return x.id===_editingVendorId; });
-  if(!v) return;
-
-  var name  = (document.getElementById('f-vname').value||'').trim();
-  var loc   = getFullLocation();
-  var cat   = (document.getElementById('f-cat').value||'').trim();
-  var team  = (document.getElementById('f-team').value||'').trim();
-  var phone = (document.getElementById('f-phone').value||'').trim();
-  var email = (document.getElementById('f-email').value||'').trim();
-  var desc  = (document.getElementById('f-desc').value||'').trim();
-  var msg   = document.getElementById('form-success');
-
-  // Basic validation (same rules as publishVendor)
-  function showErr(errKey, fieldId){
-    msg.innerHTML = t(errKey);
-    msg.style.color='var(--red)';
-    if(fieldId) setFieldError(fieldId,true);
-    setTimeout(function(){ msg.innerHTML=''; clearFieldErrors(); },3500);
-  }
-  if(!name)  return showErr('errName','f-vname');
-  if(!loc)   return showErr('errLoc','f-loc');
-  if(!cat)   return showErr('errCat','f-cat');
-  if(!team)  return showErr('errTeam','f-team');
-  if(!desc)  return showErr('errDesc','f-desc');
-  if(fOffersList.length===0) return showErr('errOffers',null);
-  if(fSpecsList.length===0)  return showErr('errSpecs',null);
-  if(!phone) return showErr('errPhone','f-phone');
-  var phoneClean=phone.replace(/[\s\-().+]/g,'');
-  if(!/^\d{7,15}$/.test(phoneClean)) return showErr('errPhoneInvalid','f-phone');
-  if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showErr('errEmailInvalid','f-email');
-
-  // Patch in-place so reviews are preserved
-  v.name    = name;
-  v.tagline = (document.getElementById('f-tagline').value||'').trim();
-  v.cat     = cat;
-  v.loc     = loc;
-  v.lat     = (document.getElementById('f-lat').value||'');
-  v.lng     = (document.getElementById('f-lng').value||'');
-  v.year    = (document.getElementById('f-year').value||'').trim();
-  v.team    = team;
-  v.desc    = desc;
-  v.offers  = [...fOffersList];
-  v.specs   = [...fSpecsList];
-  v.phone   = phone;
-  v.wa      = (document.getElementById('f-wa').value||'').trim();
-  v.email   = email;
-  v.web     = (document.getElementById('f-web').value||'').trim();
-
-  saveVendors();
-
-  msg.innerHTML = currentLang==='en'?'Profile updated!':
-                   currentLang==='mr'?'प्रोफाइल अपडेट झाले!':
-                   'प्रोफ़ाइल अपडेट हो गई!';
-  msg.style.color='var(--green)';
-
-  var savedId = _editingVendorId;
-  cancelEdit();
-  setTimeout(function(){ showPage('vendors'); openVendor(savedId); }, 1200);
-}
-
-// ── CANCEL EDIT ──
-// Resets the form, restores the Publish button, and clears edit state.
-function cancelEdit(){
-  _editingVendorId = null;
-  fOffersList.length=0; fSpecsList.length=0;
-  ['f-vname','f-tagline','f-loc','f-year','f-phone','f-wa','f-email','f-web','f-desc'].forEach(function(id){
-    var el=document.getElementById(id); if(el) el.value='';
+// ── EVENT DELEGATION ──
+document.addEventListener('DOMContentLoaded',function(){
+  // Confirm dialog
+  document.getElementById('confirm-cancel-btn').addEventListener('click',function(){
+    document.getElementById('confirm-overlay').classList.remove('open');
+    _confirmCb=null;
   });
-  ['f-cat','f-team'].forEach(function(id){
-    var el=document.getElementById(id); if(el) el.selectedIndex=0;
+  document.getElementById('confirm-ok-btn').addEventListener('click',function(){
+    document.getElementById('confirm-overlay').classList.remove('open');
+    if(_confirmCb){_confirmCb();_confirmCb=null;}
   });
-  ['f-offers-tags','f-specs-tags'].forEach(function(id){
-    var el=document.getElementById(id); if(el) el.innerHTML='';
+
+  // Modal events
+  document.getElementById('vendor-modal').addEventListener('click',function(e){
+    if(e.target===this){closeModal();return;}
+    var b=e.target.closest('[data-vid]');
+    if(!b) return;
+    e.stopPropagation();
+    var vid=b.getAttribute('data-vid');
+    var ri=b.hasAttribute('data-ri')?parseInt(b.getAttribute('data-ri'),10):-1;
+    if(b.classList.contains('btn-delete-review')) deleteReview(vid,ri);
+    else if(b.classList.contains('btn-edit-review')) openEditReview(vid,ri);
+    else if(b.classList.contains('btn-save-review')) saveEditReview(vid,ri);
+    else if(b.classList.contains('btn-cancel-edit')) cancelEditReview(vid,ri);
+    else if(b.classList.contains('btn-delete-vendor')) deleteVendor(vid);
+    else if(b.classList.contains('btn-edit-vendor')) editVendor(vid);
   });
-  var descCount=document.getElementById('f-desc-count');
-  if(descCount) descCount.textContent='0 / 300';
 
-  // Restore Publish button
-  var publishBtn=document.getElementById('publish-btn');
-  if(publishBtn){
-    publishBtn.textContent=t('publishBtn');
-    publishBtn.onclick=function(){ publishVendor(); };
+  // Location autocomplete init
+  initLocationField('f-loc-text','f-loc-value','loc-suggestions');
+
+  // Map init on page load (will show after user types location)
+  document.getElementById('f-loc-text').addEventListener('change',function(){
+    if(this.value) initMapPicker(this.value);
+  });
+
+  // Deep link on load
+  var hash=window.location.hash;
+  if(hash&&hash.startsWith('#vendor=')){
+    var vid=hash.split('=')[1];
+    if(vid){showPage('vendors');setTimeout(function(){openVendor(vid);},200);}
   }
-
-  // Clear any cancel-edit message
-  var msg=document.getElementById('form-success');
-  if(msg){ msg.innerHTML=''; msg.style.color=''; }
-
-  clearFieldErrors();
-}
-
-// ── SAVE REVIEW (inline edit) ──
-function saveReview(vid, ri){
-  var v = vendors.find(function(x){ return x.id===vid; });
-  if(!v||!v.reviews||!v.reviews[ri]) return;
-  var textarea = document.getElementById('review-edit-text-'+vid+'-'+ri);
-  var newText = textarea ? textarea.value.trim() : '';
-  if(!newText){ showToast(t('fillFields')); return; }
-
-  // Read the edited star rating from the inline star picker state
-  var editStarContainer = document.getElementById('edit-stars-'+vid+'-'+ri);
-  var newStars = 0;
-  if(editStarContainer){
-    editStarContainer.querySelectorAll('.review-edit-star').forEach(function(s){
-      if(s.classList.contains('lit')) newStars = parseInt(s.getAttribute('data-star'),10);
-    });
-  }
-  if(!newStars) newStars = v.reviews[ri].stars; // keep old stars if nothing changed
-
-  v.reviews[ri].text  = newText;
-  v.reviews[ri].stars = newStars;
-  saveVendors();
-  showToast(t('toastReviewUpdated'));
-  openVendor(vid); // re-render modal with updated review
-}
-
-// ── CANCEL EDIT (inline review) ──
-function cancelReviewEdit(vid, ri){
-  var area  = document.getElementById('review-edit-area-'+vid+'-'+ri);
-  var disp  = document.getElementById('review-text-disp-'+vid+'-'+ri);
-  if(area) area.style.display='none';
-  if(disp) disp.style.display='';
-}
-
-// ── HASH-BASED DEEP LINKING ──
-// Reads #vendor=ID from the URL on page load and opens that vendor's modal.
-function handleHashDeepLink(){
-  var hash = window.location.hash; // e.g. "#vendor=v1234567890"
-  if(!hash) return;
-  var match = hash.match(/^#vendor=(.+)$/);
-  if(!match) return;
-  var vid = decodeURIComponent(match[1]);
-  var v = vendors.find(function(x){ return x.id===vid; });
-  if(!v) return;
-  // Show vendors page first so the modal has context behind it
-  showPage('vendors');
-  openVendor(vid);
-}
-
-// Update the URL hash whenever a vendor modal opens (for shareability)
-var _origOpenVendor = openVendor;
-openVendor = function(id){
-  _origOpenVendor(id);
-  // Push the hash without reloading
-  if(history.replaceState){
-    history.replaceState(null, '', window.location.pathname + window.location.search + '#vendor='+id);
-  }
-};
-
-// Clear hash when modal closes
-var _origCloseModal = closeModal;
-closeModal = function(){
-  _origCloseModal();
-  if(history.replaceState){
-    history.replaceState(null, '', window.location.pathname + window.location.search);
-  }
-};
+});
 
 // ── INIT ──
-window.addEventListener('load', function(){
+window.addEventListener('load',function(){
   applyTranslations();
   updateAuthUI();
   updateStats();
-  initLocationDropdown();
-  handleHashDeepLink();
-});
-
-// Close modal when clicking the backdrop
-document.getElementById('vendor-modal').addEventListener('click',function(e){
-  if(e.target===this) closeModal();
-});
-
-// ── EVENT DELEGATION ── (vendor-edit-btn, review-edit-btn, review-edit-star, review-edit-save, review-edit-cancel)
-document.addEventListener('DOMContentLoaded', function(){
-
-  // Confirm dialog buttons
-  document.getElementById('confirm-cancel-btn').addEventListener('click', function(){
-    document.getElementById('confirm-overlay').classList.remove('open');
-    _confirmCallback = null;
-  });
-  document.getElementById('confirm-ok-btn').addEventListener('click', function(){
-    document.getElementById('confirm-overlay').classList.remove('open');
-    if(_confirmCallback){ _confirmCallback(); _confirmCallback = null; }
-  });
-
-  // All delegation lives on the modal so it covers dynamically injected HTML
-  document.getElementById('vendor-modal').addEventListener('click', function(e){
-
-    // ── Review delete ──
-    var reviewDelBtn = e.target.closest('.review-delete-btn');
-    if(reviewDelBtn){
-      e.stopPropagation();
-      deleteReview(reviewDelBtn.getAttribute('data-vid'), parseInt(reviewDelBtn.getAttribute('data-ri'),10));
-      return;
-    }
-
-    // ── Vendor delete ──
-    var vendorDelBtn = e.target.closest('.vendor-delete-btn');
-    if(vendorDelBtn){
-      e.stopPropagation();
-      deleteVendor(vendorDelBtn.getAttribute('data-vid'));
-      return;
-    }
-
-    // ── Vendor edit ──
-    var vendorEditBtn = e.target.closest('.vendor-edit-btn');
-    if(vendorEditBtn){
-      e.stopPropagation();
-      editVendor(vendorEditBtn.getAttribute('data-vid'));
-      return;
-    }
-
-    // ── Review: open inline edit ──
-    var reviewEditBtn = e.target.closest('.review-edit-btn');
-    if(reviewEditBtn){
-      e.stopPropagation();
-      var vid = reviewEditBtn.getAttribute('data-vid');
-      var ri  = reviewEditBtn.getAttribute('data-ri');
-      var area = document.getElementById('review-edit-area-'+vid+'-'+ri);
-      var disp = document.getElementById('review-text-disp-'+vid+'-'+ri);
-      if(area){ area.style.display = area.style.display==='none'||area.style.display==='' ? 'block' : 'none'; }
-      if(disp){ disp.style.display = disp.style.display===''||disp.style.display==='none'&&area&&area.style.display!=='none' ? 'none' : ''; }
-      return;
-    }
-
-    // ── Review inline: star picker ──
-    var editStar = e.target.closest('.review-edit-star');
-    if(editStar){
-      e.stopPropagation();
-      var vid2 = editStar.getAttribute('data-vid');
-      var ri2  = editStar.getAttribute('data-ri');
-      var n    = parseInt(editStar.getAttribute('data-star'),10);
-      var container = document.getElementById('edit-stars-'+vid2+'-'+ri2);
-      if(container){
-        container.querySelectorAll('.review-edit-star').forEach(function(s){
-          s.classList.toggle('lit', parseInt(s.getAttribute('data-star'),10) <= n);
-        });
-      }
-      return;
-    }
-
-    // ── Review inline: save ──
-    var saveBtn = e.target.closest('.review-edit-save');
-    if(saveBtn){
-      e.stopPropagation();
-      saveReview(saveBtn.getAttribute('data-vid'), parseInt(saveBtn.getAttribute('data-ri'),10));
-      return;
-    }
-
-    // ── Review inline: cancel ──
-    var cancelBtn = e.target.closest('.review-edit-cancel');
-    if(cancelBtn){
-      e.stopPropagation();
-      cancelReviewEdit(cancelBtn.getAttribute('data-vid'), parseInt(cancelBtn.getAttribute('data-ri'),10));
-      return;
-    }
-  });
+  renderVendorGrid();
 });
 </script>
 </body>
